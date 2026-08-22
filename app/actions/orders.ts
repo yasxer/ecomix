@@ -2,11 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { supabase } from "@/lib/supabase";
-import { getProduct, getSettings } from "@/lib/data";
+import { getProduct, getSettings, normalizeItems } from "@/lib/data";
 import { createParcel, deleteParcel, getDeliveryInfo } from "@/lib/yalidine";
 import { notifyNewOrder } from "@/lib/telegram";
 import { WILAYAS } from "@/lib/wilayas";
-import type { Order } from "@/lib/types";
+import { summarize } from "@/lib/variants";
+import type { Order, OrderItem, Product } from "@/lib/types";
 import { requireAdmin } from "./auth";
 
 export type OrderFormState = {
@@ -15,6 +16,46 @@ export type OrderFormState = {
 };
 
 const PHONE_RE = /^(0)(5|6|7)[0-9]{8}$/;
+
+/**
+ * Variante de chaque pièce, validée contre le catalogue. Le formulaire envoie
+ * une entrée par pièce ; on exige donc exactement `quantity` entrées, chacune
+ * portant une couleur et une taille connues dès que le produit en définit.
+ */
+function parseItems(
+  raw: unknown,
+  quantity: number,
+  product: Product
+): { items: OrderItem[] } | { error: string } {
+  let parsed: OrderItem[];
+  try {
+    parsed = normalizeItems(JSON.parse(String(raw || "[]")));
+  } catch {
+    return { error: "الرجاء اختيار اللون و المقاس." };
+  }
+  if (parsed.length !== quantity) {
+    // Sans couleurs ni tailles au catalogue, il n'y a rien à choisir : on
+    // complète plutôt que de rejeter une commande parfaitement valide.
+    if (product.colors.length === 0 && product.sizes.length === 0) {
+      return {
+        items: Array.from({ length: quantity }, () => ({ color: null, size: null })),
+      };
+    }
+    return { error: "الرجاء اختيار اللون و المقاس لكل قطعة." };
+  }
+  for (const item of parsed) {
+    if (
+      product.colors.length > 0 &&
+      !product.colors.some((c) => c.name === item.color)
+    ) {
+      return { error: "الرجاء اختيار لون." };
+    }
+    if (product.sizes.length > 0 && !product.sizes.includes(item.size ?? "")) {
+      return { error: "الرجاء اختيار مقاس." };
+    }
+  }
+  return { items: parsed };
+}
 
 export async function createOrder(
   _prev: OrderFormState,
@@ -28,7 +69,10 @@ export async function createOrder(
   const wilaya = String(formData.get("wilaya") || "");
   const address = String(formData.get("address") || "").trim();
   const stopdeskId = Number(formData.get("stopdesk_id")) || null;
-  const quantity = Math.min(Math.max(Number(formData.get("quantity")) || 1, 1), 20);
+  const requestedQuantity = Math.min(
+    Math.max(Number(formData.get("quantity")) || 1, 1),
+    20
+  );
 
   // Contrôles sans accès base d'abord : inutile d'interroger Supabase pour
   // une soumission manifestement invalide
@@ -51,15 +95,22 @@ export async function createOrder(
   if (delivery_type === "domicile" && address.length < 5)
     return { error: "الرجاء إدخال عنوان التوصيل." };
 
-  // Variantes : obligatoires si le produit en définit
-  const color = String(formData.get("color") || "").trim() || null;
-  const size = String(formData.get("size") || "").trim() || null;
-  if (product.colors.length > 0 && !product.colors.some((c) => c.name === color)) {
-    return { error: "الرجاء اختيار لون." };
-  }
-  if (product.sizes.length > 0 && !product.sizes.includes(size ?? "")) {
-    return { error: "الرجاء اختيار مقاس." };
-  }
+  // Offre groupée : le pack fixe la quantité et le prix. Les deux sont relus
+  // depuis la base d'après le seul identifiant envoyé — le client ne décide ni
+  // du nombre de pièces ni du montant.
+  const packId = String(formData.get("pack_id") || "");
+  const pack = product.packs.find((p) => p.id === packId) ?? null;
+  if (product.packs.length > 0 && !pack) return { error: "الرجاء اختيار عرض." };
+
+  const quantity = pack ? pack.quantity : requestedQuantity;
+  const subtotal = pack ? pack.price : product.price * quantity;
+
+  // Variantes : une par pièce, obligatoires si le produit en définit
+  const parsedItems = parseItems(formData.get("items"), quantity, product);
+  if ("error" in parsedItems) return { error: parsedItems.error };
+  const items = parsedItems.items;
+  const color = summarize(items, "color");
+  const size = summarize(items, "size");
 
   // Tarifs et bureaux recalculés côté serveur depuis Yalidine
   // (jamais confiés au client, aucun tarif manuel)
@@ -94,7 +145,7 @@ export async function createOrder(
   const isFree =
     settings.free_delivery_mode === "all" ||
     (settings.free_delivery_mode === "stopdesk" && delivery_type === "stopdesk");
-  const total = product.price * quantity + (isFree ? 0 : delivery);
+  const total = subtotal + (isFree ? 0 : delivery);
 
   const { error } = await supabase().from("orders").insert({
     customer_name,
@@ -105,6 +156,8 @@ export async function createOrder(
     delivery_type,
     stopdesk_id,
     stopdesk_name,
+    pack_label: pack?.label ?? null,
+    items,
     color,
     size,
     quantity,
@@ -120,6 +173,8 @@ export async function createOrder(
     address: address || null,
     delivery_type,
     stopdesk_name,
+    packLabel: pack?.label ?? null,
+    items,
     color,
     size,
     quantity,
@@ -138,7 +193,10 @@ async function getOrder(orderId: string): Promise<Order | null> {
     .select("*")
     .eq("id", orderId)
     .single();
-  return (data as Order) ?? null;
+  if (!data) return null;
+  // Même garde-fou que `getOrders` : `items` est absent des lignes créées avant
+  // la migration 012, et `createParcel` itère dessus.
+  return { ...(data as Order), items: normalizeItems(data.items) };
 }
 
 /**

@@ -16,6 +16,13 @@ create table if not exists public.product (
   features jsonb not null default '[]'::jsonb,
   colors jsonb not null default '[]'::jsonb,   -- [{ "name": "Noir", "hex": "#111111" }]
   sizes jsonb not null default '[]'::jsonb,    -- ["S", "M", "L"]
+  -- Offres groupées : « 2 pièces à 4 000 DA ». Chaque pack porte son prix total
+  -- (pas unitaire) et son traitement visuel sur la landing :
+  -- [{ "id": uuid, "label": "Pack 2 pièces", "quantity": 2,
+  --    "price": 4000, "old_price": 5000|null, "badge": "الأكثر طلبا"|null,
+  --    "highlight": "none"|"badge"|"border" }]
+  -- Vide = la landing garde son sélecteur de quantité et son prix × quantité.
+  packs jsonb not null default '[]'::jsonb,
   updated_at timestamptz not null default now()
 );
 
@@ -31,6 +38,14 @@ create table if not exists public.orders (
   delivery_type text not null default 'domicile' check (delivery_type in ('domicile','stopdesk')),
   stopdesk_id int,
   stopdesk_name text,
+  -- Pack retenu, figé à la commande : renommer un pack dans l'admin ne doit
+  -- pas réécrire l'historique. Null = commande sans pack.
+  pack_label text,
+  -- Variante de chaque pièce : [{ "color": "Noir", "size": "M" }, ...]
+  -- Un pack de 2 pièces produit 2 entrées.
+  items jsonb not null default '[]'::jsonb,
+  -- Résumé des valeurs distinctes de `items` ("Noir, Blanc") : garde les
+  -- anciennes lignes et les cellules compactes lisibles sans cas particulier.
   color text,
   size text,
   quantity int not null default 1 check (quantity > 0),

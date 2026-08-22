@@ -120,6 +120,37 @@ export default async function ProductPage({
                 </div>
               )}
 
+              {product.packs.length > 0 && (
+                <div className="flex flex-col gap-2 border-t border-zinc-100 pt-4">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                    Offres groupées
+                  </span>
+                  {product.packs.map((pack) => (
+                    <div key={pack.id} className="flex items-center gap-3">
+                      <span className="min-w-0 flex-1 truncate text-sm font-semibold text-zinc-800">
+                        {pack.label}
+                        <span className="ms-1.5 font-medium text-zinc-400">
+                          ×{pack.quantity}
+                        </span>
+                      </span>
+                      {pack.badge && (
+                        <span className="shrink-0 rounded-md bg-indigo-50 px-2 py-0.5 text-[11px] font-bold text-indigo-600">
+                          {pack.badge}
+                        </span>
+                      )}
+                      <span className="shrink-0 text-sm font-bold text-zinc-900">
+                        {formatDA(pack.price)}
+                      </span>
+                      {pack.old_price && pack.old_price > pack.price && (
+                        <span className="shrink-0 text-xs text-zinc-400 line-through">
+                          {formatDA(pack.old_price)}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <div className="mt-auto flex flex-wrap gap-3 border-t border-zinc-100 pt-4 text-xs font-medium text-zinc-500">
                 <span className="inline-flex items-center gap-1.5">
                   <Truck className="size-3.5" />

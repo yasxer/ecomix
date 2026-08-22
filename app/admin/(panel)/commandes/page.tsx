@@ -1,6 +1,7 @@
 import { Filter, Home, Inbox, Search, Store } from "lucide-react";
 import { getOrders, syncYalidineStatuses, type OrderFilters } from "@/lib/data";
 import { ORDER_STATUSES, type Order, type OrderStatus } from "@/lib/types";
+import { formatVariants } from "@/lib/variants";
 import { WILAYAS } from "@/lib/wilayas";
 import { OrderActions } from "./order-actions";
 import { StatusBadge, YalidineStatusBadge } from "./status-badge";
@@ -192,9 +193,14 @@ export default async function OrdersPage({
                       {o.stopdesk_name && (
                         <p className="mt-0.5 text-xs text-zinc-500">{o.stopdesk_name}</p>
                       )}
-                      {(o.color || o.size) && (
+                      {o.pack_label && (
+                        <p className="mt-0.5 text-xs font-semibold text-zinc-700">
+                          {o.pack_label}
+                        </p>
+                      )}
+                      {formatVariants(o) && (
                         <p className="mt-0.5 text-xs font-medium text-indigo-600">
-                          {[o.color, o.size].filter(Boolean).join(" / ")}
+                          {formatVariants(o)}
                         </p>
                       )}
                     </td>
@@ -247,8 +253,8 @@ export default async function OrdersPage({
                       ? "Domicile"
                       : `Stopdesk${o.stopdesk_name ? ` (${o.stopdesk_name})` : ""}`}{" "}
                     — Qté {o.quantity}
-                    {(o.color || o.size) &&
-                      ` — ${[o.color, o.size].filter(Boolean).join(" / ")}`}
+                    {o.pack_label && ` — ${o.pack_label}`}
+                    {formatVariants(o) && ` — ${formatVariants(o)}`}
                   </span>
                   <span className="font-bold text-zinc-900">
                     {formatDA(Number(o.total))}

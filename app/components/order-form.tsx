@@ -1,6 +1,11 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import {
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -16,7 +21,13 @@ import {
 } from "lucide-react";
 import { createOrder, type OrderFormState } from "@/app/actions/orders";
 import { WILAYAS } from "@/lib/wilayas";
-import type { FreeDeliveryMode, ProductColor } from "@/lib/types";
+import type {
+  FreeDeliveryMode,
+  OrderItem,
+  ProductColor,
+  ProductPack,
+} from "@/lib/types";
+import { VariantPicker } from "./variant-picker";
 
 const initialState: OrderFormState = {};
 
@@ -56,21 +67,58 @@ function trackPixel(event: string, data?: Record<string, unknown>) {
   }
 }
 
+/** Pièce dont la variante n'a pas encore été choisie. */
+const EMPTY_ITEM: OrderItem = { color: null, size: null };
+
 export function OrderForm({
   price,
   colors,
   sizes,
   freeDeliveryMode,
+  packs,
+  selectedPackId,
 }: {
   price: number;
   colors: ProductColor[];
   sizes: string[];
   freeDeliveryMode: FreeDeliveryMode;
+  /** Offres groupées. Vide = vente à la pièce avec le sélecteur de quantité. */
+  packs: ProductPack[];
+  /** Pack choisi dans la section « اختر عرضك » (voir `offers.tsx`). */
+  selectedPackId: string | null;
 }) {
   const [state, action, pending] = useActionState(createOrder, initialState);
   const [quantity, setQuantity] = useState(1);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+
+  const selectedPack = packs.find((p) => p.id === selectedPackId) ?? null;
+  // Le pack fait la quantité : quand des offres existent, le sélecteur `-/+`
+  // disparaît et c'est `pack.quantity` qui compte les pièces.
+  const effectiveQuantity = selectedPack?.quantity ?? quantity;
+
+  /**
+   * Ce que le client a choisi, pièce par pièce. Le tableau n'est jamais retaillé
+   * quand l'offre change : c'est `items` qui est dérivé à la bonne longueur au
+   * rendu. Passer du pack 2 au pack 1 puis revenir ne perd donc rien, et il n'y
+   * a pas d'effet qui corrige l'état après coup.
+   */
+  const [chosen, setChosen] = useState<OrderItem[]>([]);
+  /** Une entrée par pièce commandée, complétée de vides si besoin. */
+  const items = Array.from(
+    { length: effectiveQuantity },
+    (_, i) => chosen[i] ?? EMPTY_ITEM
+  );
+  const itemsJson = JSON.stringify(items);
+
+  function patchItem(index: number, changes: Partial<OrderItem>) {
+    setChosen((prev) =>
+      Array.from({ length: Math.max(prev.length, index + 1) }, (_, i) =>
+        i === index
+          ? { ...(prev[i] ?? EMPTY_ITEM), ...changes }
+          : prev[i] ?? EMPTY_ITEM
+      )
+    );
+  }
+
   // Ce que le client a coché ; `deliveryType` plus bas tient compte des
   // wilayas où Yalidine n'a aucun bureau.
   const [deliveryChoice, setDeliveryChoice] = useState<"domicile" | "stopdesk">(
@@ -159,11 +207,22 @@ export function OrderForm({
     freeDeliveryMode === "all" ||
     (freeDeliveryMode === "stopdesk" && deliveryType === "stopdesk");
   const fee = isFree ? 0 : yalidineFee;
-  const total = price * quantity + (fee ?? 0);
-  const variantsOk =
-    (colors.length === 0 || selectedColor !== null) &&
-    (sizes.length === 0 || selectedSize !== null);
-  const ready = Boolean(wilaya) && !loadingFees && delivery !== null && variantsOk;
+  // Le pack porte le prix du lot, pas celui d'une pièce : jamais × quantité.
+  const subtotal = selectedPack ? selectedPack.price : price * quantity;
+  const total = subtotal + (fee ?? 0);
+  const variantsOk = items.every(
+    (item) =>
+      (colors.length === 0 || item.color !== null) &&
+      (sizes.length === 0 || item.size !== null)
+  );
+  // Des offres existent mais aucune n'est retenue : rien à commander.
+  const packOk = packs.length === 0 || selectedPack !== null;
+  const ready =
+    Boolean(wilaya) && !loadingFees && delivery !== null && variantsOk && packOk;
+
+  // Variantes, quantité et pack passent par des boutons qui écrivent dans des
+  // champs cachés : React n'émet pas d'`change` pour eux, le `onChange` du
+  // formulaire ne les verrait donc jamais.
 
   if (state.success) {
     return (
@@ -198,7 +257,7 @@ export function OrderForm({
         // InitiateCheckout : première interaction avec le formulaire
         if (!checkoutTracked.current) {
           checkoutTracked.current = true;
-          trackPixel("InitiateCheckout", { value: price, currency: "DZD" });
+          trackPixel("InitiateCheckout", { value: subtotal, currency: "DZD" });
         }
       }}
       className="flex flex-col gap-4 rounded-3xl bg-white p-6 shadow-xl ring-1 ring-zinc-200/60 sm:p-8"
@@ -226,61 +285,44 @@ export function OrderForm({
         aria-hidden="true"
       />
 
-      {/* Choix de la couleur */}
-      {colors.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <span className="text-sm font-semibold text-zinc-700">
-            اللون{" "}
-            {selectedColor ? (
-              <span className="font-normal text-zinc-500">— {selectedColor}</span>
-            ) : (
-              <span className="font-normal text-zinc-400">(اختر)</span>
-            )}
-          </span>
-          <div className="flex flex-wrap gap-2.5">
-            {colors.map((c) => (
-              <button
-                key={c.name}
-                type="button"
-                onClick={() => setSelectedColor(c.name)}
-                title={c.name}
-                aria-label={`اللون ${c.name}`}
-                className={`size-10 rounded-full ring-2 ring-offset-2 transition ${
-                  selectedColor === c.name
-                    ? "ring-(--primary) scale-110"
-                    : "ring-zinc-200 hover:scale-105"
-                }`}
-                style={{ backgroundColor: c.hex }}
-              />
-            ))}
-          </div>
-          <input type="hidden" name="color" value={selectedColor ?? ""} />
+      {/* Offre retenue. Le serveur relit le prix et la quantité depuis la base
+          d'après cet identifiant : rien de tarifaire ne vient du client. */}
+      <input type="hidden" name="pack_id" value={selectedPack?.id ?? ""} />
+
+      {/* Rappel de l'offre choisie. Pas de second sélecteur : la section
+          « اختر عرضك » plus haut *est* le sélecteur. */}
+      {packs.length > 0 && (
+        <div className="flex items-center justify-between gap-3 rounded-xl bg-(--primary)/5 px-4 py-3">
+          {selectedPack ? (
+            <span dir="auto" className="min-w-0 text-sm font-bold text-zinc-800">
+              {selectedPack.label}
+              <span className="ms-1.5 font-extrabold text-(--primary)">
+                {formatDA(selectedPack.price)}
+              </span>
+            </span>
+          ) : (
+            <span className="text-sm font-semibold text-zinc-500">لم تختر عرضا</span>
+          )}
+          <a
+            href="#offres"
+            className="shrink-0 text-sm font-bold text-(--primary) underline underline-offset-4"
+          >
+            بدّل العرض
+          </a>
         </div>
       )}
 
-      {/* Choix de la taille */}
-      {sizes.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <span className="text-sm font-semibold text-zinc-700">المقاس</span>
-          <div className="flex flex-wrap gap-2">
-            {sizes.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => setSelectedSize(s)}
-                className={`min-w-11 rounded-xl border-2 px-3.5 py-2 text-sm font-bold transition ${
-                  selectedSize === s
-                    ? "border-(--primary) bg-(--primary)/5 text-(--primary)"
-                    : "border-zinc-200 text-zinc-600 hover:border-zinc-300"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-          <input type="hidden" name="size" value={selectedSize ?? ""} />
-        </div>
-      )}
+      {/* Couleur et taille, une fois par pièce */}
+      <VariantPicker
+        colors={colors}
+        sizes={sizes}
+        count={effectiveQuantity}
+        items={items}
+        onChange={patchItem}
+      />
+
+      {/* Source de vérité des variantes côté serveur */}
+      <input type="hidden" name="items" value={itemsJson} />
 
       <div className="relative">
         <User className="pointer-events-none absolute start-4 top-1/2 size-4.5 -translate-y-1/2 text-zinc-400" />
@@ -441,36 +483,40 @@ export function OrderForm({
         </div>
       )}
 
-      {/* Quantité */}
-      <div className="flex items-center justify-between rounded-xl border border-zinc-200 px-4 py-3">
-        <span className="text-sm font-medium text-zinc-700">الكمية</span>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            className="flex size-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-700 transition hover:bg-zinc-200"
-            aria-label="إنقاص"
-          >
-            <Minus className="size-4" />
-          </button>
-          <span className="w-6 text-center font-bold text-zinc-900">{quantity}</span>
-          <button
-            type="button"
-            onClick={() => setQuantity((q) => Math.min(20, q + 1))}
-            className="flex size-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-700 transition hover:bg-zinc-200"
-            aria-label="زيادة"
-          >
-            <Plus className="size-4" />
-          </button>
-          <input type="hidden" name="quantity" value={quantity} />
+      {/* Quantité — remplacée par le choix de l'offre quand des packs existent */}
+      {packs.length === 0 && (
+        <div className="flex items-center justify-between rounded-xl border border-zinc-200 px-4 py-3">
+          <span className="text-sm font-medium text-zinc-700">الكمية</span>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              className="flex size-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-700 transition hover:bg-zinc-200"
+              aria-label="إنقاص"
+            >
+              <Minus className="size-4" />
+            </button>
+            <span className="w-6 text-center font-bold text-zinc-900">{quantity}</span>
+            <button
+              type="button"
+              onClick={() => setQuantity((q) => Math.min(20, q + 1))}
+              className="flex size-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-700 transition hover:bg-zinc-200"
+              aria-label="زيادة"
+            >
+              <Plus className="size-4" />
+            </button>
+            <input type="hidden" name="quantity" value={quantity} />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Récap */}
       <div className="flex flex-col gap-1.5 rounded-xl bg-zinc-50 p-4 text-sm">
-        <div className="flex justify-between text-zinc-600">
-          <span>المنتج × {quantity}</span>
-          <span>{formatDA(price * quantity)}</span>
+        <div className="flex justify-between gap-3 text-zinc-600">
+          <span dir="auto" className="min-w-0">
+            {selectedPack ? selectedPack.label : "المنتج"} × {effectiveQuantity}
+          </span>
+          <span className="shrink-0">{formatDA(subtotal)}</span>
         </div>
         <div className="flex justify-between text-zinc-600">
           <span>التوصيل</span>
@@ -489,7 +535,7 @@ export function OrderForm({
         <div className="mt-1 flex justify-between border-t border-zinc-200 pt-2 text-base font-bold text-zinc-900">
           <span>المجموع</span>
           <span className="text-(--primary)">
-            {fee !== null ? formatDA(total) : formatDA(price * quantity)}
+            {fee !== null ? formatDA(total) : formatDA(subtotal)}
           </span>
         </div>
       </div>
@@ -512,11 +558,17 @@ export function OrderForm({
           </>
         ) : ready ? (
           <>تأكيد الطلب — {formatDA(total)}</>
+        ) : !packOk ? (
+          <>اختر عرضك</>
         ) : !variantsOk ? (
+          // À plusieurs pièces, nommer la couleur ou la taille manquante
+          // n'aide pas : c'est *quelle* pièce qui est incomplète qui compte.
           <>
-            {colors.length > 0 && selectedColor === null
-              ? "اختر لونا"
-              : "اختر مقاسا"}
+            {effectiveQuantity > 1
+              ? "أكمل اختيار كل قطعة"
+              : colors.length > 0 && items[0]?.color === null
+                ? "اختر لونا"
+                : "اختر مقاسا"}
           </>
         ) : (
           <>اختر ولايتك</>

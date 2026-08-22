@@ -1,5 +1,6 @@
 import "server-only";
 import type { Order, Settings } from "./types";
+import { formatVariants } from "./variants";
 import { wilayaId, wilayaName } from "./wilayas";
 
 const BASE_URL = "https://api.yalidine.app/v1";
@@ -53,7 +54,8 @@ export async function createParcel(
     to_wilaya_name: wilayaName(order.wilaya),
     product_list: [
       productName,
-      [order.color, order.size].filter(Boolean).join(" / "),
+      order.pack_label,
+      formatVariants(order),
       `x${order.quantity}`,
     ]
       .filter(Boolean)

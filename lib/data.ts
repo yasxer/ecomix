@@ -2,9 +2,13 @@ import "server-only";
 import { supabase } from "./supabase";
 import {
   FREE_DELIVERY_MODES,
+  BASE_PACK_ID,
+  PACK_HIGHLIGHTS,
   type Order,
+  type OrderItem,
   type OrderStatus,
   type Product,
+  type ProductPack,
   type Settings,
 } from "./types";
 
@@ -18,6 +22,45 @@ export const DEFAULT_SETTINGS: Omit<Settings, "id" | "updated_at"> = {
   free_delivery_mode: "none",
 };
 
+/**
+ * Remet un `packs` venu de la base dans une forme sur laquelle le rendu peut
+ * compter. Tant que la migration 012 n'a pas été jouée la colonne est absente
+ * de `select *`, donc `product.packs` vaut `undefined` : sans ce garde-fou la
+ * landing planterait sur le premier `.length`. Une entrée incomplète est
+ * écartée plutôt que de faire tomber toute la liste.
+ */
+function normalizePacks(raw: unknown): ProductPack[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((p): ProductPack[] => {
+    if (typeof p?.id !== "string" || typeof p?.label !== "string") return [];
+    const quantity = Number(p.quantity);
+    const price = Number(p.price);
+    if (!Number.isFinite(quantity) || quantity < 1) return [];
+    if (!Number.isFinite(price) || price < 0) return [];
+    const oldPrice = Number(p.old_price);
+    return [
+      {
+        id: p.id,
+        label: p.label,
+        quantity: Math.min(Math.round(quantity), 20),
+        price,
+        old_price: Number.isFinite(oldPrice) && oldPrice > 0 ? oldPrice : null,
+        badge: typeof p.badge === "string" && p.badge ? p.badge : null,
+        highlight: PACK_HIGHLIGHTS.includes(p.highlight) ? p.highlight : "none",
+      },
+    ];
+  });
+}
+
+/** Même garde-fou que `normalizePacks`, pour les variantes pièce par pièce. */
+export function normalizeItems(raw: unknown): OrderItem[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((item) => ({
+    color: typeof item?.color === "string" && item.color ? item.color : null,
+    size: typeof item?.size === "string" && item.size ? item.size : null,
+  }));
+}
+
 export async function getProduct(): Promise<Product | null> {
   const { data, error } = await supabase()
     .from("product")
@@ -25,7 +68,31 @@ export async function getProduct(): Promise<Product | null> {
     .limit(1)
     .maybeSingle();
   if (error) throw new Error(`Erreur produit: ${error.message}`);
-  return data as Product | null;
+  if (!data) return null;
+  const packs = normalizePacks(data.packs);
+  return {
+    ...(data as Product),
+    packs:
+      packs.length > 0
+        ? [
+            {
+              id: BASE_PACK_ID,
+              label: "1 pièce",
+              quantity: 1,
+              price: Number(data.price),
+              old_price: Number(data.price),
+              badge: null,
+              highlight: "none",
+            },
+            ...packs
+              .filter((pack) => pack.id !== BASE_PACK_ID && pack.quantity !== 1)
+              .map((pack) => ({
+                ...pack,
+                old_price: pack.quantity * Number(data.price),
+              })),
+          ]
+        : [],
+  };
 }
 
 // Cache mémoire court : évite un aller-retour Supabase à chaque requête
@@ -89,7 +156,10 @@ export async function getOrders(filters: OrderFilters = {}): Promise<Order[]> {
 
   const { data, error } = await query;
   if (error) throw new Error(`Erreur commandes: ${error.message}`);
-  return (data ?? []) as Order[];
+  return (data ?? []).map((o) => ({
+    ...(o as Order),
+    items: normalizeItems(o.items),
+  }));
 }
 
 export async function getAllOrdersForStats(): Promise<

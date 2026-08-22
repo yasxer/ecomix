@@ -50,6 +50,34 @@ html {
   animation: fade-up 0.4s ease-out 0.08s both;
 }
 
+@keyframes pack-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* Bordure animée d'un pack mis en avant. Le carré est volontairement plus large
+   que la carte et rogné par `overflow-hidden` : faire tourner l'angle du
+   conic-gradient repeindrait le dégradé à chaque frame, faire tourner l'élément
+   reste sur le compositeur. `translate` est une propriété distincte pour que
+   l'animation garde `transform` pour elle seule. */
+.pack-border::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 180%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 55%,
+    var(--primary) 78%,
+    transparent 88%
+  );
+  animation: pack-spin 3.5s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -58,5 +86,11 @@ html {
   .animate-fade-up,
   .animate-fade-up-delay {
     animation: none;
+  }
+
+  /* Le contour reste, mais plat et immobile. */
+  .pack-border::before {
+    animation: none;
+    background: var(--primary);
   }
 }

@@ -4,7 +4,7 @@ import { ArrowDown, BadgeCheck, Banknote, Check, PackageOpen, Truck } from "luci
 import { getProduct, getSettings } from "@/lib/data";
 import { Gallery } from "./components/gallery";
 import { MetaPixel } from "./components/meta-pixel";
-import { OrderForm } from "./components/order-form";
+import { Offers } from "./components/offers";
 
 // Page servie depuis le cache CDN (rapide même en 2G). Elle est régénérée
 // immédiatement quand le produit ou les settings changent (revalidatePath),
@@ -193,8 +193,15 @@ export default async function LandingPage() {
           </section>
         )}
 
-        {/* Formulaire */}
-        <div id="commander" className="scroll-mt-24 pt-10">
+        {/* Offres groupées (si configurées) puis formulaire : les deux
+            partagent le pack sélectionné, d'où le composant client commun. */}
+        <Offers
+          packs={product.packs}
+          price={product.price}
+          colors={product.colors}
+          sizes={product.sizes}
+          freeDeliveryMode={settings.free_delivery_mode}
+        >
           <div className="mb-6 flex flex-col items-center gap-1 text-center">
             <h2 className="text-2xl font-extrabold tracking-tight">
               Passez votre commande
@@ -203,13 +210,7 @@ export default async function LandingPage() {
               Vous ne payez qu&apos;à la réception de votre colis
             </p>
           </div>
-          <OrderForm
-            price={product.price}
-            colors={product.colors}
-            sizes={product.sizes}
-            freeDeliveryMode={settings.free_delivery_mode}
-          />
-        </div>
+        </Offers>
       </main>
 
       {/* Barre mobile fixe */}

@@ -11,6 +11,7 @@ import {
   type UploadTarget,
 } from "@/lib/storage";
 import { getProduct } from "@/lib/data";
+import { BASE_PACK_ID, PACK_HIGHLIGHTS, type ProductPack } from "@/lib/types";
 import { requireAdmin } from "./auth";
 
 export type ProductFormState = { success?: boolean; error?: string };
@@ -18,11 +19,58 @@ export type ProductFormState = { success?: boolean; error?: string };
 /** Nombre d'images demandables en une seule sélection (la galerie, elle, est illimitée). */
 const MAX_BATCH = 40;
 
+/** Nombre de packs qu'un produit peut proposer. Au-delà, plus personne ne choisit. */
+const MAX_PACKS = 10;
+
 /**
- * Prépare des URLs d'upload signées pour que le navigateur envoie les images
- * directement à Supabase. Le serveur ne reçoit ensuite que les URLs publiques,
- * ce qui lève la limite de taille des Server Actions (25 Mo) : le client peut
- * ajouter autant d'images qu'il veut.
+/**
+ * Valide les packs envoyés par l'éditeur. Un pack incomplet (label vide,
+ * quantité ou prix absurdes) est écarté silencieusement plutôt que de bloquer
+ * l'enregistrement : l'éditeur ne permet pas d'en produire, et un pack invalide
+ * en base afficherait une offre incommandable sur la landing.
+ */
+function parsePacks(raw: unknown[]): ProductPack[] {
+  const seen = new Set<string>();
+  return raw
+    .flatMap((p: unknown): ProductPack[] => {
+      const pack = p as Record<string, unknown>;
+      const id = typeof pack?.id === "string" ? pack.id : "";
+      const label = typeof pack?.label === "string" ? pack.label.trim() : "";
+      if (!id || seen.has(id) || !label) return [];
+
+      const quantity = Number(pack.quantity);
+      const price = Number(pack.price);
+      if (!Number.isFinite(quantity) || quantity < 1 || quantity > 20) return [];
+      if (!Number.isFinite(price) || price < 0) return [];
+
+      const oldPrice = Number(pack.old_price);
+      const badge = typeof pack.badge === "string" ? pack.badge.trim() : "";
+
+      seen.add(id);
+      return [
+        {
+          id,
+          label: label.slice(0, 60),
+          quantity: Math.round(quantity),
+          price,
+          old_price:
+            pack.old_price !== null && Number.isFinite(oldPrice) && oldPrice > 0
+              ? oldPrice
+              : null,
+          badge: badge ? badge.slice(0, 40) : null,
+          highlight: PACK_HIGHLIGHTS.includes(
+            pack.highlight as ProductPack["highlight"]
+          )
+            ? (pack.highlight as ProductPack["highlight"])
+            : "none",
+        },
+      ];
+    })
+    .slice(0, MAX_PACKS);
+}
+
+/**
+ * Prépare des URLs d'upload signées pour les images principales du produit.
  */
 export async function createProductUploadUrls(
   files: { name: string; type: string; size: number }[]
@@ -52,16 +100,18 @@ export async function createProductUploadUrls(
 
 /**
  * Supprime une image tout juste uploadée que l'admin retire avant d'enregistrer.
- * Refuse toute URL déjà rattachée au produit : celles-là ne partent qu'après
- * un enregistrement réussi (voir `updateProduct`).
+ * Refuse toute URL déjà rattachée au produit — galerie comme packs : celles-là
+ * ne partent qu'après un enregistrement réussi (voir `updateProduct`).
  */
-export async function discardProductImage(url: string): Promise<void> {
+export async function discardProductImage(
+  url: string
+): Promise<void> {
   await requireAdmin();
   if (typeof url !== "string" || !isBucketUrl(url, "product")) return;
 
   const product = await getProduct();
-  if (product?.images.includes(url)) return;
-
+  if (!product) return;
+  if (product.images.includes(url)) return;
   await deleteImages([url]);
 }
 
@@ -87,9 +137,11 @@ export async function updateProduct(
   // Variantes : couleurs [{name, hex}] et tailles [string]
   let colors: { name: string; hex: string }[] = [];
   let sizes: string[] = [];
+  let packs: ProductPack[] = [];
   try {
     const rawColors: unknown = JSON.parse(String(formData.get("colors") || "[]"));
     const rawSizes: unknown = JSON.parse(String(formData.get("sizes") || "[]"));
+    const rawPacks: unknown = JSON.parse(String(formData.get("packs") || "[]"));
     if (Array.isArray(rawColors)) {
       colors = rawColors
         .filter(
@@ -107,6 +159,25 @@ export async function updateProduct(
         .filter((s): s is string => typeof s === "string" && s.trim().length > 0)
         .map((s) => s.trim().slice(0, 20))
         .slice(0, 30);
+    }
+    if (Array.isArray(rawPacks)) {
+      const extraPacks = parsePacks(rawPacks)
+        .filter((pack) => pack.id !== BASE_PACK_ID && pack.quantity !== 1)
+        .map((pack) => ({ ...pack, old_price: pack.quantity * price }));
+      if (extraPacks.length > 0) {
+        packs = [
+          {
+            id: BASE_PACK_ID,
+            label: "1 pièce",
+            quantity: 1,
+            price,
+            old_price,
+            badge: null,
+            highlight: "none",
+          },
+          ...extraPacks,
+        ];
+      }
     }
   } catch {
     return { error: "Variantes invalides." };
@@ -141,15 +212,18 @@ export async function updateProduct(
       features,
       colors,
       sizes,
+      packs,
       images,
       updated_at: new Date().toISOString(),
     })
     .eq("id", product.id);
   if (error) return { error: error.message };
 
-  // Les images retirées sont supprimées définitivement du storage
-  // (seulement après la réussite de la mise à jour en base)
-  const removed = product.images.filter((url) => !images.includes(url));
+  // Les images retirées sont supprimées définitivement du storage (seulement
+  // après la réussite de la mise à jour en base). Les photos de packs comptent
+  // aussi : supprimer un pack doit effacer son image.
+  const kept = new Set(images);
+  const removed = product.images.filter((url) => !kept.has(url));
   await deleteImages(removed);
 
   revalidatePath("/");

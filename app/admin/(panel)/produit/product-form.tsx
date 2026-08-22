@@ -20,7 +20,9 @@ import {
   type ProductFormState,
 } from "@/app/actions/product";
 import { MAX_SOURCE_SIZE, prepareImage } from "@/lib/prepare-image";
+import { mapLimit, putToSignedUrl } from "@/lib/upload-client";
 import type { Product, ProductColor } from "@/lib/types";
+import { PackEditor } from "./pack-editor";
 
 const inputClass =
   "w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20";
@@ -47,47 +49,6 @@ type ImageItem = {
   error?: string;
 };
 
-/** Exécute `task` sur chaque élément, `limit` en parallèle au maximum. */
-async function mapLimit<T>(
-  items: T[],
-  limit: number,
-  task: (item: T) => Promise<void>
-): Promise<void> {
-  let cursor = 0;
-  await Promise.all(
-    Array.from({ length: Math.min(limit, items.length) }, async () => {
-      while (cursor < items.length) await task(items[cursor++]);
-    })
-  );
-}
-
-/**
- * Envoie le fichier directement à Supabase via l'URL signée. On passe par
- * XMLHttpRequest et non `fetch` : lui seul expose la progression d'upload.
- */
-function putToSignedUrl(
-  signedUrl: string,
-  file: File,
-  onProgress: (percent: number) => void
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("PUT", signedUrl);
-    xhr.setRequestHeader("content-type", file.type);
-    xhr.setRequestHeader("cache-control", "max-age=31536000");
-    xhr.upload.addEventListener("progress", (e) => {
-      if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
-    });
-    xhr.addEventListener("load", () => {
-      if (xhr.status >= 200 && xhr.status < 300) resolve();
-      else reject(new Error(`Upload refusé (${xhr.status})`));
-    });
-    xhr.addEventListener("error", () => reject(new Error("Connexion interrompue")));
-    xhr.addEventListener("abort", () => reject(new Error("Upload annulé")));
-    xhr.send(file);
-  });
-}
-
 export function ProductForm({ product }: { product: Product }) {
   const [state, action, pending] = useActionState<ProductFormState, FormData>(
     updateProduct,
@@ -113,7 +74,12 @@ export function ProductForm({ product }: { product: Product }) {
   const uploadedUrls = items.flatMap((it) =>
     it.status === "done" && it.url ? [it.url] : []
   );
-  const busy = items.some((it) => it.status === "preparing" || it.status === "uploading");
+  // L'éditeur de packs uploade lui aussi : enregistrer pendant un envoi
+  // écrirait un pack sans photo.
+  const [packsBusy, setPacksBusy] = useState(false);
+  const busy =
+    packsBusy ||
+    items.some((it) => it.status === "preparing" || it.status === "uploading");
   const failedCount = items.filter((it) => it.status === "error").length;
 
   // Les objectURL d'aperçu sont libérés au démontage du formulaire.
@@ -446,6 +412,13 @@ export function ProductForm({ product }: { product: Product }) {
         </div>
         <input type="hidden" name="sizes" value={JSON.stringify(sizes)} />
       </div>
+
+      {/* Offres groupées */}
+      <PackEditor
+        initial={product.packs}
+        basePrice={product.price}
+        onBusyChange={setPacksBusy}
+      />
 
       {/* Images */}
       <div className="flex flex-col gap-2.5">
