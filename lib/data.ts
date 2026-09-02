@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { supabase } from "./supabase";
 import {
   FREE_DELIVERY_MODES,
@@ -112,7 +113,13 @@ export function normalizeItems(raw: unknown): OrderItem[] {
   }));
 }
 
-export async function getProduct(): Promise<Product | null> {
+/**
+ * Le produit, relu à chaque requête. `cache` de React ne mémorise que le temps
+ * d'un rendu : `app/page.tsx` l'appelle depuis `generateMetadata` puis depuis
+ * la page sans faire deux requêtes, et rien n'est retenu d'une requête à
+ * l'autre.
+ */
+export const getProduct = cache(async (): Promise<Product | null> => {
   const { data, error } = await supabase()
     .from("product")
     .select("*")
@@ -144,20 +151,20 @@ export async function getProduct(): Promise<Product | null> {
           ]
         : [],
   };
-}
+});
 
-// Cache mémoire court : évite un aller-retour Supabase à chaque requête
-// (notamment /api/delivery appelé à chaque changement de wilaya)
-let settingsCache: { expires: number; data: Settings } | null = null;
-
-export function invalidateSettingsCache(): void {
-  settingsCache = null;
-}
-
-export async function getSettings(): Promise<Settings> {
-  if (settingsCache && settingsCache.expires > Date.now()) {
-    return settingsCache.data;
-  }
+/**
+ * Les settings, relus à chaque requête — même mémoïsation par rendu que
+ * `getProduct`.
+ *
+ * Un cache mémoire de 60 secondes vivait ici. Il ne pouvait pas tenir en
+ * production : chaque instance serverless garde le sien et l'enregistrement
+ * n'en vidait qu'une seule. La landing pouvait donc être régénérée avec des
+ * réglages périmés par une autre instance, puis rester figée ainsi le temps de
+ * son ISR — et le formulaire d'admin, relu depuis une instance en retard,
+ * réécrivait ces réglages périmés au prochain enregistrement.
+ */
+export const getSettings = cache(async (): Promise<Settings> => {
   const { data, error } = await supabase()
     .from("settings")
     .select("*")
@@ -184,9 +191,8 @@ export async function getSettings(): Promise<Settings> {
     landing_sticky_cta: raw.landing_sticky_cta !== false,
     landing_sticky_header: raw.landing_sticky_header !== false,
   };
-  settingsCache = { expires: Date.now() + 60_000, data: settings };
   return settings;
-}
+});
 
 export type OrderFilters = {
   status?: OrderStatus;

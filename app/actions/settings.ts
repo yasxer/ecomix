@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { supabase } from "@/lib/supabase";
 import { deleteImages, uploadImage } from "@/lib/storage";
-import { getSettings, invalidateSettingsCache } from "@/lib/data";
+import { getSettings } from "@/lib/data";
 import { WILAYAS } from "@/lib/wilayas";
 import { FREE_DELIVERY_MODES, type FreeDeliveryMode } from "@/lib/types";
 import { requireAdmin } from "./auth";
@@ -77,7 +77,6 @@ export async function updateSettings(
     await deleteImages([settings.logo_url]);
   }
 
-  invalidateSettingsCache();
   revalidatePath("/");
   revalidatePath("/admin", "layout");
   return { success: true };

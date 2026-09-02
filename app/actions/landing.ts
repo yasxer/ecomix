@@ -9,11 +9,7 @@ import {
   MAX_IMAGE_SIZE,
   type UploadTarget,
 } from "@/lib/storage";
-import {
-  getSettings,
-  invalidateSettingsCache,
-  normalizeLandingBlocks,
-} from "@/lib/data";
+import { getSettings, normalizeLandingBlocks } from "@/lib/data";
 import {
   LANDING_MODES,
   LANDING_THEMES,
@@ -155,7 +151,6 @@ export async function updateLanding(
   const removed = imageUrls(settings.landing_blocks).filter((url) => !kept.has(url));
   await deleteImages(removed);
 
-  invalidateSettingsCache();
   revalidatePath("/");
   revalidatePath("/admin/landing");
   return { success: true };
