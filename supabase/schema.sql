@@ -75,6 +75,26 @@ create table if not exists public.settings (
   -- Yalidine prélève ses frais dans tous les cas : c'est la marge qui absorbe.
   free_delivery_mode text not null default 'none'
     check (free_delivery_mode in ('none','all','stopdesk')),
+  -- Mise en page de la landing : 'simple' (ordre fixe) ou 'custom' (blocs
+  -- ordonnés composés depuis /admin/landing).
+  landing_mode text not null default 'simple'
+    check (landing_mode in ('simple','custom')),
+  -- Blocs du mode custom, dans l'ordre d'affichage :
+  --   { "id": uuid, "type": "hero" }                titre + prix + badges
+  --   { "id": uuid, "type": "gallery" }             galerie des images produit
+  --   { "id": uuid, "type": "description" }         description + points forts
+  --   { "id": uuid, "type": "form" }                offres groupées + formulaire
+  --   { "id": uuid, "type": "image", "url": "...",  image pleine largeur
+  --     "width": 1200, "height": 1600 }             (dimensions : évite le CLS)
+  --   { "id": uuid, "type": "text", "title": "...", titre + paragraphe libre
+  --     "body": "..." }
+  -- Le mode custom exige exactement un bloc "form" ; les "image" sont illimités.
+  landing_blocks jsonb not null default '[]'::jsonb,
+  -- Options d'affichage du mode custom (sans effet en mode simple)
+  landing_theme text not null default 'light'
+    check (landing_theme in ('light','dark')),
+  landing_sticky_cta boolean not null default true,
+  landing_sticky_header boolean not null default true,
   updated_at timestamptz not null default now()
 );
 

@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Boutique COD — Présentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  :root { --font-body: "Inter", -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  /* Les fragments arabes gardent la police arabe du document arabe. */
+  bdi { font-family: "Tajawal", "Geeza Pro", sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ 1. COUVERTURE ═══════════════ -->
+<div class="page cover">
+  <div class="halo halo-a"></div>
+  <div class="halo halo-b"></div>
+
+  <div class="intro">
+    <span class="kicker">Boutique en ligne · Algérie</span>
+    <h1>Votre site de vente,<br>livré prêt à encaisser.</h1>
+    <p class="sub">
+      Une landing page qui vend, un formulaire de commande en arabe, et un
+      panneau d'administration qui envoie vos colis chez Yalidine en un clic.
+      Paiement à la livraison, 58 wilayas.
+    </p>
+  </div>
+
+  <div class="facts-wrap">
+    <div class="facts">
+      <div class="fact">
+        <b>1 clic</b>
+        <span>De la commande au colis Yalidine</span>
+      </div>
+      <div class="fact">
+        <b>Temps réel</b>
+        <span>Tarifs de livraison et suivi des colis</span>
+      </div>
+      <div class="fact">
+        <b>0 DA</b>
+        <span>Aucune commission sur vos ventes</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">Dossier de présentation — pages du site, fonctionnement et tarifs</div>
+</div>
+
+<!-- ═══════════════ 2. SOMMAIRE + EN BREF ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">Sommaire</p>
+  <h1 class="title">Ce que contient ce dossier</h1>
+
+  <div class="toc">
+    <div class="toc-row"><span class="num">01</span><span class="lbl">Comment ça marche — le parcours complet</span><span class="dots"></span><span class="pg">p. 3</span></div>
+    <div class="toc-row"><span class="num">02</span><span class="lbl">La landing page — anatomie</span><span class="dots"></span><span class="pg">p. 4</span></div>
+    <div class="toc-row"><span class="num">03</span><span class="lbl">Les sections de la page en détail</span><span class="dots"></span><span class="pg">p. 5</span></div>
+    <div class="toc-row"><span class="num">04</span><span class="lbl">Le formulaire de commande</span><span class="dots"></span><span class="pg">p. 6</span></div>
+    <div class="toc-row"><span class="num">05</span><span class="lbl">Offres groupées, couleurs et tailles</span><span class="dots"></span><span class="pg">p. 7</span></div>
+    <div class="toc-row"><span class="num">06</span><span class="lbl">Espace admin — connexion et statistiques</span><span class="dots"></span><span class="pg">p. 8</span></div>
+    <div class="toc-row"><span class="num">07</span><span class="lbl">Admin — Commandes</span><span class="dots"></span><span class="pg">p. 9</span></div>
+    <div class="toc-row"><span class="num">08</span><span class="lbl">Admin — Produit</span><span class="dots"></span><span class="pg">p. 10</span></div>
+    <div class="toc-row"><span class="num">09</span><span class="lbl">Admin — Éditeur de landing page</span><span class="dots"></span><span class="pg">p. 11</span></div>
+    <div class="toc-row"><span class="num">10</span><span class="lbl">Admin — Paramètres</span><span class="dots"></span><span class="pg">p. 12</span></div>
+    <div class="toc-row"><span class="num">11</span><span class="lbl">Intégrations : Yalidine, Telegram, Meta Pixel</span><span class="dots"></span><span class="pg">p. 13</span></div>
+    <div class="toc-row"><span class="num">12</span><span class="lbl">Sécurité et performance</span><span class="dots"></span><span class="pg">p. 14</span></div>
+    <div class="toc-row"><span class="num">13</span><span class="lbl">Ce qui est inclus &amp; mise en route</span><span class="dots"></span><span class="pg">p. 15</span></div>
+    <div class="toc-row"><span class="num">14</span><span class="lbl">Tarifs</span><span class="dots"></span><span class="pg">p. 16</span></div>
+    <div class="toc-row"><span class="num">15</span><span class="lbl">Questions fréquentes</span><span class="dots"></span><span class="pg">p. 17</span></div>
+  </div>
+
+  <hr class="rule">
+
+  <h2>En deux phrases</h2>
+  <p class="lead">
+    Vous vendez un produit, vous le poussez sur Facebook ou TikTok, et vos
+    clients commandent depuis leur téléphone en arabe, sans compte et sans
+    carte bancaire. Vous, vous ouvrez votre panneau admin, vous cliquez
+    <strong>Confirmer</strong>, et le colis part chez Yalidine avec son
+    bordereau prêt à imprimer.
+  </p>
+
+  <div class="grid g3" style="margin-top:auto">
+    <div class="card plain">
+      <h3>Pour le client</h3>
+      <p class="muted" style="font-size:9pt;margin:0">Une page, un formulaire, cinq champs. Il ne paie rien avant de recevoir.</p>
+    </div>
+    <div class="card plain">
+      <h3>Pour vous</h3>
+      <p class="muted" style="font-size:9pt;margin:0">Tout se pilote depuis un seul écran, même sur téléphone.</p>
+    </div>
+    <div class="card plain">
+      <h3>Pour vos colis</h3>
+      <p class="muted" style="font-size:9pt;margin:0">Yalidine reçoit la commande directement, sans ressaisie.</p>
+    </div>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>2</span></div>
+</div>
+
+<!-- ═══════════════ 3. COMMENT ÇA MARCHE ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">01 — Le parcours</p>
+  <h1 class="title">De la publicité au colis livré</h1>
+
+  <div class="flow" style="margin-bottom:6mm">
+    <div class="node"><b>Pub</b><span>Facebook / TikTok</span></div>
+    <div class="arrow">›</div>
+    <div class="node"><b>Landing</b><span>Le client découvre</span></div>
+    <div class="arrow">›</div>
+    <div class="node brand"><b>Commande</b><span>5 champs, en arabe</span></div>
+    <div class="arrow">›</div>
+    <div class="node"><b>Telegram</b><span>Vous êtes prévenu</span></div>
+    <div class="arrow">›</div>
+    <div class="node"><b>Admin</b><span>Vous confirmez</span></div>
+    <div class="arrow">›</div>
+    <div class="node"><b>Yalidine</b><span>Le colis part</span></div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>Le client arrive sur votre page</h3>
+        <p>Une seule page, pensée pour le téléphone : photo du produit, prix, remise, points forts, et un bouton « Commander » qui reste visible pendant tout le défilement.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>Il choisit son offre et sa variante</h3>
+        <p>Une pièce, deux pièces, trois pièces — chaque offre a son prix. Puis la couleur et la taille, <strong>pièce par pièce</strong> quand il en commande plusieurs.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>Il remplit le formulaire</h3>
+        <p>Nom, téléphone, wilaya, domicile ou bureau Stopdesk, adresse. Le prix de la livraison s'affiche automatiquement, <strong>lu en direct chez Yalidine</strong> selon la wilaya choisie.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>Vous recevez la commande sur Telegram</h3>
+        <p>Dès la validation, un message arrive dans votre Telegram avec le nom, le téléphone, la wilaya, l'offre, la variante et le total. Plusieurs destinataires possibles (vous, votre associé, votre standardiste).</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>Vous appelez, puis vous confirmez</h3>
+        <p>Dans l'admin, un bouton <strong>Confirmer</strong>. Le colis est créé chez Yalidine à la seconde, avec le numéro de suivi et le <strong>bordereau à imprimer</strong>. Un bouton <strong>Annuler</strong> supprime aussi le colis côté Yalidine.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>Vous suivez la livraison sans quitter l'admin</h3>
+        <p>Le statut Yalidine (En préparation, Expédié, Livré, Retourné…) se met à jour tout seul à chaque ouverture de la page Commandes. Vos revenus se calculent sur les commandes réellement livrées.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent" style="margin-top:auto">
+    <h3>Le point important</h3>
+    <p style="margin:0">Aucune ressaisie nulle part. La commande n'est tapée qu'une seule fois — par le client lui-même — et elle voyage telle quelle jusqu'au bordereau Yalidine.</p>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>3</span></div>
+</div>
+
+<!-- ═══════════════ 4. LANDING — ANATOMIE ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">02 — La page publique</p>
+  <h1 class="title">La landing page, section par section</h1>
+  <p>C'est la seule page que voit votre client. Elle est construite pour le
+  téléphone d'abord (largeur fixe, colonne unique) et elle s'affiche en
+  <strong>arabe</strong> pour tout ce qui concerne l'achat.</p>
+
+  <div class="grid g2" style="grid-template-columns: 82mm 1fr; align-items:start">
+    <div class="mock">
+      <div class="bar">votre-domaine.com</div>
+      <div class="zone"><b>En-tête</b><span>Logo + nom de la boutique, collé en haut</span></div>
+      <div class="zone hi"><b>Hero</b><span>Titre, prix, ancien prix barré, badge de remise</span></div>
+      <div class="zone"><b>Galerie</b><span>Photos, glissement du doigt, miniatures</span></div>
+      <div class="zone"><b>Description</b><span>Texte libre + points forts</span></div>
+      <div class="zone hi"><b>Offres</b><span>1 pièce / 2 pièces / 3 pièces…</span></div>
+      <div class="zone hi"><b>Formulaire</b><span>Le bloc de commande</span></div>
+      <div class="zone"><b>Pied de page</b><span>Logo, nom, année</span></div>
+      <div class="zone" style="background:#eef2ff"><b>Bouton flottant</b><span>« Commander — 3 500 DA », toujours visible</span></div>
+    </div>
+
+    <div>
+      <div class="card plain">
+        <h3>En-tête</h3>
+        <p style="margin:0;font-size:9.5pt">Votre logo et le nom de la boutique. Il reste collé en haut de l'écran pendant que le client fait défiler — ou pas, c'est une option.</p>
+      </div>
+      <div class="card plain">
+        <h3>Hero — l'accroche</h3>
+        <p style="margin:0;font-size:9.5pt">Le nom du produit, le prix en gros, l'ancien prix barré et un badge <span class="tag">−30 % aujourd'hui</span> calculé automatiquement. Dessous : « Livraison 58 wilayas » et « Paiement à la livraison ».</p>
+      </div>
+      <div class="card plain">
+        <h3>Galerie photo</h3>
+        <p style="margin:0;font-size:9.5pt">Autant de photos que vous voulez. Le client glisse le doigt pour passer de l'une à l'autre, les miniatures suivent. Vos photos sont automatiquement allégées et converties pour se charger vite, même en 3G.</p>
+      </div>
+      <div class="card plain">
+        <h3>Description &amp; points forts</h3>
+        <p style="margin:0;font-size:9.5pt">Votre texte de vente, puis une liste de points forts cochés. Écrivez en arabe ou en français : la mise en page s'adapte au sens de lecture toute seule.</p>
+      </div>
+      <div class="card accent">
+        <h3>Bouton flottant</h3>
+        <p style="margin:0;font-size:9.5pt">Un bouton « Commander » qui suit le client partout dans la page et le ramène au formulaire d'un seul geste. Activable ou non.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>4</span></div>
+</div>
+
+<!-- ═══════════════ 5. DEUX MISES EN PAGE ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">03 — Mise en page</p>
+  <h1 class="title">Deux façons de construire votre page</h1>
+  <p>Selon le produit et la campagne, on ne raconte pas la même histoire. Vous
+  choisissez le mode dans l'admin, sans toucher à une ligne de code.</p>
+
+  <div class="grid g2">
+    <div class="card plain">
+      <span class="tag grey">Mode 1</span>
+      <h2 style="margin-top:2mm">Simple</h2>
+      <p style="font-size:9.5pt">L'ordre classique, celui qui convertit sur la plupart des produits : accroche → photos → description → offres → formulaire. Rien à régler, ça marche tout de suite.</p>
+      <ul class="list" style="font-size:9.5pt">
+        <li>Aucune configuration</li>
+        <li>Thème clair</li>
+        <li>Bouton flottant sur téléphone</li>
+      </ul>
+    </div>
+    <div class="card accent">
+      <span class="tag">Mode 2</span>
+      <h2 style="margin-top:2mm">Personnalisée</h2>
+      <p style="font-size:9.5pt">Vous composez la page bloc par bloc et vous les rangez dans l'ordre que vous voulez. Idéal pour les pages longues à la « advertorial » avec de grands visuels.</p>
+      <ul class="list" style="font-size:9.5pt">
+        <li>Jusqu'à 40 blocs</li>
+        <li>Thème clair ou sombre</li>
+        <li>En-tête collant et bouton flottant au choix</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <h2>Les six types de blocs disponibles</h2>
+  <table>
+    <thead><tr><th>Bloc</th><th>Ce qu'il affiche</th><th>Répétable</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Hero</td><td>Nom du produit, prix, remise, badges de réassurance</td><td>Une fois</td></tr>
+      <tr><td class="k">Galerie</td><td>Les photos du produit, avec glissement du doigt</td><td>Une fois</td></tr>
+      <tr><td class="k">Description</td><td>Votre texte de vente et vos points forts</td><td>Une fois</td></tr>
+      <tr><td class="k">Formulaire</td><td>Les offres et le bloc de commande — obligatoire</td><td>Une fois</td></tr>
+      <tr><td class="k">Image</td><td>Un visuel pleine largeur, bord à bord</td><td>Autant que voulu</td></tr>
+      <tr><td class="k">Texte</td><td>Un titre et un paragraphe libres (témoignage, garantie, mode d'emploi…)</td><td>Autant que voulu</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card warn" style="margin-top:auto">
+    <h3>Garde-fou</h3>
+    <p style="margin:0">Une page personnalisée ne peut pas être enregistrée sans le bloc Formulaire : sans lui, personne ne pourrait commander. Le système refuse la sauvegarde et vous prévient.</p>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>5</span></div>
+</div>
+
+<!-- ═══════════════ 6. FORMULAIRE ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">04 — Le cœur du site</p>
+  <h1 class="title">Le formulaire de commande</h1>
+  <p>Entièrement en arabe, lu de droite à gauche. Cinq champs, pas un de plus :
+  chaque champ supplémentaire, c'est une commande perdue.</p>
+
+  <div class="grid g2" style="grid-template-columns: 1fr 1fr; align-items:start">
+    <div>
+      <div class="card plain">
+        <h3><bdi>الاسم و اللقب</bdi> — Nom complet</h3>
+        <p style="margin:0;font-size:9.5pt">Refusé en dessous de 3 caractères.</p>
+      </div>
+      <div class="card plain">
+        <h3><bdi>رقم الهاتف</bdi> — Téléphone</h3>
+        <p style="margin:0;font-size:9.5pt">Vérifié au format algérien (05, 06 ou 07 + 8 chiffres). Un numéro faux ne passe pas, donc plus d'appels dans le vide.</p>
+      </div>
+      <div class="card plain">
+        <h3><bdi>الولاية</bdi> — Wilaya</h3>
+        <p style="margin:0;font-size:9.5pt">Les 58 wilayas. Dès la sélection, le site interroge Yalidine et affiche le vrai tarif.</p>
+      </div>
+      <div class="card plain">
+        <h3><bdi>نوع التوصيل</bdi> — Domicile ou Stopdesk</h3>
+        <p style="margin:0;font-size:9.5pt">Deux cartes avec leur prix respectif. Si Yalidine n'a aucun bureau dans la wilaya, l'option est grisée et le client lit pourquoi.</p>
+      </div>
+      <div class="card plain">
+        <h3><bdi>العنوان</bdi> / <bdi>المكتب</bdi> — Adresse ou bureau</h3>
+        <p style="margin:0;font-size:9.5pt">Adresse libre à domicile ; en Stopdesk, la liste des bureaux de la wilaya avec leur adresse exacte.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="card accent">
+        <h3>Le récapitulatif en direct</h3>
+        <table style="font-size:9.5pt">
+          <tr><td>Produit × 2</td><td style="text-align:end" class="k">4 000 DA</td></tr>
+          <tr><td>Livraison</td><td style="text-align:end" class="k">600 DA</td></tr>
+          <tr><td class="k">Total</td><td style="text-align:end;font-weight:800;color:var(--brand)">4 600 DA</td></tr>
+        </table>
+        <p style="margin:3mm 0 0;font-size:9pt">Le total se recalcule à chaque changement de wilaya, d'offre ou de mode de livraison. Le bouton affiche le montant : « <bdi>تأكيد الطلب</bdi> — 4 600 DA ».</p>
+      </div>
+
+      <div class="card plain">
+        <h3>Le bouton parle au client</h3>
+        <p style="font-size:9.5pt">Tant qu'il manque quelque chose, le bouton ne dit pas « erreur » : il dit quoi faire.</p>
+        <ul class="list" style="font-size:9.5pt">
+          <li>« <bdi>اختر عرضك</bdi> » — choisissez votre offre</li>
+          <li>« <bdi>اختر لونا</bdi> » — choisissez une couleur</li>
+          <li>« <bdi>اختر ولايتك</bdi> » — choisissez votre wilaya</li>
+        </ul>
+      </div>
+
+      <div class="card ok">
+        <h3>Après validation</h3>
+        <p style="margin:0;font-size:9.5pt">Un écran de confirmation en arabe : « <bdi>تم استلام طلبكم</bdi> » — nous vous rappelons très vite. Rien à payer maintenant, tout se règle à la réception.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:auto">
+    <h3>Anti-robots, invisible</h3>
+    <p style="margin:0">Un champ piège que seuls les robots remplissent bloque les fausses commandes automatiques, sans jamais gêner un vrai client (pas de captcha, pas d'image à décoder).</p>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>6</span></div>
+</div>
+
+<!-- ═══════════════ 7. OFFRES & VARIANTES ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">05 — Vendre plus par commande</p>
+  <h1 class="title">Offres groupées, couleurs et tailles</h1>
+
+  <h2>Les offres groupées (packs)</h2>
+  <p>Le levier le plus rentable du COD : faire passer un client de 1 pièce à
+  2 ou 3. Vous créez des offres, chacune avec <strong>son prix total</strong>
+  (pas un prix unitaire), et la page affiche la remise toute seule.</p>
+
+  <table style="margin-bottom:4mm">
+    <thead><tr><th>Offre</th><th>Pièces</th><th>Prix</th><th>Ancien prix</th><th>Économie affichée</th></tr></thead>
+    <tbody>
+      <tr><td class="k">1 pièce</td><td>1</td><td>2 500 DA</td><td>3 000 DA</td><td><span class="tag">−17 %</span></td></tr>
+      <tr><td class="k">Pack 2 pièces</td><td>2</td><td>4 000 DA</td><td>5 000 DA</td><td><span class="tag">−20 %</span></td></tr>
+      <tr><td class="k">Pack 3 pièces</td><td>3</td><td>5 400 DA</td><td>7 500 DA</td><td><span class="tag">−28 %</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid g3">
+    <div class="card plain"><h3>Le ruban</h3><p style="margin:0;font-size:9pt">Un texte de votre choix — « <bdi>الأكثر طلبا</bdi> » — posé sur l'offre que vous voulez pousser.</p></div>
+    <div class="card plain"><h3>La bordure animée</h3><p style="margin:0;font-size:9pt">Un second niveau de mise en avant, pour que l'œil aille droit sur l'offre la plus rentable.</p></div>
+    <div class="card plain"><h3>Présélection</h3><p style="margin:0;font-size:9pt">La première offre de la liste est cochée d'avance : le client n'est jamais bloqué.</p></div>
+  </div>
+
+  <hr class="rule">
+
+  <h2>Couleurs et tailles, pièce par pièce</h2>
+  <p>C'est le détail qui évite les appels et les retours. Quand un client
+  commande un pack de 3, il ne choisit pas « une couleur » : il choisit
+  <strong>la couleur et la taille de chacune des trois pièces</strong>.</p>
+
+  <div class="grid g2">
+    <div class="card plain">
+      <h3>Côté client</h3>
+      <ul class="list" style="font-size:9.5pt">
+        <li>Les couleurs s'affichent en pastilles réelles, pas en texte</li>
+        <li>Les tailles en boutons (S, M, L, 38, 40…)</li>
+        <li>Une ligne par pièce : « <bdi>القطعة</bdi> 1 », « <bdi>القطعة</bdi> 2 »…</li>
+        <li>Impossible de valider tant qu'une pièce est incomplète</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>Côté vous</h3>
+      <ul class="list" style="font-size:9.5pt">
+        <li>La commande arrive détaillée : « Noir M, Blanc L »</li>
+        <li>Le détail part aussi sur le bordereau Yalidine</li>
+        <li>Le message Telegram le reprend</li>
+        <li>Vous préparez le colis sans rappeler le client</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card warn" style="margin-top:auto">
+    <h3>Le prix ne vient jamais du navigateur</h3>
+    <p style="margin:0">Quand une commande arrive, le serveur relit lui-même le prix et la quantité de l'offre dans la base de données. Même si quelqu'un trafiquait la page dans son téléphone, il paierait le vrai prix.</p>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>7</span></div>
+</div>
+
+<!-- ═══════════════ 8. ADMIN — CONNEXION + STATS ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">06 — Votre espace</p>
+  <h1 class="title">Le panneau d'administration</h1>
+  <p>Accessible depuis n'importe quel navigateur, sur ordinateur comme sur
+  téléphone. Cinq écrans, une barre de navigation, rien à installer.</p>
+
+  <div class="flow" style="margin-bottom:5mm">
+    <div class="node brand"><b>Statistiques</b><span>/admin</span></div>
+    <div class="node"><b>Commandes</b><span>/admin/commandes</span></div>
+    <div class="node"><b>Produit</b><span>/admin/produit</span></div>
+    <div class="node"><b>Landing</b><span>/admin/landing</span></div>
+    <div class="node"><b>Paramètres</b><span>/admin/settings</span></div>
+  </div>
+
+  <h2>Écran de connexion</h2>
+  <p>Un seul mot de passe, le vôtre. Protégé contre les tentatives à répétition :
+  après 5 essais ratés, l'adresse est bloquée 15 minutes — puis 30, puis 60 si
+  ça recommence. Votre session reste ouverte 30 jours.</p>
+
+  <hr class="rule">
+
+  <h2>Tableau de bord — ce que vous voyez en arrivant</h2>
+
+  <div class="grid g2" style="margin-bottom:4mm">
+    <div class="card plain">
+      <h3>Quatre chiffres clés</h3>
+      <ul class="list" style="font-size:9.5pt">
+        <li><strong>Commandes aujourd'hui</strong> — le pouls de votre campagne</li>
+        <li><strong>En attente</strong> — ce qu'il vous reste à appeler</li>
+        <li><strong>Revenus</strong> — calculés sur les colis réellement livrés, pas sur les commandes prises</li>
+        <li><strong>Taux de confirmation</strong> — confirmées ÷ (confirmées + annulées)</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>Le reste de l'écran</h3>
+      <ul class="list" style="font-size:9.5pt">
+        <li>Un graphique des <strong>14 derniers jours</strong> pour voir si la pub tient</li>
+        <li>La répartition par statut : en attente, confirmées, annulées</li>
+        <li>Les 6 dernières commandes, avec accès direct à la liste complète</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card accent" style="margin-top:auto">
+    <h3>Pourquoi les revenus se calculent sur les colis livrés</h3>
+    <p style="margin:0">En paiement à la livraison, une commande confirmée n'est pas de l'argent. Seul un colis livré l'est. Le tableau de bord compte donc uniquement ce que Yalidine a marqué comme livré — vous savez toujours où vous en êtes réellement.</p>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>8</span></div>
+</div>
+
+<!-- ═══════════════ 9. ADMIN — COMMANDES ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">07 — L'écran que vous ouvrirez tous les jours</p>
+  <h1 class="title">Commandes</h1>
+  <p>Toutes vos commandes, filtrables, avec les actions à portée de pouce.
+  Tableau sur ordinateur, cartes sur téléphone.</p>
+
+  <h2>Filtrer pour retrouver n'importe quoi</h2>
+  <div class="grid g2" style="margin-bottom:4mm">
+    <div class="card plain">
+      <ul class="list" style="font-size:9.5pt;margin:0">
+        <li>Recherche par nom ou téléphone</li>
+        <li>Par statut : en attente / confirmée / annulée</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <ul class="list" style="font-size:9.5pt;margin:0">
+        <li>Par wilaya</li>
+        <li>Par période — du … au …</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Ce que chaque ligne affiche</h2>
+  <p>Date et heure · nom et téléphone · wilaya, commune et adresse · domicile
+  ou bureau Stopdesk (avec le nom du bureau) · l'offre choisie · les couleurs
+  et tailles · la quantité · le total · le statut · le numéro de suivi Yalidine.</p>
+
+  <hr class="rule">
+
+  <h2>Les quatre actions</h2>
+  <table>
+    <thead><tr><th>Action</th><th>Ce qui se passe vraiment</th></tr></thead>
+    <tbody>
+      <tr><td class="k"><span class="tag green">Confirmer</span></td><td>Le colis est créé chez Yalidine immédiatement : nom, téléphone, wilaya, commune, adresse, produit, offre, variantes, quantité et montant à encaisser. Vous récupérez le numéro de suivi et le lien du <strong>bordereau à imprimer</strong>.</td></tr>
+      <tr><td class="k"><span class="tag amber">Annuler</span></td><td>La commande repasse en annulée <em>et</em> le colis est supprimé chez Yalidine. Si Yalidine refuse (colis déjà ramassé), rien n'est modifié et le message vous dit exactement quoi faire.</td></tr>
+      <tr><td class="k"><span class="tag grey">Remettre en attente</span></td><td>Une commande annulée par erreur revient dans la file d'appel.</td></tr>
+      <tr><td class="k"><span class="tag grey">Supprimer</span></td><td>Effacement définitif, avec une confirmation en deux temps pour éviter le clic malheureux. Le colis Yalidine est supprimé d'abord.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card ok" style="margin-top:auto">
+    <h3>Le suivi se met à jour tout seul</h3>
+    <p style="margin:0">À chaque ouverture de la page, le site demande à Yalidine où en sont tous vos colis en cours et affiche leur statut : En préparation, Expédié, En livraison, Livré, Retourné. Vous n'avez pas à ouvrir votre compte Yalidine à côté.</p>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>9</span></div>
+</div>
+
+<!-- ═══════════════ 10. ADMIN — PRODUIT ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">08 — Votre catalogue</p>
+  <h1 class="title">Produit</h1>
+  <p>Un écran d'aperçu qui montre exactement ce que verra le client, et un
+  bouton <strong>Modifier</strong> qui ouvre le formulaire complet.</p>
+
+  <table style="margin-bottom:4mm">
+    <thead><tr><th>Champ</th><th>À quoi ça sert</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Nom</td><td>Le titre affiché en haut de la landing et repris sur le bordereau Yalidine.</td></tr>
+      <tr><td class="k">Prix</td><td>Le prix de vente d'une pièce.</td></tr>
+      <tr><td class="k">Ancien prix</td><td>Facultatif. S'il est plus élevé, il s'affiche barré et le badge de remise se calcule tout seul.</td></tr>
+      <tr><td class="k">Description</td><td>Votre argumentaire. Les retours à la ligne sont conservés.</td></tr>
+      <tr><td class="k">Points forts</td><td>Une ligne = un point coché sur la page. « Livraison rapide », « Garantie 1 an »…</td></tr>
+      <tr><td class="k">Couleurs</td><td>Nom + pastille de couleur choisie à l'écran. Jusqu'à 30.</td></tr>
+      <tr><td class="k">Tailles</td><td>S, M, L, 38, 40… Jusqu'à 30.</td></tr>
+      <tr><td class="k">Photos</td><td>Illimitées, réordonnables, supprimables une par une.</td></tr>
+      <tr><td class="k">Offres groupées</td><td>Jusqu'à 10 offres, avec prix, quantité, ruban et mise en avant.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid g2">
+    <div class="card accent">
+      <h3>Vos photos sont traitées automatiquement</h3>
+      <ul class="list" style="font-size:9.5pt;margin:0">
+        <li>Les photos iPhone (HEIC) sont converties — sinon elles resteraient cassées sur Android et sur PC</li>
+        <li>Une photo de 8 Mo redescend sous 1 Mo sans perte visible</li>
+        <li>L'orientation est corrigée : plus de photos couchées</li>
+        <li>Tout se fait dans votre navigateur, avant l'envoi : c'est rapide même avec une connexion moyenne</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>Le nettoyage se fait tout seul</h3>
+      <p style="font-size:9.5pt">Une photo que vous retirez est réellement supprimée du stockage — mais seulement <strong>après</strong> que l'enregistrement a réussi. Si la sauvegarde échoue, vous ne perdez rien.</p>
+      <h3 style="margin-top:4mm">Aperçu avant publication</h3>
+      <p style="margin:0;font-size:9.5pt">La carte d'aperçu montre le produit tel qu'il sera vu : photo, prix, remise, points forts, pastilles de couleur, tailles et offres.</p>
+    </div>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>10</span></div>
+</div>
+
+<!-- ═══════════════ 11. ADMIN — LANDING ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">09 — Construire la page</p>
+  <h1 class="title">Éditeur de landing page</h1>
+  <p>Le seul écran où vous dessinez votre page de vente. À gauche vous ajoutez
+  des blocs, à droite un aperçu vous montre le résultat en temps réel.</p>
+
+  <div class="grid g2" style="grid-template-columns: 1fr 1fr; align-items:start">
+    <div>
+      <div class="card plain">
+        <h3>1. Choisir le mode</h3>
+        <p style="margin:0;font-size:9.5pt">« Simple » pour la mise en page classique, « Personnalisée » pour composer vous-même.</p>
+      </div>
+      <div class="card plain">
+        <h3>2. Ajouter les blocs</h3>
+        <p style="margin:0;font-size:9.5pt">Hero, Galerie, Description, Formulaire, Image, Texte. Un clic pour ajouter.</p>
+      </div>
+      <div class="card plain">
+        <h3>3. Ranger dans l'ordre</h3>
+        <p style="margin:0;font-size:9.5pt">Des flèches pour monter ou descendre chaque bloc, une croix pour l'enlever.</p>
+      </div>
+      <div class="card plain">
+        <h3>4. Régler l'affichage</h3>
+        <p style="margin:0;font-size:9.5pt">Thème clair ou sombre, en-tête collant, bouton « Commander » flottant.</p>
+      </div>
+      <div class="card plain">
+        <h3>5. Enregistrer</h3>
+        <p style="margin:0;font-size:9.5pt">La page en ligne est mise à jour dans la seconde.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="card accent">
+        <h3>L'aperçu téléphone</h3>
+        <p style="margin:0;font-size:9.5pt">Un écran de téléphone à côté de l'éditeur affiche la page telle qu'elle sera, avec vos vraies photos et vos vrais textes. Vous voyez avant de publier.</p>
+      </div>
+      <div class="card plain">
+        <h3>Le bloc Image</h3>
+        <p style="margin:0;font-size:9.5pt">Un visuel bord à bord, pleine largeur. Deux images à la suite se collent l'une à l'autre et se lisent comme un seul grand visuel — la mise en page « advertorial » qui marche si bien sur TikTok.</p>
+      </div>
+      <div class="card plain">
+        <h3>Le bloc Texte</h3>
+        <p style="margin:0;font-size:9.5pt">Un titre et un paragraphe libres, à placer où vous voulez : témoignage client, garantie, mode d'emploi, réponse à une objection.</p>
+      </div>
+      <div class="card ok">
+        <h3>Jusqu'à 40 blocs</h3>
+        <p style="margin:0;font-size:9.5pt">Assez pour une très longue page de vente, sans qu'elle devienne interminable à charger sur téléphone.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>11</span></div>
+</div>
+
+<!-- ═══════════════ 12. ADMIN — PARAMÈTRES ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">10 — Régler la boutique</p>
+  <h1 class="title">Paramètres</h1>
+
+  <table style="margin-bottom:4mm">
+    <thead><tr><th>Réglage</th><th>Effet</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Nom de la boutique</td><td>Affiché dans l'en-tête, le pied de page et l'onglet du navigateur.</td></tr>
+      <tr><td class="k">Logo</td><td>Envoyé depuis votre téléphone ou votre ordinateur, avec aperçu immédiat.</td></tr>
+      <tr><td class="k">Couleur principale</td><td>Sept couleurs prêtes ou la vôtre au format #rrggbb. Elle repeint boutons, prix, badges et halos <strong>partout</strong> sur le site.</td></tr>
+      <tr><td class="k">Wilaya d'expédition</td><td>D'où partent vos colis. C'est de là que Yalidine calcule les tarifs.</td></tr>
+      <tr><td class="k">Livraison offerte</td><td>Trois modes — voir ci-dessous.</td></tr>
+      <tr><td class="k">Meta Pixel</td><td>Votre identifiant de pixel Facebook, pour mesurer et optimiser vos publicités.</td></tr>
+      <tr><td class="k">Vérification de domaine</td><td>Le code que Meta demande pour valider votre nom de domaine.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Les trois modes de livraison offerte</h2>
+  <div class="grid g3" style="margin-bottom:4mm">
+    <div class="card plain">
+      <h3>Aucune</h3>
+      <p style="margin:0;font-size:9pt">Le client paie les frais Yalidine, affichés en clair avant de valider.</p>
+    </div>
+    <div class="card plain">
+      <h3>Stopdesk offert</h3>
+      <p style="margin:0;font-size:9pt">Le bureau est gratuit, le domicile reste payant. C'est ce qui pousse le client vers le Stopdesk — moins cher pour vous, moins de retours.</p>
+    </div>
+    <div class="card plain">
+      <h3>Tout offert</h3>
+      <p style="margin:0;font-size:9pt">« <bdi>التوصيل مجاني</bdi> » affiché en vert. Le choix disparaît, tout part à domicile.</p>
+    </div>
+  </div>
+
+  <div class="card accent" style="margin-top:auto">
+    <h3>Une couleur, tout le site</h3>
+    <p style="margin:0">Vous changez la couleur principale, vous enregistrez : boutons, prix, badges de remise, cartes d'offres sélectionnées, halos d'arrière-plan et bouton flottant suivent immédiatement. Aucune retouche à faire ailleurs.</p>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>12</span></div>
+</div>
+
+<!-- ═══════════════ 13. INTÉGRATIONS ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">11 — Connecté à vos outils</p>
+  <h1 class="title">Intégrations</h1>
+
+  <div class="card">
+    <h2>Yalidine — la livraison, de bout en bout</h2>
+    <div class="grid g2">
+      <ul class="list" style="font-size:9.5pt">
+        <li><strong>Tarifs en direct</strong> : le prix affiché au client est celui de Yalidine, pas une estimation que vous devriez maintenir à la main</li>
+        <li><strong>Bureaux Stopdesk</strong> : la liste réelle des bureaux de la wilaya, avec leur adresse</li>
+      </ul>
+      <ul class="list" style="font-size:9.5pt">
+        <li><strong>Création du colis</strong> en un clic, avec le montant à encaisser</li>
+        <li><strong>Bordereau</strong> prêt à imprimer et à coller</li>
+        <li><strong>Suivi</strong> rafraîchi automatiquement</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Telegram — vous prévenir tout de suite</h2>
+    <p>Chaque commande arrive sur votre Telegram en quelques secondes, avec :
+    le nom, le téléphone, la wilaya, la commune, le mode de livraison, le produit,
+    l'offre, les variantes et le total. <strong>Plusieurs destinataires possibles</strong> —
+    vous, votre associé, la personne qui appelle les clients.</p>
+    <p style="margin:0;font-size:9pt" class="muted">Si Telegram est injoignable, la commande est quand même enregistrée : la notification ne peut jamais faire perdre une vente.</p>
+  </div>
+
+  <div class="card">
+    <h2>Meta Pixel — mesurer et optimiser vos pubs</h2>
+    <p style="margin:0">Deux événements sont envoyés automatiquement : <strong>InitiateCheckout</strong>
+    quand le client commence à remplir le formulaire, et <strong>Purchase</strong>
+    avec le montant exact quand la commande est validée. C'est ce qui permet à
+    Facebook d'aller chercher des acheteurs plutôt que des curieux, et à vous de
+    connaître votre coût par commande.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:0">
+    <h2>Supabase — vos données, chez vous</h2>
+    <p style="margin:0">Vos commandes, votre produit et vos photos sont stockés sur
+    <strong>votre propre compte</strong>. Vous les exportez ou les emportez quand
+    vous voulez ; personne d'autre n'y accède.</p>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>13</span></div>
+</div>
+
+<!-- ═══════════════ 14. SÉCURITÉ & PERFORMANCE ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">12 — Sous le capot</p>
+  <h1 class="title">Rapidité et sécurité</h1>
+  <p>Ce que le client ne voit pas, mais qui décide s'il commande ou s'il ferme
+  l'onglet.</p>
+
+  <h2>La page se charge vite, même en 3G</h2>
+  <div class="grid g2" style="margin-bottom:4mm">
+    <div class="card plain">
+      <ul class="list" style="font-size:9.5pt;margin:0">
+        <li>La page est <strong>pré-calculée et servie depuis un cache mondial</strong> : elle arrive déjà prête, sans attendre la base de données</li>
+        <li>Elle se met à jour dans la seconde dès que vous modifiez le produit ou les réglages</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <ul class="list" style="font-size:9.5pt;margin:0">
+        <li>Les images sont converties, redimensionnées et servies au bon format selon le téléphone</li>
+        <li>Aucun effet de flou coûteux : le défilement reste fluide sur iPhone</li>
+        <li>Les tarifs déjà consultés sont mémorisés : rechanger de wilaya est instantané</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Sécurité</h2>
+  <table>
+    <tbody>
+      <tr><td class="k">Accès admin</td><td>Mot de passe unique, comparé en temps constant. Session signée cryptographiquement, valable 30 jours.</td></tr>
+      <tr><td class="k">Anti-force brute</td><td>5 échecs → blocage 15 min, puis 30, puis 60. Les compteurs se purgent seuls.</td></tr>
+      <tr><td class="k">Base de données</td><td>Verrouillée par défaut : aucun accès public, tout passe par le serveur.</td></tr>
+      <tr><td class="k">Prix et quantités</td><td>Toujours recalculés côté serveur d'après la base. Le navigateur n'envoie qu'un identifiant d'offre.</td></tr>
+      <tr><td class="k">Frais de livraison</td><td>Relus chez Yalidine à chaque commande. Impossible de forger un tarif.</td></tr>
+      <tr><td class="k">Images</td><td>Seules les images de votre propre stockage sont acceptées : aucune URL extérieure ne peut être injectée.</td></tr>
+      <tr><td class="k">Anti-robots</td><td>Champ piège invisible, sans captcha ni friction pour le vrai client.</td></tr>
+      <tr><td class="k">Clés d'accès</td><td>Yalidine, Telegram, base de données : toutes côté serveur, jamais visibles dans le navigateur.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card accent" style="margin-top:auto">
+    <h3>Construit sur des bases solides</h3>
+    <p style="margin:0">Next.js 16 et React 19 — la même technologie que les grands sites de vente. Hébergement mondial, certificat HTTPS inclus, mises à jour sans interruption de service.</p>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>14</span></div>
+</div>
+
+<!-- ═══════════════ 15. INCLUS & MISE EN ROUTE ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">13 — Concrètement</p>
+  <h1 class="title">Ce qui est inclus</h1>
+
+  <div class="grid g2" style="margin-bottom:5mm">
+    <div class="card plain">
+      <h3>Le site</h3>
+      <ul class="list" style="font-size:9.5pt;margin:0">
+        <li>Landing page complète, en arabe</li>
+        <li>Formulaire de commande COD</li>
+        <li>Offres groupées, couleurs, tailles</li>
+        <li>Éditeur de page intégré</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>L'administration</h3>
+      <ul class="list" style="font-size:9.5pt;margin:0">
+        <li>Tableau de bord et statistiques</li>
+        <li>Gestion complète des commandes</li>
+        <li>Gestion du produit et des photos</li>
+        <li>Réglages de la boutique</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>Les connexions</h3>
+      <ul class="list" style="font-size:9.5pt;margin:0">
+        <li>Yalidine (tarifs, colis, bordereau, suivi)</li>
+        <li>Notifications Telegram</li>
+        <li>Meta Pixel Facebook</li>
+        <li>Base de données et stockage</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>La mise en service</h3>
+      <ul class="list" style="font-size:9.5pt;margin:0">
+        <li>Installation et mise en ligne</li>
+        <li>Branchement de votre nom de domaine</li>
+        <li>HTTPS et hébergement configurés</li>
+        <li>Prise en main de l'admin avec vous</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Mise en route en quatre étapes</h2>
+  <div class="steps">
+    <div class="step"><span class="n"></span><div><h3>On récupère vos accès</h3><p>Compte Yalidine, nom de domaine si vous en avez un, votre logo et vos photos produit.</p></div></div>
+    <div class="step"><span class="n"></span><div><h3>On met le site en ligne</h3><p>Hébergement, domaine, HTTPS, base de données et notifications Telegram : tout est branché et testé.</p></div></div>
+    <div class="step"><span class="n"></span><div><h3>On saisit votre produit ensemble</h3><p>Prix, offres, photos, description. Vous voyez comment faire pour le produit suivant.</p></div></div>
+    <div class="step"><span class="n"></span><div><h3>On fait une commande test</h3><p>De la landing jusqu'au bordereau Yalidine, pour que vous partiez en campagne l'esprit tranquille.</p></div></div>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>15</span></div>
+</div>
+
+<!-- ═══════════════ 16. TARIFS ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">14 — Investissement</p>
+  <h1 class="title">Tarifs</h1>
+  <p class="lead" style="margin-bottom:6mm">Un prix clair, une fois. Aucune
+  commission sur vos ventes, aucun pourcentage sur votre chiffre d'affaires.</p>
+
+  <div class="price-grid" style="margin-bottom:6mm">
+    <div class="price-card">
+      <div class="plan">Essentiel</div>
+      <div class="desc">Le site complet, mis en ligne et prêt à vendre.</div>
+      <div class="price-blank">Prix</div>
+      <ul class="list">
+        <li>Landing page + formulaire COD</li>
+        <li>Panneau admin complet</li>
+        <li>Connexion Yalidine</li>
+        <li>Notifications Telegram</li>
+        <li>Mise en ligne incluse</li>
+      </ul>
+    </div>
+
+    <div class="price-card featured">
+      <div class="plan">Business <span class="tag">Recommandé</span></div>
+      <div class="desc">Tout l'Essentiel, plus le suivi publicitaire et l'accompagnement.</div>
+      <div class="price-blank">Prix</div>
+      <ul class="list">
+        <li>Tout l'offre Essentiel</li>
+        <li>Meta Pixel configuré</li>
+        <li>Nom de domaine branché</li>
+        <li>Offres groupées paramétrées</li>
+        <li>Formation à l'admin</li>
+        <li>Support …… jours</li>
+      </ul>
+    </div>
+
+    <div class="price-card">
+      <div class="plan">Sur mesure</div>
+      <div class="desc">Plusieurs produits, plusieurs boutiques, besoins particuliers.</div>
+      <div class="price-blank">Sur devis</div>
+      <ul class="list">
+        <li>Design personnalisé</li>
+        <li>Fonctionnalités spécifiques</li>
+        <li>Plusieurs boutiques</li>
+        <li>Maintenance mensuelle</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card plain">
+      <h3>Options</h3>
+      <table style="font-size:9.5pt">
+        <tr><td>Landing page supplémentaire</td><td class="amt">…… DA</td></tr>
+        <tr><td>Rédaction du texte de vente</td><td class="amt">…… DA</td></tr>
+        <tr><td>Retouche des photos produit</td><td class="amt">…… DA</td></tr>
+        <tr><td>Maintenance mensuelle</td><td class="amt">…… DA</td></tr>
+      </table>
+    </div>
+    <div class="card plain">
+      <h3>Frais récurrents à prévoir</h3>
+      <p style="font-size:9.5pt">Indépendants de nous, payés directement aux fournisseurs :</p>
+      <ul class="list" style="font-size:9.5pt;margin:0">
+        <li>Nom de domaine — environ …… DA / an</li>
+        <li>Hébergement — gratuit au démarrage</li>
+        <li>Base de données — gratuite au démarrage</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card warn" style="margin-top:auto;margin-bottom:0">
+    <h3>Modalités</h3>
+    <p style="margin:0">Acompte de …… % à la commande, solde à la mise en ligne. Livraison en …… jours ouvrables à compter de la réception de vos éléments.</p>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>16</span></div>
+</div>
+
+<!-- ═══════════════ 17. FAQ ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">15 — Questions fréquentes</p>
+  <h1 class="title">Vous vous demandez sûrement…</h1>
+
+  <div class="qa">
+    <div class="q">Est-ce que je peux modifier mon produit et mes prix moi-même ?</div>
+    <p class="a">Oui, tout. Nom, prix, ancien prix, description, points forts, couleurs, tailles, photos, offres groupées. Vous enregistrez, la page en ligne change dans la seconde. Aucune compétence technique nécessaire.</p>
+  </div>
+  <div class="qa">
+    <div class="q">Faut-il un compte Yalidine ?</div>
+    <p class="a">Oui, un compte Yalidine avec accès développeur — gratuit chez eux. C'est lui qui permet d'afficher les vrais tarifs, de créer les colis et de suivre les livraisons. On vous guide pour l'obtenir.</p>
+  </div>
+  <div class="qa">
+    <div class="q">Et si Yalidine est en panne au moment d'une commande ?</div>
+    <p class="a">Le client voit un message clair lui demandant de réessayer, plutôt qu'un tarif inventé. Aucune commande ne part avec un mauvais prix.</p>
+  </div>
+  <div class="qa">
+    <div class="q">Est-ce que ça marche sur téléphone ?</div>
+    <p class="a">Le site est conçu pour le téléphone d'abord — c'est là que sont vos clients. Le panneau admin aussi : vous confirmez vos commandes depuis votre lit s'il le faut.</p>
+  </div>
+  <div class="qa">
+    <div class="q">Je vends plusieurs produits, c'est possible ?</div>
+    <p class="a">La version présentée ici est optimisée pour un produit par site — c'est ce qui convertit le mieux en COD. Pour plusieurs produits, on déploie plusieurs boutiques ou on adapte : voir l'offre Sur mesure.</p>
+  </div>
+  <div class="qa">
+    <div class="q">Qui possède les données ?</div>
+    <p class="a">Vous. Commandes, photos, réglages : tout est sur votre compte, exportable à tout moment.</p>
+  </div>
+  <div class="qa">
+    <div class="q">Le site est en arabe ou en français ?</div>
+    <p class="a">Tout ce que voit l'acheteur — offres, formulaire, messages, confirmation — est en arabe, lu de droite à gauche. Le panneau admin est en français. Vos textes produit, vous les écrivez dans la langue que vous voulez : la mise en page suit.</p>
+  </div>
+  <div class="qa">
+    <div class="q">Combien de temps pour être en ligne ?</div>
+    <p class="a">Quelques jours ouvrables une fois vos accès, votre logo et vos photos reçus.</p>
+  </div>
+
+  <hr class="rule">
+
+  <div class="card accent" style="margin-top:auto;margin-bottom:0">
+    <h2 style="margin-bottom:2mm">Prêt à lancer votre boutique ?</h2>
+    <p style="margin-bottom:4mm">Écrivez-nous, on installe votre site et on lance votre première campagne ensemble.</p>
+    <div class="grid g3" style="gap:5mm">
+      <div><div class="muted" style="font-size:8pt;font-weight:700;text-transform:uppercase;letter-spacing:.1em">Téléphone</div><div class="fill-line"></div></div>
+      <div><div class="muted" style="font-size:8pt;font-weight:700;text-transform:uppercase;letter-spacing:.1em">E-mail</div><div class="fill-line"></div></div>
+      <div><div class="muted" style="font-size:8pt;font-weight:700;text-transform:uppercase;letter-spacing:.1em">Instagram / Facebook</div><div class="fill-line"></div></div>
+    </div>
+  </div>
+
+  <div class="folio"><span>Boutique COD — Présentation</span><span>17</span></div>
+</div>
+
+</body>
+</html>

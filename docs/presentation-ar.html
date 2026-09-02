@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>متجر الدفع عند الاستلام — ملف تعريفي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  :root { --font-body: "Tajawal", "Geeza Pro", "Al Bayan", sans-serif; }
+  body { font-size: 11pt; line-height: 1.75; }
+  h1.title { font-size: 24pt; line-height: 1.3; }
+  .cover h1 { font-size: 33pt; line-height: 1.3; }
+  h2 { font-size: 13.5pt; }
+  h3 { font-size: 11pt; }
+  .eyebrow { letter-spacing: 0; }
+  .tag, .folio, th { letter-spacing: 0; }
+  ul.list li::before { top: 3mm; }
+  .step .n { font-family: "Inter", sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ 1. الغلاف ═══════════════ -->
+<div class="page cover">
+  <div class="halo halo-a"></div>
+  <div class="halo halo-b"></div>
+
+  <div class="intro">
+    <span class="kicker">متجر إلكتروني · الجزائر</span>
+    <h1>موقعك للبيع،<br>جاهز من أول يوم.</h1>
+    <p class="sub">
+      صفحة بيع تُقنع الزبون، استمارة طلب بالعربية، ولوحة تحكّم تُرسل طرودك
+      إلى Yalidine بضغطة واحدة. الدفع عند الاستلام، 58 ولاية.
+    </p>
+  </div>
+
+  <div class="facts-wrap">
+    <div class="facts">
+      <div class="fact">
+        <b>ضغطة واحدة</b>
+        <span>من الطلب إلى طرد Yalidine</span>
+      </div>
+      <div class="fact">
+        <b>مباشرة</b>
+        <span>أسعار التوصيل وتتبّع الطرود</span>
+      </div>
+      <div class="fact">
+        <b>0 دج</b>
+        <span>بلا أي عمولة على مبيعاتك</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">ملف تعريفي — صفحات الموقع، طريقة العمل، والأسعار</div>
+</div>
+
+<!-- ═══════════════ 2. المحتويات ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">المحتويات</p>
+  <h1 class="title">ماذا يحتوي هذا الملف</h1>
+
+  <div class="toc">
+    <div class="toc-row"><span class="num">01</span><span class="lbl">كيف يعمل — المسار الكامل</span><span class="dots"></span><span class="pg">ص. 3</span></div>
+    <div class="toc-row"><span class="num">02</span><span class="lbl">صفحة البيع — تشريح كامل</span><span class="dots"></span><span class="pg">ص. 4</span></div>
+    <div class="toc-row"><span class="num">03</span><span class="lbl">طريقتان لبناء الصفحة</span><span class="dots"></span><span class="pg">ص. 5</span></div>
+    <div class="toc-row"><span class="num">04</span><span class="lbl">استمارة الطلب</span><span class="dots"></span><span class="pg">ص. 6</span></div>
+    <div class="toc-row"><span class="num">05</span><span class="lbl">العروض، الألوان والمقاسات</span><span class="dots"></span><span class="pg">ص. 7</span></div>
+    <div class="toc-row"><span class="num">06</span><span class="lbl">لوحة التحكّم — الدخول والإحصائيات</span><span class="dots"></span><span class="pg">ص. 8</span></div>
+    <div class="toc-row"><span class="num">07</span><span class="lbl">لوحة التحكّم — الطلبيات</span><span class="dots"></span><span class="pg">ص. 9</span></div>
+    <div class="toc-row"><span class="num">08</span><span class="lbl">لوحة التحكّم — المنتج</span><span class="dots"></span><span class="pg">ص. 10</span></div>
+    <div class="toc-row"><span class="num">09</span><span class="lbl">لوحة التحكّم — محرّر صفحة البيع</span><span class="dots"></span><span class="pg">ص. 11</span></div>
+    <div class="toc-row"><span class="num">10</span><span class="lbl">لوحة التحكّم — الإعدادات</span><span class="dots"></span><span class="pg">ص. 12</span></div>
+    <div class="toc-row"><span class="num">11</span><span class="lbl">الربط: Yalidine، Telegram، Meta Pixel</span><span class="dots"></span><span class="pg">ص. 13</span></div>
+    <div class="toc-row"><span class="num">12</span><span class="lbl">الأمان والسرعة</span><span class="dots"></span><span class="pg">ص. 14</span></div>
+    <div class="toc-row"><span class="num">13</span><span class="lbl">ما الذي ستحصل عليه &amp; الانطلاق</span><span class="dots"></span><span class="pg">ص. 15</span></div>
+    <div class="toc-row"><span class="num">14</span><span class="lbl">الأسعار</span><span class="dots"></span><span class="pg">ص. 16</span></div>
+    <div class="toc-row"><span class="num">15</span><span class="lbl">أسئلة متكرّرة</span><span class="dots"></span><span class="pg">ص. 17</span></div>
+  </div>
+
+  <hr class="rule">
+
+  <h2>الفكرة في سطرين</h2>
+  <p class="lead">
+    أنت تبيع منتجًا، تُشهره على Facebook أو TikTok، وزبائنك يطلبون من هواتفهم
+    بالعربية — بلا حساب وبلا بطاقة بنكية. أنت تفتح لوحة التحكّم، تضغط
+    <strong>تأكيد</strong>، فينطلق الطرد إلى Yalidine ومعه وصل الشحن جاهزًا
+    للطباعة.
+  </p>
+
+  <div class="grid g3" style="margin-top:auto">
+    <div class="card plain">
+      <h3>بالنسبة للزبون</h3>
+      <p class="muted" style="font-size:9.5pt;margin:0">صفحة واحدة، استمارة واحدة، خمس خانات. ولا يدفع شيئًا قبل الاستلام.</p>
+    </div>
+    <div class="card plain">
+      <h3>بالنسبة لك</h3>
+      <p class="muted" style="font-size:9.5pt;margin:0">كل شيء يُدار من شاشة واحدة، حتى من الهاتف.</p>
+    </div>
+    <div class="card plain">
+      <h3>بالنسبة لطرودك</h3>
+      <p class="muted" style="font-size:9.5pt;margin:0">Yalidine تستقبل الطلب مباشرة، بلا إعادة كتابة.</p>
+    </div>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>2</span></div>
+</div>
+
+<!-- ═══════════════ 3. كيف يعمل ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">01 — المسار</p>
+  <h1 class="title">من الإعلان إلى الطرد المسلَّم</h1>
+
+  <div class="flow" style="margin-bottom:5mm">
+    <div class="node"><b>الإعلان</b><span>Facebook / TikTok</span></div>
+    <div class="arrow">←</div>
+    <div class="node"><b>الصفحة</b><span>الزبون يكتشف</span></div>
+    <div class="arrow">←</div>
+    <div class="node brand"><b>الطلب</b><span>5 خانات بالعربية</span></div>
+    <div class="arrow">←</div>
+    <div class="node"><b>Telegram</b><span>إشعار فوري لك</span></div>
+    <div class="arrow">←</div>
+    <div class="node"><b>اللوحة</b><span>أنت تؤكّد</span></div>
+    <div class="arrow">←</div>
+    <div class="node"><b>Yalidine</b><span>الطرد ينطلق</span></div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>الزبون يصل إلى صفحتك</h3>
+        <p>صفحة واحدة مصمّمة للهاتف أولًا: صورة المنتج، السعر، التخفيض، المزايا، وزر «اطلب الآن» يبقى ظاهرًا طوال التمرير.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>يختار عرضه ونوعه</h3>
+        <p>قطعة، قطعتان، ثلاث — لكل عرض سعره. ثم اللون والمقاس، <strong>قطعة بقطعة</strong> إن طلب أكثر من واحدة.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>يملأ الاستمارة</h3>
+        <p>الاسم، الهاتف، الولاية، المنزل أو مكتب Stopdesk، والعنوان. سعر التوصيل يظهر تلقائيًا، <strong>مقروءًا مباشرة من Yalidine</strong> حسب الولاية.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>يصلك الطلب على Telegram</h3>
+        <p>فور التأكيد تصلك رسالة فيها الاسم، الهاتف، الولاية، العرض، النوع والمجموع. ويمكن إرسالها لأكثر من شخص: أنت، شريكك، ومن يتكفّل بالاتصال بالزبائن.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>تتّصل بالزبون، ثم تؤكّد</h3>
+        <p>في اللوحة زر <strong>تأكيد</strong> واحد. يُنشأ الطرد لدى Yalidine في الحال، مع رقم التتبّع و<strong>وصل الشحن الجاهز للطباعة</strong>. وزر <strong>إلغاء</strong> يحذف الطرد من Yalidine أيضًا.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="n"></span>
+      <div>
+        <h3>تتابع التوصيل دون مغادرة اللوحة</h3>
+        <p>حالة Yalidine (قيد التحضير، مُرسل، سُلّم، مُرتجع…) تتحدّث وحدها في كل مرة تفتح فيها صفحة الطلبيات. وأرباحك تُحسب على الطرود المسلَّمة فعلًا.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent" style="margin-top:auto">
+    <h3>النقطة الأهم</h3>
+    <p style="margin:0">لا إعادة كتابة في أي مرحلة. الطلب يُكتب مرة واحدة — من الزبون نفسه — ويسافر كما هو حتى وصل الشحن.</p>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>3</span></div>
+</div>
+
+<!-- ═══════════════ 4. تشريح صفحة البيع ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">02 — الصفحة العلنية</p>
+  <h1 class="title">صفحة البيع، قسمًا بقسم</h1>
+  <p>هي الصفحة الوحيدة التي يراها زبونك. مبنية للهاتف أولًا (عمود واحد بعرض
+  ثابت)، وكل ما يخصّ الشراء فيها <strong>بالعربية</strong> من اليمين إلى اليسار.</p>
+
+  <div class="grid g2" style="grid-template-columns: 82mm 1fr; align-items:start">
+    <div class="mock">
+      <div class="bar">votre-domaine.com</div>
+      <div class="zone"><b>الترويسة</b><span>الشعار واسم المتجر، ملتصقة بالأعلى</span></div>
+      <div class="zone hi"><b>الواجهة</b><span>العنوان، السعر، السعر القديم مشطوبًا، شارة التخفيض</span></div>
+      <div class="zone"><b>معرض الصور</b><span>صور المنتج، تمرير بالإصبع، صور مصغّرة</span></div>
+      <div class="zone"><b>الوصف</b><span>نصّك الحرّ + قائمة المزايا</span></div>
+      <div class="zone hi"><b>العروض</b><span>قطعة / قطعتان / ثلاث قطع…</span></div>
+      <div class="zone hi"><b>الاستمارة</b><span>صندوق الطلب</span></div>
+      <div class="zone"><b>التذييل</b><span>الشعار، الاسم، السنة</span></div>
+      <div class="zone" style="background:#eef2ff"><b>الزر العائم</b><span>«اطلب الآن — 3 500 دج»، ظاهر دائمًا</span></div>
+    </div>
+
+    <div>
+      <div class="card plain">
+        <h3>الترويسة</h3>
+        <p style="margin:0;font-size:10pt">شعارك واسم متجرك. تبقى ملتصقة بأعلى الشاشة أثناء تمرير الزبون — أو لا، فهذا خيار تتحكّم فيه.</p>
+      </div>
+      <div class="card plain">
+        <h3>الواجهة — الجملة الأولى</h3>
+        <p style="margin:0;font-size:10pt">اسم المنتج، السعر بخطّ كبير، السعر القديم مشطوبًا، وشارة <span class="tag">−30% اليوم</span> تُحسب وحدها. وتحتها: «التوصيل لـ 58 ولاية» و«الدفع عند الاستلام».</p>
+      </div>
+      <div class="card plain">
+        <h3>معرض الصور</h3>
+        <p style="margin:0;font-size:10pt">صور بلا حدّ. الزبون يمرّر بإصبعه والصور المصغّرة تتبعه. صورك تُخفَّف وتُحوَّل تلقائيًا لتُفتح بسرعة حتى على شبكة 3G.</p>
+      </div>
+      <div class="card plain">
+        <h3>الوصف والمزايا</h3>
+        <p style="margin:0;font-size:10pt">نصّ البيع، ثم قائمة مزايا مؤشَّرة. اكتب بالعربية أو بالفرنسية: اتجاه النص يضبط نفسه تلقائيًا.</p>
+      </div>
+      <div class="card accent">
+        <h3>الزر العائم</h3>
+        <p style="margin:0;font-size:10pt">زر «اطلب الآن» يرافق الزبون في كل الصفحة ويعيده إلى الاستمارة بحركة واحدة. يمكن تفعيله أو إخفاؤه.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>4</span></div>
+</div>
+
+<!-- ═══════════════ 5. طريقتان للبناء ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">03 — بناء الصفحة</p>
+  <h1 class="title">طريقتان لبناء صفحتك</h1>
+  <p>ليس كل منتج يُروى بنفس الطريقة. تختار النمط من لوحة التحكّم، دون أن تلمس
+  سطرًا واحدًا من البرمجة.</p>
+
+  <div class="grid g2">
+    <div class="card plain">
+      <span class="tag grey">النمط 1</span>
+      <h2 style="margin-top:2mm">بسيط</h2>
+      <p style="font-size:10pt">الترتيب الكلاسيكي الذي يبيع في أغلب المنتجات: واجهة ← صور ← وصف ← عروض ← استمارة. لا شيء تضبطه، يشتغل فورًا.</p>
+      <ul class="list" style="font-size:10pt">
+        <li>بلا أي إعداد</li>
+        <li>مظهر فاتح</li>
+        <li>زر عائم على الهاتف</li>
+      </ul>
+    </div>
+    <div class="card accent">
+      <span class="tag">النمط 2</span>
+      <h2 style="margin-top:2mm">مخصّص</h2>
+      <p style="font-size:10pt">تركّب الصفحة قطعة بقطعة وترتّبها كما تشاء. مثالي للصفحات الطويلة ذات الصور الكبيرة على طريقة الـ advertorial.</p>
+      <ul class="list" style="font-size:10pt">
+        <li>حتى 40 قطعة</li>
+        <li>مظهر فاتح أو داكن</li>
+        <li>ترويسة ملتصقة وزر عائم حسب اختيارك</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <h2>القطع الست المتاحة</h2>
+  <table>
+    <thead><tr><th>القطعة</th><th>ماذا تعرض</th><th>التكرار</th></tr></thead>
+    <tbody>
+      <tr><td class="k">الواجهة</td><td>اسم المنتج، السعر، التخفيض، شارات الطمأنة</td><td>مرة واحدة</td></tr>
+      <tr><td class="k">المعرض</td><td>صور المنتج مع التمرير بالإصبع</td><td>مرة واحدة</td></tr>
+      <tr><td class="k">الوصف</td><td>نصّ البيع والمزايا</td><td>مرة واحدة</td></tr>
+      <tr><td class="k">الاستمارة</td><td>العروض وصندوق الطلب — إجبارية</td><td>مرة واحدة</td></tr>
+      <tr><td class="k">صورة</td><td>صورة بعرض الشاشة كاملًا، من حافة إلى حافة</td><td>بلا حدّ</td></tr>
+      <tr><td class="k">نصّ</td><td>عنوان وفقرة حرّان (شهادة زبون، ضمان، طريقة استعمال…)</td><td>بلا حدّ</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card warn" style="margin-top:auto">
+    <h3>حاجز أمان</h3>
+    <p style="margin:0">الصفحة المخصّصة لا تُحفظ بدون قطعة «الاستمارة»: بدونها لا أحد يستطيع الطلب. النظام يرفض الحفظ وينبّهك.</p>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>5</span></div>
+</div>
+
+<!-- ═══════════════ 6. الاستمارة ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">04 — قلب الموقع</p>
+  <h1 class="title">استمارة الطلب</h1>
+  <p>بالعربية كاملة، من اليمين إلى اليسار. خمس خانات لا أكثر: كل خانة زائدة
+  تعني طلبًا ضائعًا.</p>
+
+  <div class="grid g2" style="grid-template-columns: 1fr 1fr; align-items:start">
+    <div>
+      <div class="card plain">
+        <h3>الاسم و اللقب</h3>
+        <p style="margin:0;font-size:10pt">مرفوض إن كان أقل من 3 أحرف.</p>
+      </div>
+      <div class="card plain">
+        <h3>رقم الهاتف</h3>
+        <p style="margin:0;font-size:10pt">يُتحقّق منه بالصيغة الجزائرية (05 أو 06 أو 07 متبوعة بـ 8 أرقام). الرقم الخاطئ لا يمرّ، فلا اتصالات في الفراغ.</p>
+      </div>
+      <div class="card plain">
+        <h3>الولاية</h3>
+        <p style="margin:0;font-size:10pt">الولايات الـ 58. بمجرد الاختيار يسأل الموقع Yalidine ويعرض السعر الحقيقي.</p>
+      </div>
+      <div class="card plain">
+        <h3>نوع التوصيل</h3>
+        <p style="margin:0;font-size:10pt">بطاقتان: المنزل أو مكتب Stopdesk، كلٌّ بسعره. وإن لم يكن لـ Yalidine مكتب في الولاية، يُعطَّل الخيار ويقرأ الزبون السبب.</p>
+      </div>
+      <div class="card plain">
+        <h3>العنوان أو المكتب</h3>
+        <p style="margin:0;font-size:10pt">عنوان حرّ للتوصيل المنزلي؛ وفي Stopdesk قائمة مكاتب الولاية مع عناوينها الدقيقة.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="card accent">
+        <h3>الملخّص المباشر</h3>
+        <table style="font-size:10pt">
+          <tr><td>المنتج × 2</td><td style="text-align:end" class="k">4 000 دج</td></tr>
+          <tr><td>التوصيل</td><td style="text-align:end" class="k">600 دج</td></tr>
+          <tr><td class="k">المجموع</td><td style="text-align:end;font-weight:800;color:var(--brand)">4 600 دج</td></tr>
+        </table>
+        <p style="margin:3mm 0 0;font-size:9.5pt">المجموع يُعاد حسابه عند كل تغيير للولاية أو العرض أو نوع التوصيل. والزر نفسه يعرض المبلغ: «تأكيد الطلب — 4 600 دج».</p>
+      </div>
+
+      <div class="card plain">
+        <h3>الزرّ يخاطب الزبون</h3>
+        <p style="font-size:10pt">ما دام شيء ناقصًا، الزر لا يقول «خطأ» — بل يقول ماذا يفعل:</p>
+        <ul class="list" style="font-size:10pt">
+          <li>«اختر عرضك»</li>
+          <li>«اختر لونا»</li>
+          <li>«اختر ولايتك»</li>
+        </ul>
+      </div>
+
+      <div class="card ok">
+        <h3>بعد التأكيد</h3>
+        <p style="margin:0;font-size:10pt">شاشة تأكيد بالعربية: «تم استلام طلبكم» — سنتصل بكم في أقرب وقت. لا شيء يُدفع الآن، كل شيء عند الاستلام.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:auto">
+    <h3>حماية من الروبوتات، غير مرئية</h3>
+    <p style="margin:0">خانة فخّ لا يملؤها إلا الروبوت تمنع الطلبات الوهمية الآلية، دون أن تُزعج زبونًا حقيقيًا أبدًا: بلا كابتشا وبلا صور تُفكّ.</p>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>6</span></div>
+</div>
+
+<!-- ═══════════════ 7. العروض والأنواع ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">05 — بيع أكثر في الطلب الواحد</p>
+  <h1 class="title">العروض، الألوان والمقاسات</h1>
+
+  <h2>العروض المجمّعة</h2>
+  <p>أربح وسيلة في الدفع عند الاستلام: أن ينتقل الزبون من قطعة إلى قطعتين أو
+  ثلاث. تُنشئ عروضًا، لكل واحد <strong>سعره الإجمالي</strong> (لا سعر الوحدة)،
+  والصفحة تعرض نسبة التخفيض وحدها.</p>
+
+  <table style="margin-bottom:4mm">
+    <thead><tr><th>العرض</th><th>القطع</th><th>السعر</th><th>السعر القديم</th><th>التوفير المعروض</th></tr></thead>
+    <tbody>
+      <tr><td class="k">قطعة واحدة</td><td>1</td><td>2 500 دج</td><td>3 000 دج</td><td><span class="tag">−17%</span></td></tr>
+      <tr><td class="k">عرض قطعتين</td><td>2</td><td>4 000 دج</td><td>5 000 دج</td><td><span class="tag">−20%</span></td></tr>
+      <tr><td class="k">عرض 3 قطع</td><td>3</td><td>5 400 دج</td><td>7 500 دج</td><td><span class="tag">−28%</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid g3">
+    <div class="card plain"><h3>الشريط</h3><p style="margin:0;font-size:9.5pt">نصّ من اختيارك — «الأكثر طلبا» — يُوضع على العرض الذي تريد دفعه.</p></div>
+    <div class="card plain"><h3>الإطار المميّز</h3><p style="margin:0;font-size:9.5pt">مستوى إبراز ثانٍ، ليقع نظر الزبون مباشرة على العرض الأكثر ربحًا.</p></div>
+    <div class="card plain"><h3>اختيار مسبق</h3><p style="margin:0;font-size:9.5pt">أول عرض في القائمة مُحدَّد سلفًا: الزبون لا يجد نفسه عالقًا أبدًا.</p></div>
+  </div>
+
+  <hr class="rule">
+
+  <h2>اللون والمقاس، قطعة بقطعة</h2>
+  <p>هذه التفصيلة هي التي تُجنّبك المكالمات والمرتجعات. حين يطلب الزبون عرض
+  3 قطع، فهو لا يختار «لونًا» واحدًا: بل يختار
+  <strong>لون ومقاس كل قطعة من الثلاث</strong>.</p>
+
+  <div class="grid g2">
+    <div class="card plain">
+      <h3>عند الزبون</h3>
+      <ul class="list" style="font-size:10pt">
+        <li>الألوان تظهر كدوائر ملوّنة حقيقية، لا كنصّ</li>
+        <li>المقاسات كأزرار (S، M، L، 38، 40…)</li>
+        <li>سطر لكل قطعة: «القطعة 1»، «القطعة 2»…</li>
+        <li>لا يمكن التأكيد ما دامت قطعة ناقصة</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>عندك أنت</h3>
+      <ul class="list" style="font-size:10pt">
+        <li>الطلب يصلك مفصّلًا: «أسود M، أبيض L»</li>
+        <li>التفصيل يُطبع على وصل Yalidine أيضًا</li>
+        <li>ورسالة Telegram تحمله كذلك</li>
+        <li>تحضّر الطرد دون معاودة الاتصال بالزبون</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card warn" style="margin-top:auto">
+    <h3>السعر لا يأتي أبدًا من المتصفّح</h3>
+    <p style="margin:0">عند وصول أي طلب، يُعيد الخادم قراءة سعر العرض وكميته من قاعدة البيانات بنفسه. حتى لو تلاعب أحدهم بالصفحة في هاتفه، سيدفع السعر الحقيقي.</p>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>7</span></div>
+</div>
+
+<!-- ═══════════════ 8. لوحة التحكّم ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">06 — مساحتك</p>
+  <h1 class="title">لوحة التحكّم</h1>
+  <p>تُفتح من أي متصفّح، على الحاسوب كما على الهاتف. خمس شاشات، شريط تنقّل
+  واحد، ولا شيء يُثبَّت.</p>
+
+  <div class="flow" style="margin-bottom:5mm">
+    <div class="node brand"><b>الإحصائيات</b><span>/admin</span></div>
+    <div class="node"><b>الطلبيات</b><span>/admin/commandes</span></div>
+    <div class="node"><b>المنتج</b><span>/admin/produit</span></div>
+    <div class="node"><b>الصفحة</b><span>/admin/landing</span></div>
+    <div class="node"><b>الإعدادات</b><span>/admin/settings</span></div>
+  </div>
+
+  <h2>شاشة الدخول</h2>
+  <p>كلمة سرّ واحدة، كلمتك أنت. محميّة من المحاولات المتكرّرة: بعد 5 محاولات
+  فاشلة يُحجب العنوان 15 دقيقة، ثم 30، ثم 60 إن تكرّر الأمر. وجلستك تبقى
+  مفتوحة 30 يومًا.</p>
+
+  <hr class="rule">
+
+  <h2>لوحة الإحصائيات — ما تراه أول ما تدخل</h2>
+
+  <div class="grid g2" style="margin-bottom:4mm">
+    <div class="card plain">
+      <h3>أربعة أرقام أساسية</h3>
+      <ul class="list" style="font-size:10pt">
+        <li><strong>طلبيات اليوم</strong> — نبض حملتك الإعلانية</li>
+        <li><strong>قيد الانتظار</strong> — ما بقي عليك الاتصال به</li>
+        <li><strong>الإيرادات</strong> — محسوبة على الطرود المسلَّمة فعلًا، لا على الطلبات المأخوذة</li>
+        <li><strong>نسبة التأكيد</strong> — المؤكَّدة ÷ (المؤكَّدة + الملغاة)</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>بقية الشاشة</h3>
+      <ul class="list" style="font-size:10pt">
+        <li>رسم بياني لـ <strong>آخر 14 يومًا</strong> لترى إن كانت الحملة صامدة</li>
+        <li>التوزيع حسب الحالة: قيد الانتظار، مؤكَّدة، ملغاة</li>
+        <li>آخر 6 طلبيات، مع منفذ مباشر إلى القائمة الكاملة</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card accent" style="margin-top:auto">
+    <h3>لماذا تُحسب الإيرادات على الطرود المسلَّمة</h3>
+    <p style="margin:0">في الدفع عند الاستلام، الطلب المؤكَّد ليس مالًا. الطرد المسلَّم وحده هو المال. لذلك تعدّ اللوحة ما وسمته Yalidine مسلَّمًا فقط — فتعرف دائمًا أين أنت فعلًا.</p>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>8</span></div>
+</div>
+
+<!-- ═══════════════ 9. الطلبيات ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">07 — الشاشة التي تفتحها كل يوم</p>
+  <h1 class="title">الطلبيات</h1>
+  <p>كل طلبياتك، قابلة للتصفية، والأزرار في متناول إبهامك. جدول على الحاسوب،
+  بطاقات على الهاتف.</p>
+
+  <h2>صفِّ لتجد أي شيء</h2>
+  <div class="grid g2" style="margin-bottom:4mm">
+    <div class="card plain">
+      <ul class="list" style="font-size:10pt;margin:0">
+        <li>بحث بالاسم أو برقم الهاتف</li>
+        <li>حسب الحالة: قيد الانتظار / مؤكَّدة / ملغاة</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <ul class="list" style="font-size:10pt;margin:0">
+        <li>حسب الولاية</li>
+        <li>حسب الفترة — من … إلى …</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>ماذا يعرض كل سطر</h2>
+  <p>التاريخ والساعة · الاسم والهاتف · الولاية والبلدية والعنوان · منزل أو
+  مكتب Stopdesk (مع اسم المكتب) · العرض المختار · الألوان والمقاسات · الكمية ·
+  المجموع · الحالة · رقم تتبّع Yalidine.</p>
+
+  <hr class="rule">
+
+  <h2>الأزرار الأربعة</h2>
+  <table>
+    <thead><tr><th>الزر</th><th>ماذا يحدث فعلًا</th></tr></thead>
+    <tbody>
+      <tr><td class="k"><span class="tag green">تأكيد</span></td><td>يُنشأ الطرد لدى Yalidine في الحال: الاسم، الهاتف، الولاية، البلدية، العنوان، المنتج، العرض، الأنواع، الكمية والمبلغ المطلوب تحصيله. وتستلم رقم التتبّع ورابط <strong>وصل الشحن للطباعة</strong>.</td></tr>
+      <tr><td class="k"><span class="tag amber">إلغاء</span></td><td>يعود الطلب إلى «ملغى» <em>ويُحذف</em> الطرد من Yalidine. وإن رفضت Yalidine (الطرد استُلم بالفعل) لا يتغيّر شيء، والرسالة تخبرك بالضبط بما عليك فعله.</td></tr>
+      <tr><td class="k"><span class="tag grey">إعادة للانتظار</span></td><td>طلب أُلغي بالخطأ يعود إلى قائمة الاتصال.</td></tr>
+      <tr><td class="k"><span class="tag grey">حذف</span></td><td>حذف نهائي، بتأكيد على مرحلتين تفاديًا للضغطة الخاطئة. ويُحذف طرد Yalidine أولًا.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card ok" style="margin-top:auto">
+    <h3>التتبّع يتحدّث وحده</h3>
+    <p style="margin:0">في كل مرة تُفتح فيها الصفحة، يسأل الموقع Yalidine عن حال كل طرودك الجارية ويعرض حالتها: قيد التحضير، مُرسل، قيد التوصيل، سُلّم، مُرتجع. لا حاجة لفتح حساب Yalidine بجانبك.</p>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>9</span></div>
+</div>
+
+<!-- ═══════════════ 10. المنتج ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">08 — كتالوجك</p>
+  <h1 class="title">المنتج</h1>
+  <p>شاشة معاينة تُظهر بالضبط ما سيراه الزبون، وزر <strong>تعديل</strong> يفتح
+  الاستمارة الكاملة.</p>
+
+  <table style="margin-bottom:4mm">
+    <thead><tr><th>الخانة</th><th>فائدتها</th></tr></thead>
+    <tbody>
+      <tr><td class="k">الاسم</td><td>العنوان المعروض أعلى صفحة البيع، ويُنقل إلى وصل Yalidine.</td></tr>
+      <tr><td class="k">السعر</td><td>سعر بيع القطعة الواحدة.</td></tr>
+      <tr><td class="k">السعر القديم</td><td>اختياري. إن كان أعلى، ظهر مشطوبًا واحتُسبت شارة التخفيض تلقائيًا.</td></tr>
+      <tr><td class="k">الوصف</td><td>نصّ الإقناع. الأسطر الجديدة تُحفظ كما كتبتها.</td></tr>
+      <tr><td class="k">المزايا</td><td>سطر = ميزة مؤشَّرة في الصفحة. «توصيل سريع»، «ضمان سنة»…</td></tr>
+      <tr><td class="k">الألوان</td><td>اسم + دائرة لون تختارها من الشاشة. حتى 30 لونًا.</td></tr>
+      <tr><td class="k">المقاسات</td><td>S، M، L، 38، 40… حتى 30 مقاسًا.</td></tr>
+      <tr><td class="k">الصور</td><td>بلا حدّ، قابلة لإعادة الترتيب والحذف واحدة واحدة.</td></tr>
+      <tr><td class="k">العروض المجمّعة</td><td>حتى 10 عروض، بسعرها وكميتها وشريطها وإبرازها.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid g2">
+    <div class="card accent">
+      <h3>صورك تُعالَج تلقائيًا</h3>
+      <ul class="list" style="font-size:10pt;margin:0">
+        <li>صور الآيفون (HEIC) تُحوَّل — وإلا بقيت مكسورة على Android وعلى الحاسوب</li>
+        <li>صورة بـ 8 ميغا تنزل تحت 1 ميغا دون فرق يُرى</li>
+        <li>الاتجاه يُصحَّح: لا مزيد من الصور المقلوبة</li>
+        <li>كل ذلك في متصفّحك قبل الإرسال: سريع حتى بشبكة متوسطة</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>التنظيف يتمّ وحده</h3>
+      <p style="font-size:10pt">الصورة التي تحذفها تُمسح فعلًا من التخزين — لكن <strong>بعد</strong> نجاح الحفظ فقط. وإن فشل الحفظ لا تخسر شيئًا.</p>
+      <h3 style="margin-top:4mm">معاينة قبل النشر</h3>
+      <p style="margin:0;font-size:10pt">بطاقة المعاينة تُظهر المنتج كما سيُرى: الصورة، السعر، التخفيض، المزايا، دوائر الألوان، المقاسات والعروض.</p>
+    </div>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>10</span></div>
+</div>
+
+<!-- ═══════════════ 11. محرّر الصفحة ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">09 — بناء الصفحة</p>
+  <h1 class="title">محرّر صفحة البيع</h1>
+  <p>الشاشة الوحيدة التي ترسم فيها صفحة بيعك. من جهة تضيف القطع، ومن الجهة
+  الأخرى معاينة تُريك النتيجة لحظة بلحظة.</p>
+
+  <div class="grid g2" style="grid-template-columns: 1fr 1fr; align-items:start">
+    <div>
+      <div class="card plain">
+        <h3>1. اختر النمط</h3>
+        <p style="margin:0;font-size:10pt">«بسيط» للترتيب الكلاسيكي، «مخصّص» لتركّبها بنفسك.</p>
+      </div>
+      <div class="card plain">
+        <h3>2. أضف القطع</h3>
+        <p style="margin:0;font-size:10pt">واجهة، معرض، وصف، استمارة، صورة، نصّ. ضغطة واحدة للإضافة.</p>
+      </div>
+      <div class="card plain">
+        <h3>3. رتّبها</h3>
+        <p style="margin:0;font-size:10pt">أسهم لرفع القطعة أو خفضها، وعلامة × لإزالتها.</p>
+      </div>
+      <div class="card plain">
+        <h3>4. اضبط العرض</h3>
+        <p style="margin:0;font-size:10pt">مظهر فاتح أو داكن، ترويسة ملتصقة، وزر «اطلب الآن» عائم.</p>
+      </div>
+      <div class="card plain">
+        <h3>5. احفظ</h3>
+        <p style="margin:0;font-size:10pt">الصفحة المنشورة تتحدّث في ثانية واحدة.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="card accent">
+        <h3>معاينة على شكل هاتف</h3>
+        <p style="margin:0;font-size:10pt">شاشة هاتف بجانب المحرّر تعرض الصفحة كما ستكون، بصورك ونصوصك الحقيقية. ترى قبل أن تنشر.</p>
+      </div>
+      <div class="card plain">
+        <h3>قطعة «صورة»</h3>
+        <p style="margin:0;font-size:10pt">صورة بعرض الشاشة كاملًا. صورتان متتاليتان تلتصقان وتُقرآن كصورة واحدة كبيرة — تنسيق الـ advertorial الذي ينجح كثيرًا على TikTok.</p>
+      </div>
+      <div class="card plain">
+        <h3>قطعة «نصّ»</h3>
+        <p style="margin:0;font-size:10pt">عنوان وفقرة حرّان، تضعهما حيث تشاء: شهادة زبون، ضمان، طريقة استعمال، أو ردّ على اعتراض متكرّر.</p>
+      </div>
+      <div class="card ok">
+        <h3>حتى 40 قطعة</h3>
+        <p style="margin:0;font-size:10pt">ما يكفي لصفحة بيع طويلة جدًا، دون أن تصير ثقيلة على الهاتف.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>11</span></div>
+</div>
+
+<!-- ═══════════════ 12. الإعدادات ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">10 — ضبط المتجر</p>
+  <h1 class="title">الإعدادات</h1>
+
+  <table style="margin-bottom:4mm">
+    <thead><tr><th>الإعداد</th><th>أثره</th></tr></thead>
+    <tbody>
+      <tr><td class="k">اسم المتجر</td><td>يظهر في الترويسة والتذييل وفي لسان المتصفّح.</td></tr>
+      <tr><td class="k">الشعار</td><td>يُرفع من هاتفك أو حاسوبك، مع معاينة فورية.</td></tr>
+      <tr><td class="k">اللون الرئيسي</td><td>سبعة ألوان جاهزة أو لونك أنت بصيغة #rrggbb. يُعيد صبغ الأزرار والأسعار والشارات والهالات في <strong>كل</strong> الموقع.</td></tr>
+      <tr><td class="k">ولاية الإرسال</td><td>من أين تنطلق طرودك. منها تحسب Yalidine الأسعار.</td></tr>
+      <tr><td class="k">التوصيل المجاني</td><td>ثلاثة أنماط — انظر أسفله.</td></tr>
+      <tr><td class="k">Meta Pixel</td><td>معرّف بكسل فيسبوك، لقياس إعلاناتك وتحسينها.</td></tr>
+      <tr><td class="k">توثيق النطاق</td><td>الرمز الذي تطلبه Meta للمصادقة على اسم نطاقك.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>أنماط التوصيل المجاني الثلاثة</h2>
+  <div class="grid g3" style="margin-bottom:4mm">
+    <div class="card plain">
+      <h3>لا شيء</h3>
+      <p style="margin:0;font-size:9.5pt">الزبون يدفع أجرة Yalidine، معروضة بوضوح قبل التأكيد.</p>
+    </div>
+    <div class="card plain">
+      <h3>المكتب مجاني</h3>
+      <p style="margin:0;font-size:9.5pt">Stopdesk مجاني والمنزل مدفوع. هذا ما يدفع الزبون نحو المكتب — أرخص لك ومرتجعات أقل.</p>
+    </div>
+    <div class="card plain">
+      <h3>كل شيء مجاني</h3>
+      <p style="margin:0;font-size:9.5pt">«التوصيل مجاني» بالأخضر. الخيار يختفي وكل الطلبات تذهب للمنزل.</p>
+    </div>
+  </div>
+
+  <div class="card accent" style="margin-top:auto">
+    <h3>لون واحد، كل الموقع</h3>
+    <p style="margin:0">تُغيّر اللون الرئيسي وتحفظ: الأزرار، الأسعار، شارات التخفيض، بطاقات العروض المختارة، هالات الخلفية والزر العائم تتبعه فورًا. لا لمسة إضافية في أي مكان آخر.</p>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>12</span></div>
+</div>
+
+<!-- ═══════════════ 13. الربط ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">11 — مربوط بأدواتك</p>
+  <h1 class="title">الخدمات المربوطة</h1>
+
+  <div class="card">
+    <h2>Yalidine — التوصيل من أوله إلى آخره</h2>
+    <div class="grid g2">
+      <ul class="list" style="font-size:10pt">
+        <li><strong>أسعار مباشرة</strong>: السعر المعروض للزبون هو سعر Yalidine، لا تقدير تضطر لتحديثه بيدك</li>
+        <li><strong>مكاتب Stopdesk</strong>: القائمة الحقيقية لمكاتب الولاية مع عناوينها</li>
+      </ul>
+      <ul class="list" style="font-size:10pt">
+        <li><strong>إنشاء الطرد</strong> بضغطة واحدة، مع المبلغ المطلوب تحصيله</li>
+        <li><strong>وصل الشحن</strong> جاهز للطباعة واللصق</li>
+        <li><strong>التتبّع</strong> يتحدّث تلقائيًا</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Telegram — إشعارك في الحال</h2>
+    <p>كل طلب يصلك على Telegram في ثوانٍ، ومعه: الاسم، الهاتف، الولاية،
+    البلدية، نوع التوصيل، المنتج، العرض، الأنواع والمجموع.
+    <strong>ويمكن إرساله لعدة أشخاص</strong> — أنت، شريكك، ومن يتّصل بالزبائن.</p>
+    <p style="margin:0;font-size:9.5pt" class="muted">وإن تعذّر الوصول إلى Telegram، يُسجَّل الطلب رغم ذلك: الإشعار لا يمكن أن يُضيّع بيعًا أبدًا.</p>
+  </div>
+
+  <div class="card">
+    <h2>Meta Pixel — قياس إعلاناتك وتحسينها</h2>
+    <p style="margin:0">حدثان يُرسلان تلقائيًا: <strong>InitiateCheckout</strong>
+    حين يبدأ الزبون بملء الاستمارة، و<strong>Purchase</strong> بالمبلغ الدقيق
+    عند تأكيد الطلب. هذا ما يجعل فيسبوك يبحث لك عن مشترين لا عن فضوليين، وما
+    يجعلك تعرف تكلفة الطلب الواحد.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:0">
+    <h2>Supabase — بياناتك عندك</h2>
+    <p style="margin:0">طلبياتك ومنتجك وصورك محفوظة في
+    <strong>حسابك أنت</strong>. تصدّرها أو تأخذها متى شئت، ولا أحد غيرك
+    يصل إليها.</p>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>13</span></div>
+</div>
+
+<!-- ═══════════════ 14. الأمان والسرعة ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">12 — تحت الغطاء</p>
+  <h1 class="title">السرعة والأمان</h1>
+  <p>ما لا يراه الزبون، لكنه هو الذي يقرّر إن كان سيطلب أم سيغلق الصفحة.</p>
+
+  <h2>الصفحة تُفتح بسرعة، حتى على 3G</h2>
+  <div class="grid g2" style="margin-bottom:4mm">
+    <div class="card plain">
+      <ul class="list" style="font-size:10pt;margin:0">
+        <li>الصفحة <strong>محسوبة مسبقًا وتُقدَّم من ذاكرة عالمية</strong>: تصل جاهزة دون انتظار قاعدة البيانات</li>
+        <li>وتتحدّث في ثانية بمجرد تعديلك للمنتج أو الإعدادات</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <ul class="list" style="font-size:10pt;margin:0">
+        <li>الصور تُحوَّل وتُصغَّر وتُقدَّم بالصيغة المناسبة لكل هاتف</li>
+        <li>بلا تأثيرات ضبابية مكلفة: التمرير يبقى سلسًا على الآيفون</li>
+        <li>أسعار الولايات المطلوبة سابقًا تُحفظ: تغيير الولاية مجددًا يكون فوريًا</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>الأمان</h2>
+  <table>
+    <tbody>
+      <tr><td class="k">دخول اللوحة</td><td>كلمة سرّ واحدة، تُقارَن بزمن ثابت. والجلسة موقَّعة تشفيريًا وصالحة 30 يومًا.</td></tr>
+      <tr><td class="k">ضد التخمين</td><td>5 محاولات فاشلة ← حجب 15 دقيقة، ثم 30، ثم 60. والعدّادات تُنظَّف وحدها.</td></tr>
+      <tr><td class="k">قاعدة البيانات</td><td>مقفلة افتراضيًا: لا وصول علني، كل شيء يمرّ عبر الخادم.</td></tr>
+      <tr><td class="k">الأسعار والكميات</td><td>تُعاد حسابها دائمًا في الخادم من قاعدة البيانات. المتصفّح لا يرسل إلا معرّف العرض.</td></tr>
+      <tr><td class="k">أجرة التوصيل</td><td>تُقرأ من Yalidine عند كل طلب. من المستحيل تزوير سعر.</td></tr>
+      <tr><td class="k">الصور</td><td>لا تُقبل إلا صور تخزينك أنت: لا يمكن حقن أي رابط خارجي.</td></tr>
+      <tr><td class="k">ضد الروبوتات</td><td>خانة فخّ غير مرئية، بلا كابتشا ولا عناء على الزبون الحقيقي.</td></tr>
+      <tr><td class="k">مفاتيح الوصول</td><td>Yalidine وTelegram وقاعدة البيانات: كلها في الخادم، ولا تظهر أبدًا في المتصفّح.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card accent" style="margin-top:auto">
+    <h3>مبني على أسس متينة</h3>
+    <p style="margin:0">Next.js 16 وReact 19 — التقنية نفسها التي تشتغل بها كبريات مواقع البيع. استضافة عالمية، شهادة HTTPS مضمّنة، وتحديثات دون انقطاع الخدمة.</p>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>14</span></div>
+</div>
+
+<!-- ═══════════════ 15. ما ستحصل عليه ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">13 — بشكل ملموس</p>
+  <h1 class="title">ما الذي ستحصل عليه</h1>
+
+  <div class="grid g2" style="margin-bottom:5mm">
+    <div class="card plain">
+      <h3>الموقع</h3>
+      <ul class="list" style="font-size:10pt;margin:0">
+        <li>صفحة بيع كاملة بالعربية</li>
+        <li>استمارة طلب بالدفع عند الاستلام</li>
+        <li>عروض مجمّعة، ألوان، مقاسات</li>
+        <li>محرّر صفحة مدمج</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>الإدارة</h3>
+      <ul class="list" style="font-size:10pt;margin:0">
+        <li>لوحة إحصائيات</li>
+        <li>إدارة كاملة للطلبيات</li>
+        <li>إدارة المنتج والصور</li>
+        <li>إعدادات المتجر</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>الربط</h3>
+      <ul class="list" style="font-size:10pt;margin:0">
+        <li>Yalidine (الأسعار، الطرود، الوصل، التتبّع)</li>
+        <li>إشعارات Telegram</li>
+        <li>Meta Pixel</li>
+        <li>قاعدة بيانات وتخزين</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>التشغيل</h3>
+      <ul class="list" style="font-size:10pt;margin:0">
+        <li>التنصيب والنشر</li>
+        <li>ربط اسم نطاقك</li>
+        <li>ضبط HTTPS والاستضافة</li>
+        <li>تدريبك على استعمال اللوحة</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>الانطلاق في أربع خطوات</h2>
+  <div class="steps">
+    <div class="step"><span class="n"></span><div><h3>نأخذ منك المفاتيح</h3><p>حساب Yalidine، اسم النطاق إن كان لديك، شعارك وصور منتجك.</p></div></div>
+    <div class="step"><span class="n"></span><div><h3>ننشر الموقع</h3><p>الاستضافة، النطاق، HTTPS، قاعدة البيانات وإشعارات Telegram: كل شيء يُربط ويُختبر.</p></div></div>
+    <div class="step"><span class="n"></span><div><h3>ندخل منتجك معًا</h3><p>السعر، العروض، الصور، الوصف. وترى كيف تفعلها وحدك في المنتج القادم.</p></div></div>
+    <div class="step"><span class="n"></span><div><h3>نجرّب طلبًا حقيقيًا</h3><p>من صفحة البيع حتى وصل Yalidine، لتنطلق في حملتك وأنت مطمئن.</p></div></div>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>15</span></div>
+</div>
+
+<!-- ═══════════════ 16. الأسعار ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">14 — الاستثمار</p>
+  <h1 class="title">الأسعار</h1>
+  <p class="lead" style="margin-bottom:6mm">سعر واضح، مرة واحدة. بلا أي عمولة
+  على مبيعاتك، وبلا أي نسبة من رقم أعمالك.</p>
+
+  <div class="price-grid" style="margin-bottom:6mm">
+    <div class="price-card">
+      <div class="plan">الأساسي</div>
+      <div class="desc">الموقع كاملًا، منشورًا وجاهزًا للبيع.</div>
+      <div class="price-blank">السعر</div>
+      <ul class="list">
+        <li>صفحة بيع + استمارة طلب</li>
+        <li>لوحة تحكّم كاملة</li>
+        <li>ربط Yalidine</li>
+        <li>إشعارات Telegram</li>
+        <li>النشر مضمَّن</li>
+      </ul>
+    </div>
+
+    <div class="price-card featured">
+      <div class="plan">الاحترافي <span class="tag">مُوصى به</span></div>
+      <div class="desc">كل ما في الأساسي، مع تتبّع الإعلانات والمرافقة.</div>
+      <div class="price-blank">السعر</div>
+      <ul class="list">
+        <li>كل ما في العرض الأساسي</li>
+        <li>Meta Pixel مضبوط</li>
+        <li>اسم نطاق مربوط</li>
+        <li>عروض مجمّعة مُعدّة</li>
+        <li>تدريب على اللوحة</li>
+        <li>دعم لمدة …… يومًا</li>
+      </ul>
+    </div>
+
+    <div class="price-card">
+      <div class="plan">حسب الطلب</div>
+      <div class="desc">عدة منتجات، عدة متاجر، أو حاجات خاصة.</div>
+      <div class="price-blank">حسب دراسة</div>
+      <ul class="list">
+        <li>تصميم خاص</li>
+        <li>ميزات إضافية</li>
+        <li>عدة متاجر</li>
+        <li>صيانة شهرية</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card plain">
+      <h3>خدمات إضافية</h3>
+      <table style="font-size:10pt">
+        <tr><td>صفحة بيع إضافية</td><td class="amt">…… دج</td></tr>
+        <tr><td>كتابة نصّ البيع</td><td class="amt">…… دج</td></tr>
+        <tr><td>معالجة صور المنتج</td><td class="amt">…… دج</td></tr>
+        <tr><td>صيانة شهرية</td><td class="amt">…… دج</td></tr>
+      </table>
+    </div>
+    <div class="card plain">
+      <h3>مصاريف دورية متوقّعة</h3>
+      <p style="font-size:10pt">مستقلّة عنّا، تُدفع مباشرة لمزوّديها:</p>
+      <ul class="list" style="font-size:10pt;margin:0">
+        <li>اسم النطاق — حوالي …… دج / سنة</li>
+        <li>الاستضافة — مجانية في البداية</li>
+        <li>قاعدة البيانات — مجانية في البداية</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card warn" style="margin-top:auto;margin-bottom:0">
+    <h3>شروط التعامل</h3>
+    <p style="margin:0">تسبيق …… % عند الطلب، والباقي عند النشر. التسليم في …… أيام عمل ابتداءً من استلام عناصرك.</p>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>16</span></div>
+</div>
+
+<!-- ═══════════════ 17. أسئلة متكرّرة ═══════════════ -->
+<div class="page">
+  <p class="eyebrow">15 — أسئلة متكرّرة</p>
+  <h1 class="title">أسئلة قد تدور في ذهنك</h1>
+
+  <div class="qa">
+    <div class="q">هل أستطيع تعديل منتجي وأسعاري بنفسي؟</div>
+    <p class="a">نعم، كل شيء: الاسم، السعر، السعر القديم، الوصف، المزايا، الألوان، المقاسات، الصور والعروض. تحفظ، فتتغيّر الصفحة المنشورة في ثانية. ولا تحتاج أي خبرة تقنية.</p>
+  </div>
+  <div class="qa">
+    <div class="q">هل يلزم حساب Yalidine؟</div>
+    <p class="a">نعم، حساب Yalidine مع صلاحية المطوّر — وهو مجاني عندهم. به تُعرض الأسعار الحقيقية وتُنشأ الطرود ويُتابع التوصيل. ونحن نرافقك للحصول عليه.</p>
+  </div>
+  <div class="qa">
+    <div class="q">وماذا لو تعطّلت Yalidine لحظة وصول طلب؟</div>
+    <p class="a">يرى الزبون رسالة واضحة تطلب منه إعادة المحاولة، بدل سعر مخترع. ولا ينطلق أي طلب بسعر خاطئ.</p>
+  </div>
+  <div class="qa">
+    <div class="q">هل يشتغل على الهاتف؟</div>
+    <p class="a">الموقع مصمَّم للهاتف أولًا — فزبائنك هناك. ولوحة التحكّم كذلك: تؤكّد طلبياتك من سريرك إن لزم الأمر.</p>
+  </div>
+  <div class="qa">
+    <div class="q">أبيع عدة منتجات، هل هذا ممكن؟</div>
+    <p class="a">النسخة المعروضة هنا مُحسَّنة لمنتج واحد لكل موقع — وهي الصيغة الأعلى تحويلًا في الدفع عند الاستلام. ولعدة منتجات ننشر عدة متاجر أو نُكيّف النظام: انظر عرض «حسب الطلب».</p>
+  </div>
+  <div class="qa">
+    <div class="q">لمن تعود ملكية البيانات؟</div>
+    <p class="a">لك أنت. الطلبيات، الصور، الإعدادات: كلها في حسابك، وقابلة للتصدير في أي وقت.</p>
+  </div>
+  <div class="qa">
+    <div class="q">هل الموقع بالعربية أم بالفرنسية؟</div>
+    <p class="a">كل ما يراه المشتري — العروض، الاستمارة، الرسائل، التأكيد — بالعربية من اليمين إلى اليسار. ولوحة التحكّم بالفرنسية. أما نصوص منتجك فتكتبها باللغة التي تريد، والتنسيق يتبعك.</p>
+  </div>
+  <div class="qa">
+    <div class="q">كم يستغرق النشر؟</div>
+    <p class="a">بضعة أيام عمل بعد استلام مفاتيحك وشعارك وصورك.</p>
+  </div>
+
+  <hr class="rule">
+
+  <div class="card accent" style="margin-top:auto;margin-bottom:0">
+    <h2 style="margin-bottom:2mm">جاهز لإطلاق متجرك؟</h2>
+    <p style="margin-bottom:4mm">راسلنا، ننصّب موقعك ونطلق معك حملتك الأولى.</p>
+    <div class="grid g3" style="gap:5mm">
+      <div><div class="muted" style="font-size:8.5pt;font-weight:700">الهاتف</div><div class="fill-line"></div></div>
+      <div><div class="muted" style="font-size:8.5pt;font-weight:700">البريد الإلكتروني</div><div class="fill-line"></div></div>
+      <div><div class="muted" style="font-size:8.5pt;font-weight:700">Instagram / Facebook</div><div class="fill-line"></div></div>
+    </div>
+  </div>
+
+  <div class="folio"><span>متجر الدفع عند الاستلام — ملف تعريفي</span><span>17</span></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,373 @@
+/* Feuille de style commune aux deux brochures (FR / AR).
+   Pensée pour l'impression : chaque .page fait exactement un A4. */
+
+:root {
+  --brand: #4f46e5;
+  --brand-dark: #3730a3;
+  --brand-soft: #eef2ff;
+  --ink: #18181b;
+  --ink-2: #3f3f46;
+  --muted: #71717a;
+  --line: #e4e4e7;
+  --paper: #ffffff;
+  --wash: #f7f7fb;
+  --ok: #059669;
+  --ok-soft: #ecfdf5;
+  --warn: #b45309;
+  --warn-soft: #fffbeb;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; background: #d8d8de; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-size: 10.5pt;
+  line-height: 1.55;
+}
+
+@page { size: A4; margin: 0; }
+
+.page {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  padding: 16mm 15mm 14mm;
+  margin: 0 auto 6mm;
+  background: var(--paper);
+  overflow: hidden;
+  page-break-after: always;
+  break-after: page;
+  display: flex;
+  flex-direction: column;
+}
+.page:last-child { page-break-after: auto; break-after: auto; margin-bottom: 0; }
+
+@media print {
+  body { background: #fff; }
+  .page { margin: 0; box-shadow: none; }
+}
+
+/* ── En-tête / pied de page ───────────────────────────────────────────── */
+
+.eyebrow {
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin: 0 0 3mm;
+}
+
+h1.title {
+  font-size: 23pt;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -.01em;
+  margin: 0 0 4mm;
+}
+
+h2 {
+  font-size: 13pt;
+  font-weight: 800;
+  margin: 0 0 2.5mm;
+  letter-spacing: -.01em;
+}
+
+h3 {
+  font-size: 10.5pt;
+  font-weight: 800;
+  margin: 0 0 1.5mm;
+}
+
+p { margin: 0 0 3mm; color: var(--ink-2); }
+.lead { font-size: 11.5pt; color: var(--ink-2); }
+.muted { color: var(--muted); }
+strong { color: var(--ink); font-weight: 700; }
+
+.folio {
+  position: absolute;
+  bottom: 8mm;
+  inset-inline: 15mm;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  color: #a1a1aa;
+  border-top: 1px solid var(--line);
+  padding-top: 2.5mm;
+}
+
+/* ── Couverture ───────────────────────────────────────────────────────── */
+
+.cover {
+  background: linear-gradient(160deg, #1e1b4b 0%, #312e81 45%, #4f46e5 100%);
+  color: #fff;
+  justify-content: space-between;
+  padding: 22mm 18mm;
+}
+.cover .halo {
+  position: absolute;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255,255,255,.20), transparent 68%);
+}
+.cover .halo-a { width: 120mm; height: 120mm; top: -40mm; inset-inline-end: -30mm; }
+.cover .halo-b { width: 100mm; height: 100mm; bottom: -35mm; inset-inline-start: -25mm; }
+.cover > * { position: relative; z-index: 1; }
+.cover h1 {
+  font-size: 34pt;
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  margin: 0 0 5mm;
+}
+.cover .sub { font-size: 13pt; color: rgba(255,255,255,.82); max-width: 130mm; margin: 0; }
+.cover .kicker {
+  display: inline-block;
+  font-size: 8.5pt;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  padding: 2mm 5mm;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 999px;
+  margin-bottom: 8mm;
+}
+.cover .facts { display: flex; gap: 6mm; margin-top: 10mm; }
+.cover .fact {
+  flex: 1;
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 4mm;
+  padding: 4mm;
+}
+.cover .fact b { display: block; font-size: 15pt; font-weight: 800; margin-bottom: .5mm; }
+.cover .fact span { font-size: 8.5pt; color: rgba(255,255,255,.75); }
+.cover .foot { font-size: 9pt; color: rgba(255,255,255,.7); }
+
+/* ── Blocs de contenu ─────────────────────────────────────────────────── */
+
+.card {
+  background: var(--wash);
+  border: 1px solid var(--line);
+  border-radius: 4mm;
+  padding: 5mm;
+  margin-bottom: 4mm;
+}
+.card.plain { background: #fff; }
+.card.accent { background: var(--brand-soft); border-color: #c7d2fe; }
+.card.ok { background: var(--ok-soft); border-color: #a7f3d0; }
+.card.warn { background: var(--warn-soft); border-color: #fde68a; }
+.card > :last-child { margin-bottom: 0; }
+
+.grid { display: grid; gap: 4mm; }
+.g2 { grid-template-columns: 1fr 1fr; }
+.g3 { grid-template-columns: repeat(3, 1fr); }
+
+.rule { height: 1px; background: var(--line); margin: 4mm 0; border: 0; }
+
+/* Liste à puces compacte */
+ul.list { margin: 0 0 3mm; padding: 0; list-style: none; }
+ul.list li {
+  position: relative;
+  padding-inline-start: 5.5mm;
+  margin-bottom: 1.6mm;
+  color: var(--ink-2);
+}
+ul.list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 2.1mm;
+  width: 2mm;
+  height: 2mm;
+  border-radius: 999px;
+  background: var(--brand);
+}
+ul.list li:last-child { margin-bottom: 0; }
+
+/* Étapes numérotées */
+.steps { counter-reset: s; display: grid; gap: 3mm; }
+.step {
+  display: grid;
+  grid-template-columns: 9mm 1fr;
+  gap: 4mm;
+  align-items: start;
+}
+.step .n {
+  counter-increment: s;
+  width: 9mm; height: 9mm;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 800;
+  font-size: 10pt;
+  display: flex; align-items: center; justify-content: center;
+}
+.step .n::before { content: counter(s); }
+.step h3 { margin-bottom: .8mm; }
+.step p { margin: 0; font-size: 9.5pt; }
+
+/* Tableau */
+table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+th {
+  text-align: start;
+  font-size: 7.5pt;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  padding: 0 3mm 2mm;
+  border-bottom: 1px solid var(--line);
+}
+td { padding: 2.5mm 3mm; border-bottom: 1px solid #f1f1f4; color: var(--ink-2); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td.k { font-weight: 700; color: var(--ink); white-space: nowrap; }
+
+/* Badges */
+.tag {
+  display: inline-block;
+  font-size: 8pt;
+  font-weight: 700;
+  padding: .8mm 2.5mm;
+  border-radius: 2mm;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+}
+.tag.green { background: var(--ok-soft); color: #047857; }
+.tag.amber { background: var(--warn-soft); color: var(--warn); }
+.tag.grey  { background: #f4f4f5; color: var(--ink-2); }
+
+/* Maquette de page (wireframe) */
+.mock {
+  border: 1.5px solid var(--line);
+  border-radius: 4mm;
+  overflow: hidden;
+  background: #fff;
+}
+.mock .bar {
+  background: #fafafa;
+  border-bottom: 1px solid var(--line);
+  padding: 2mm 3mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+}
+.mock .zone {
+  border-bottom: 1px dashed #d4d4d8;
+  padding: 3mm;
+  font-size: 8.5pt;
+}
+.mock .zone:last-child { border-bottom: 0; }
+.mock .zone b { display: block; font-size: 9pt; color: var(--ink); margin-bottom: .6mm; }
+.mock .zone span { color: var(--muted); font-size: 8pt; }
+.mock .zone.hi { background: var(--brand-soft); }
+
+/* Flux horizontal */
+.flow { display: flex; align-items: stretch; gap: 2mm; }
+.flow .node {
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: 3mm;
+  background: #fff;
+  padding: 3mm 2mm;
+  text-align: center;
+  font-size: 8pt;
+}
+.flow .node b { display: block; font-size: 8.5pt; margin-bottom: .6mm; }
+.flow .node span { color: var(--muted); }
+.flow .node.brand { background: var(--brand); border-color: var(--brand); color: #fff; }
+.flow .node.brand span { color: rgba(255,255,255,.8); }
+.flow .arrow {
+  align-self: center;
+  color: #c4c4cc;
+  font-size: 12pt;
+  font-weight: 700;
+}
+
+/* Zone tarifs à remplir */
+.price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+.price-card {
+  border: 1.5px solid var(--line);
+  border-radius: 4mm;
+  padding: 5mm 4mm;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+.price-card.featured { border-color: var(--brand); border-width: 2px; box-shadow: 0 0 0 3px var(--brand-soft); }
+.price-card .plan { font-size: 11pt; font-weight: 800; margin-bottom: 1mm; }
+.price-card .desc { font-size: 8.5pt; color: var(--muted); margin-bottom: 4mm; min-height: 11mm; }
+.price-blank {
+  border: 1.5px dashed #c7c7cf;
+  border-radius: 3mm;
+  height: 15mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b4b4bd;
+  font-size: 8pt;
+  font-weight: 600;
+  margin-bottom: 4mm;
+}
+.price-card ul.list li { font-size: 8.5pt; margin-bottom: 1.2mm; }
+.price-card ul.list li::before { width: 1.6mm; height: 1.6mm; top: 2mm; }
+
+.fill-line {
+  border-bottom: 1.5px dotted #c7c7cf;
+  min-height: 7mm;
+  margin-bottom: 3mm;
+}
+
+/* Sommaire */
+.toc { display: grid; gap: 2mm; }
+.toc-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2mm;
+  font-size: 10pt;
+}
+.toc-row .num {
+  width: 7mm;
+  font-weight: 800;
+  color: var(--brand);
+  flex: none;
+}
+.toc-row .lbl { font-weight: 600; color: var(--ink); }
+.toc-row .dots { flex: 1; border-bottom: 1px dotted #d4d4d8; transform: translateY(-1mm); }
+.toc-row .pg { color: var(--muted); font-size: 9pt; }
+
+/* Q/R */
+.qa { margin-bottom: 3.5mm; }
+.qa .q { font-weight: 800; color: var(--ink); margin-bottom: .8mm; }
+.qa .a { color: var(--ink-2); margin: 0; font-size: 9.5pt; }
+
+/* ── Correctifs ───────────────────────────────────────────────────────── */
+
+/* Fragments arabes insérés dans un texte latin (et l'inverse) : sans
+   isolation, les guillemets et les chiffres du texte porteur viennent se
+   ranger du mauvais côté du fragment. */
+bdi { unicode-bidi: isolate; }
+
+/* Couverture : titre en haut, mention en bas, sans trou au milieu. */
+.cover { justify-content: flex-start; }
+.cover .facts-wrap { margin-top: 12mm; }
+.cover .foot { margin-top: auto; }
+
+/* Montants pointillés des options : jamais coupés sur deux lignes. */
+td.amt {
+  text-align: end;
+  white-space: nowrap;
+  color: #b4b4bd;
+}
+
+/* Couverture : le bloc titre est centré verticalement, la mention reste en bas. */
+.cover .intro { margin-top: auto; }
+
+/* Flèche du flux : glyphe non miroité, pour qu'elle pointe dans le sens de
+   lecture aussi bien en LTR qu'en RTL. */
+.flow .arrow { font-size: 11pt; }
