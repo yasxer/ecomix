@@ -99,6 +99,47 @@ export type Order = {
   notes: string | null;
 };
 
+/** Mise en page de la landing : fixe ("simple") ou composée de blocs ("custom"). */
+export type LandingMode = "simple" | "custom";
+
+export const LANDING_MODES: LandingMode[] = ["simple", "custom"];
+
+/** Thème du mode custom. Le mode simple reste clair. */
+export type LandingTheme = "light" | "dark";
+
+export const LANDING_THEMES: LandingTheme[] = ["light", "dark"];
+
+/**
+ * Bloc de la landing en mode custom. Les blocs "hero", "gallery",
+ * "description" et "form" reprennent les données du produit ; "image" et
+ * "text" portent leur propre contenu.
+ */
+export type LandingBlock =
+  | { id: string; type: "hero" }
+  | { id: string; type: "gallery" }
+  | { id: string; type: "description" }
+  | { id: string; type: "form" }
+  | {
+      id: string;
+      type: "image";
+      url: string;
+      /** Dimensions réelles : `next/image` en a besoin pour réserver la place. */
+      width: number;
+      height: number;
+    }
+  | { id: string; type: "text"; title: string; body: string };
+
+export type LandingBlockType = LandingBlock["type"];
+
+export const LANDING_BLOCK_TYPES: LandingBlockType[] = [
+  "hero",
+  "gallery",
+  "description",
+  "form",
+  "image",
+  "text",
+];
+
 export type Settings = {
   id: string;
   store_name: string;
@@ -109,5 +150,14 @@ export type Settings = {
   fb_domain_verification: string | null;
   /** Livraison offerte au client : la boutique absorbe les frais Yalidine. */
   free_delivery_mode: FreeDeliveryMode;
+  landing_mode: LandingMode;
+  /** Blocs du mode custom, dans l'ordre d'affichage. Ignorés en mode simple. */
+  landing_blocks: LandingBlock[];
+  /** Options d'affichage du mode custom, sans effet en mode simple. */
+  landing_theme: LandingTheme;
+  /** Bouton « Commander » flottant, visible sur toute la page. */
+  landing_sticky_cta: boolean;
+  /** En-tête collé en haut pendant le défilement. */
+  landing_sticky_header: boolean;
   updated_at: string;
 };

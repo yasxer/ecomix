@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   ExternalLink,
   LayoutDashboard,
+  LayoutTemplate,
   LogOut,
   Package,
   PackageOpen,
@@ -17,6 +18,7 @@ const LINKS = [
   { href: "/admin", label: "Statistiques", short: "Stats", icon: LayoutDashboard },
   { href: "/admin/commandes", label: "Commandes", short: "Commandes", icon: ShoppingCart },
   { href: "/admin/produit", label: "Produit", short: "Produit", icon: Package },
+  { href: "/admin/landing", label: "Landing page", short: "Landing", icon: LayoutTemplate },
   { href: "/admin/settings", label: "Paramètres", short: "Réglages", icon: Settings },
 ];
 

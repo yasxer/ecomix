@@ -32,19 +32,19 @@ export function VariantPicker({
             key={index}
             className={
               count > 1
-                ? "flex flex-col gap-3 rounded-xl border border-zinc-200 p-4"
+                ? "flex flex-col gap-3 rounded-xl border border-zinc-200 p-4 dark:border-zinc-700"
                 : "flex flex-col gap-3"
             }
           >
             {count > 1 && (
-              <span className="text-sm font-bold text-zinc-900">
+              <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
                 القطعة {index + 1}
               </span>
             )}
 
             {colors.length > 0 && (
               <div className="flex flex-col gap-2">
-                <span className="text-sm font-semibold text-zinc-700">
+                <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                   اللون{" "}
                   {item.color ? (
                     <span className="font-normal text-zinc-500">— {item.color}</span>
@@ -60,10 +60,10 @@ export function VariantPicker({
                       onClick={() => onChange(index, { color: c.name })}
                       title={c.name}
                       aria-label={`اللون ${c.name}`}
-                      className={`size-10 rounded-full ring-2 ring-offset-2 transition ${
+                      className={`size-10 rounded-full ring-2 ring-offset-2 transition dark:ring-offset-zinc-900 ${
                         item.color === c.name
                           ? "ring-(--primary) scale-110"
-                          : "ring-zinc-200 hover:scale-105"
+                          : "ring-zinc-200 hover:scale-105 dark:ring-zinc-700"
                       }`}
                       style={{ backgroundColor: c.hex }}
                     />
@@ -74,7 +74,7 @@ export function VariantPicker({
 
             {sizes.length > 0 && (
               <div className="flex flex-col gap-2">
-                <span className="text-sm font-semibold text-zinc-700">المقاس</span>
+                <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">المقاس</span>
                 <div className="flex flex-wrap gap-2">
                   {sizes.map((s) => (
                     <button
@@ -84,7 +84,7 @@ export function VariantPicker({
                       className={`min-w-11 rounded-xl border-2 px-3.5 py-2 text-sm font-bold transition ${
                         item.size === s
                           ? "border-(--primary) bg-(--primary)/5 text-(--primary)"
-                          : "border-zinc-200 text-zinc-600 hover:border-zinc-300"
+                          : "border-zinc-200 text-zinc-600 hover:border-zinc-300 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-600"
                       }`}
                     >
                       {s}

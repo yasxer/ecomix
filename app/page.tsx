@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { ArrowDown, BadgeCheck, Banknote, Check, PackageOpen, Truck } from "lucide-react";
+import { ArrowDown, PackageOpen } from "lucide-react";
 import { getProduct, getSettings } from "@/lib/data";
-import { Gallery } from "./components/gallery";
+import {
+  CustomBlocks,
+  DescriptionBlock,
+  FormBlock,
+  GalleryBlock,
+  HeroBlock,
+  formatDA,
+} from "./components/landing-blocks";
 import { MetaPixel } from "./components/meta-pixel";
-import { Offers } from "./components/offers";
 
 // Page servie depuis le cache CDN (rapide même en 2G). Elle est régénérée
 // immédiatement quand le produit ou les settings changent (revalidatePath),
@@ -22,10 +28,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function formatDA(n: number) {
-  return `${n.toLocaleString("fr-DZ")} DA`;
-}
-
 export default async function LandingPage() {
   const [settings, product] = await Promise.all([getSettings(), getProduct()]);
 
@@ -40,15 +42,25 @@ export default async function LandingPage() {
     );
   }
 
-  const discount =
-    product.old_price && product.old_price > product.price
-      ? Math.round((1 - product.price / product.old_price) * 100)
-      : null;
+  // Mode custom : l'admin a composé la page bloc par bloc (voir
+  // /admin/landing). Sans bloc enregistré on retombe sur la mise en page
+  // simple plutôt que de servir une page vide.
+  const custom = settings.landing_mode === "custom" && settings.landing_blocks.length > 0;
+  // Les options d'affichage n'existent qu'en mode custom : le mode simple
+  // garde son thème clair, son en-tête fixé et son bouton flottant mobile.
+  const dark = custom && settings.landing_theme === "dark";
+  const stickyHeader = !custom || settings.landing_sticky_header;
+  const cta: "mobile" | "always" | "none" = !custom
+    ? "mobile"
+    : settings.landing_sticky_cta
+      ? "always"
+      : "none";
 
   return (
     <div
+      data-theme={dark ? "dark" : undefined}
       style={{ "--primary": settings.primary_color } as React.CSSProperties}
-      className="relative min-h-screen overflow-x-clip bg-zinc-50 text-zinc-900"
+      className="relative min-h-screen overflow-x-clip bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100"
     >
       {settings.pixel_id && <MetaPixel pixelId={settings.pixel_id} />}
 
@@ -70,7 +82,9 @@ export default async function LandingPage() {
       {/* Header. Volontairement sans `backdrop-blur` : sur un élément sticky,
           Safari (surtout iOS) refait le flou du contenu derrière à chaque
           frame de scroll, ce qui saccade le défilement. */}
-      <header className="sticky top-0 z-40 border-b border-zinc-200/50 bg-white/95">
+      <header
+        className={`${stickyHeader ? "sticky top-0" : "relative"} z-40 border-b border-zinc-200/50 bg-white/95 dark:border-white/10 dark:bg-zinc-950/95`}
+      >
         <div className="mx-auto flex h-16 max-w-[420px] items-center justify-center gap-3 px-4">
           {settings.logo_url ? (
             <Image
@@ -92,137 +106,44 @@ export default async function LandingPage() {
       </header>
 
       <main className="relative mx-auto flex max-w-[420px] flex-col px-4 pb-12">
-        {/* Titre + prix */}
-        <div className="animate-fade-up flex flex-col items-center gap-3 pb-7 pt-8 text-center">
-          {discount !== null && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-(--primary) px-4 py-1.5 text-sm font-bold text-white shadow-lg shadow-(--primary)/30">
-              <BadgeCheck className="size-4" />
-              -{discount}% aujourd&apos;hui
-            </span>
-          )}
-          <h1 className="text-3xl font-extrabold leading-tight tracking-tight">
-            {product.name}
-          </h1>
-          <div className="flex items-baseline gap-3">
-            <span className="text-4xl font-extrabold text-(--primary)">
-              {formatDA(product.price)}
-            </span>
-            {product.old_price && product.old_price > product.price && (
-              <span className="text-xl font-medium text-zinc-400 line-through">
-                {formatDA(product.old_price)}
-              </span>
-            )}
-          </div>
-          {/* Mini badges */}
-          <div className="mt-1 flex items-center gap-4 text-xs font-semibold text-zinc-500">
-            <span className="flex items-center gap-1.5">
-              <Truck className="size-4 text-(--primary)" />
-              {settings.free_delivery_mode === "all"
-                ? "Livraison gratuite"
-                : settings.free_delivery_mode === "stopdesk"
-                  ? "Gratuit en Stopdesk"
-                  : "69 wilayas"}
-            </span>
-            <span className="h-3 w-px bg-zinc-300" />
-            <span className="flex items-center gap-1.5">
-              <Banknote className="size-4 text-(--primary)" />
-              Paiement à la livraison
-            </span>
-          </div>
-          <a
-            href="#commander"
-            className="mt-2 flex items-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-bold text-white shadow-xl transition hover:-translate-y-0.5 hover:bg-zinc-700"
-          >
-            Commander maintenant
-            <ArrowDown className="size-4" />
-          </a>
-        </div>
-
-        {/* Galerie : grande image + miniatures, zoom au clic, swipe */}
-        <div className="animate-fade-up-delay relative">
-          <div
-            aria-hidden="true"
-            className="absolute -inset-x-2 -inset-y-2 rounded-4xl bg-(--primary)/10"
+        {custom ? (
+          <CustomBlocks
+            blocks={settings.landing_blocks}
+            product={product}
+            settings={settings}
           />
-          <div className="relative">
-            <Gallery images={product.images} alt={product.name} />
-          </div>
-        </div>
-
-        {/* Description et points forts saisis dans l'admin.
-            `dir="auto"` partout : la page est en LTR mais ces textes sont
-            saisis librement (arabe ici, français ailleurs) — le navigateur
-            déduit le sens du premier caractère fort, et les marges logiques
-            (`start-*`, `ps-*`) suivent. */}
-        {(product.description || product.features.length > 0) && (
-          <section className="flex flex-col gap-3 pt-9">
-            {product.description && (
-              <div
-                dir="auto"
-                className="relative overflow-hidden rounded-3xl bg-white py-5 pe-5 ps-6 shadow-sm ring-1 ring-zinc-200/60"
-              >
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-y-0 inset-s-0 w-1 bg-(--primary)"
-                />
-                {/* `whitespace-pre-line` conserve les retours à la ligne saisis */}
-                <p className="whitespace-pre-line text-[15px] leading-relaxed text-zinc-600">
-                  {product.description}
-                </p>
-              </div>
-            )}
-
-            {product.features.length > 0 && (
-              // `gap-px` sur fond gris : des séparateurs d'un pixel entre les
-              // lignes blanches, sans bordure à gérer sur chacune.
-              <ul className="grid gap-px overflow-hidden rounded-3xl bg-zinc-200/70 shadow-sm ring-1 ring-zinc-200/60">
-                {product.features.map((feature) => (
-                  <li
-                    key={feature}
-                    dir="auto"
-                    className="flex items-start gap-3 bg-white px-5 py-3.5"
-                  >
-                    <span className="mt-px flex size-5 shrink-0 items-center justify-center rounded-full bg-(--primary)/15 text-(--primary)">
-                      <Check className="size-3" strokeWidth={3.5} />
-                    </span>
-                    <span className="text-sm font-medium text-zinc-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
+        ) : (
+          <>
+            <HeroBlock product={product} settings={settings} />
+            <GalleryBlock product={product} />
+            <DescriptionBlock product={product} />
+            <FormBlock product={product} settings={settings} />
+          </>
         )}
-
-        {/* Offres groupées (si configurées) puis formulaire : les deux
-            partagent le pack sélectionné, d'où le composant client commun. */}
-        <Offers
-          packs={product.packs}
-          price={product.price}
-          colors={product.colors}
-          sizes={product.sizes}
-          freeDeliveryMode={settings.free_delivery_mode}
-        >
-          <div className="mb-6 flex flex-col items-center gap-1 text-center">
-            <h2 className="text-2xl font-extrabold tracking-tight">
-              Passez votre commande
-            </h2>
-            <p className="text-sm text-zinc-500">
-              Vous ne payez qu&apos;à la réception de votre colis
-            </p>
-          </div>
-        </Offers>
       </main>
 
-      {/* Barre mobile fixe */}
-      <a
-        href="#commander"
-        className="fixed inset-x-4 bottom-4 z-40 flex items-center justify-center gap-2 rounded-2xl bg-(--primary) px-6 py-4 text-base font-bold text-white shadow-lg shadow-(--primary)/30 sm:hidden"
-      >
-        Commander — {formatDA(product.price)}
-        <ArrowDown className="size-5" />
-      </a>
+      {/* Bouton flottant : mobile seulement en mode simple, partout ou nulle
+          part en mode custom selon l'option choisie. Au-dessus de tout le
+          reste : il doit rester cliquable quelle que soit la section. */}
+      {cta !== "none" && (
+        <a
+          href="#commander"
+          className={`fixed inset-x-4 bottom-4 z-50 flex items-center justify-center gap-2 rounded-2xl bg-(--primary) px-6 py-4 text-base font-bold text-white shadow-lg shadow-(--primary)/30 ${
+            cta === "mobile"
+              ? "sm:hidden"
+              : "sm:inset-x-auto sm:left-1/2 sm:w-[388px] sm:-translate-x-1/2"
+          }`}
+        >
+          Commander — {formatDA(product.price)}
+          <ArrowDown className="size-5" />
+        </a>
+      )}
 
-      <footer className="relative border-t border-zinc-200/70 bg-white py-7 pb-24 sm:pb-7">
+      <footer
+        className={`relative border-t border-zinc-200/70 bg-white py-7 dark:border-white/10 dark:bg-zinc-900 ${
+          cta === "always" ? "pb-24" : cta === "mobile" ? "pb-24 sm:pb-7" : ""
+        }`}
+      >
         <div className="flex flex-col items-center gap-1.5">
           <div className="flex items-center gap-2">
             {settings.logo_url ? (
@@ -238,7 +159,7 @@ export default async function LandingPage() {
             )}
             <span className="text-sm font-bold">{settings.store_name}</span>
           </div>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-zinc-400 dark:text-zinc-500">
             © {new Date().getFullYear()} {settings.store_name} — Tous droits réservés
           </p>
         </div>

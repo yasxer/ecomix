@@ -229,13 +229,13 @@ export function OrderForm({
       <div
         dir="rtl"
         lang="ar"
-        className="flex flex-col items-center gap-4 rounded-3xl bg-white p-10 text-center shadow-xl ring-1 ring-zinc-200/60"
+        className="flex flex-col items-center gap-4 rounded-3xl bg-white p-10 text-center shadow-xl ring-1 ring-zinc-200/60 dark:bg-zinc-900 dark:ring-white/10"
       >
         <span className="flex size-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
           <CheckCircle2 className="size-9" />
         </span>
-        <h3 className="text-2xl font-bold text-zinc-900">تم استلام طلبكم!</h3>
-        <p className="max-w-sm text-zinc-600">
+        <h3 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">تم استلام طلبكم!</h3>
+        <p className="max-w-sm text-zinc-600 dark:text-zinc-300">
           شكرا على ثقتكم. سيتصل بكم فريقنا في أقرب وقت لتأكيد طلبكم.
         </p>
       </div>
@@ -243,7 +243,7 @@ export function OrderForm({
   }
 
   const inputClass =
-    "w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-zinc-900 placeholder-zinc-400 outline-none transition focus:border-(--primary) focus:ring-2 focus:ring-(--primary)/20";
+    "w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-zinc-900 placeholder-zinc-400 outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500 transition focus:border-(--primary) focus:ring-2 focus:ring-(--primary)/20";
 
   return (
     <form
@@ -260,14 +260,14 @@ export function OrderForm({
           trackPixel("InitiateCheckout", { value: subtotal, currency: "DZD" });
         }
       }}
-      className="flex flex-col gap-4 rounded-3xl bg-white p-6 shadow-xl ring-1 ring-zinc-200/60 sm:p-8"
+      className="flex flex-col gap-4 rounded-3xl bg-white p-6 shadow-xl ring-1 ring-zinc-200/60 dark:bg-zinc-900 dark:ring-white/10 sm:p-8"
     >
-      <h3 className="text-xl font-bold text-zinc-900">
+      <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
         اطلب الآن — الدفع عند الاستلام
       </h3>
 
       {freeDeliveryMode !== "none" && (
-        <p className="flex items-center justify-center gap-2 rounded-xl bg-emerald-50 px-4 py-2.5 text-center text-sm font-bold text-emerald-700">
+        <p className="flex items-center justify-center gap-2 rounded-xl bg-emerald-50 px-4 py-2.5 text-center text-sm font-bold text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400">
           <Truck className="size-4 shrink-0" />
           {freeDeliveryMode === "all"
             ? "التوصيل مجاني لكل الولايات"
@@ -294,7 +294,7 @@ export function OrderForm({
       {packs.length > 0 && (
         <div className="flex items-center justify-between gap-3 rounded-xl bg-(--primary)/5 px-4 py-3">
           {selectedPack ? (
-            <span dir="auto" className="min-w-0 text-sm font-bold text-zinc-800">
+            <span dir="auto" className="min-w-0 text-sm font-bold text-zinc-800 dark:text-zinc-200">
               {selectedPack.label}
               <span className="ms-1.5 font-extrabold text-(--primary)">
                 {formatDA(selectedPack.price)}
@@ -364,7 +364,7 @@ export function OrderForm({
       </select>
 
       {feesError && (
-        <p className="flex items-start gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700">
+        <p className="flex items-start gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700 dark:bg-amber-500/15 dark:text-amber-400">
           <AlertTriangle className="mt-0.5 size-4 shrink-0" />
           تعذر تحميل أسعار التوصيل. تحقق من اتصالك بالأنترنت ثم أعد اختيار
           الولاية.
@@ -376,7 +376,7 @@ export function OrderForm({
       {hideDeliveryChoice ? (
         <input type="hidden" name="delivery_type" value="domicile" />
       ) : (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2">
           {(
             [
               {
@@ -388,7 +388,7 @@ export function OrderForm({
               },
               {
                 value: "stopdesk",
-                label: "مكتب التوصيل (Stopdesk)",
+                label: "مكتب Stopdesk",
                 icon: Store,
                 optionFee: delivery?.deskFee ?? null,
                 disabled: stopdeskBlocked,
@@ -397,12 +397,12 @@ export function OrderForm({
           ).map(({ value, label, icon: Icon, optionFee, disabled }) => (
             <label
               key={value}
-              className={`flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition ${
+              className={`flex flex-col items-center gap-0.5 rounded-xl border-2 px-2.5 py-2 text-center transition ${
                 disabled
-                  ? "cursor-not-allowed border-zinc-100 opacity-50"
+                  ? "cursor-not-allowed border-zinc-100 opacity-50 dark:border-zinc-800"
                   : deliveryType === value
                     ? "cursor-pointer border-(--primary) bg-(--primary)/5"
-                    : "cursor-pointer border-zinc-200 hover:border-zinc-300"
+                    : "cursor-pointer border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
               }`}
             >
               <input
@@ -415,13 +415,17 @@ export function OrderForm({
                 className="sr-only"
               />
               <Icon
-                className={`size-5 ${deliveryType === value ? "text-(--primary)" : "text-zinc-400"}`}
+                className={`size-4 ${deliveryType === value ? "text-(--primary)" : "text-zinc-400"}`}
               />
-              <span className="text-sm font-semibold text-zinc-800">{label}</span>
+              {/* `whitespace-nowrap` : sur deux lignes, la carte doublerait de
+                  hauteur — c'est ce qui la rendait si haute. */}
+              <span className="whitespace-nowrap text-xs font-semibold text-zinc-800 dark:text-zinc-200">
+                {label}
+              </span>
               {freeDeliveryMode === "stopdesk" && value === "stopdesk" ? (
-                <span className="text-xs font-bold text-emerald-600">مجاني</span>
+                <span className="text-[11px] font-bold text-emerald-600">مجاني</span>
               ) : (
-                <span className="text-xs text-zinc-500">
+                <span className="text-[11px] text-zinc-500">
                   {loadingFees
                     ? "..."
                     : optionFee !== null
@@ -436,7 +440,7 @@ export function OrderForm({
 
       {/* Wilaya sans bureau : on le dit, l'option grisée seule n'explique rien */}
       {!hideDeliveryChoice && noStopdeskHere && (
-        <p className="flex items-start gap-2 rounded-xl bg-zinc-50 px-4 py-3 text-sm text-zinc-500">
+        <p className="flex items-start gap-2 rounded-xl bg-zinc-50 px-4 py-3 text-sm text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
           <Store className="mt-0.5 size-4 shrink-0" />
           لا يوجد مكتب Stopdesk في هذه الولاية. التوصيل للمنزل فقط.
         </p>
@@ -462,7 +466,7 @@ export function OrderForm({
             ))}
           </select>
           {selectedCenter && (
-            <p className="flex items-start gap-1.5 rounded-xl bg-zinc-50 px-3 py-2 text-xs text-zinc-500">
+            <p className="flex items-start gap-1.5 rounded-xl bg-zinc-50 px-3 py-2 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
               <MapPin className="mt-0.5 size-3.5 shrink-0" />
               {selectedCenter.address}
             </p>
@@ -485,22 +489,22 @@ export function OrderForm({
 
       {/* Quantité — remplacée par le choix de l'offre quand des packs existent */}
       {packs.length === 0 && (
-        <div className="flex items-center justify-between rounded-xl border border-zinc-200 px-4 py-3">
-          <span className="text-sm font-medium text-zinc-700">الكمية</span>
+        <div className="flex items-center justify-between rounded-xl border border-zinc-200 px-4 py-3 dark:border-zinc-700">
+          <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">الكمية</span>
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className="flex size-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-700 transition hover:bg-zinc-200"
+              className="flex size-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
               aria-label="إنقاص"
             >
               <Minus className="size-4" />
             </button>
-            <span className="w-6 text-center font-bold text-zinc-900">{quantity}</span>
+            <span className="w-6 text-center font-bold text-zinc-900 dark:text-zinc-100">{quantity}</span>
             <button
               type="button"
               onClick={() => setQuantity((q) => Math.min(20, q + 1))}
-              className="flex size-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-700 transition hover:bg-zinc-200"
+              className="flex size-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
               aria-label="زيادة"
             >
               <Plus className="size-4" />
@@ -511,14 +515,14 @@ export function OrderForm({
       )}
 
       {/* Récap */}
-      <div className="flex flex-col gap-1.5 rounded-xl bg-zinc-50 p-4 text-sm">
-        <div className="flex justify-between gap-3 text-zinc-600">
+      <div className="flex flex-col gap-1.5 rounded-xl bg-zinc-50 p-4 text-sm dark:bg-zinc-800">
+        <div className="flex justify-between gap-3 text-zinc-600 dark:text-zinc-300">
           <span dir="auto" className="min-w-0">
             {selectedPack ? selectedPack.label : "المنتج"} × {effectiveQuantity}
           </span>
           <span className="shrink-0">{formatDA(subtotal)}</span>
         </div>
-        <div className="flex justify-between text-zinc-600">
+        <div className="flex justify-between text-zinc-600 dark:text-zinc-300">
           <span>التوصيل</span>
           {isFree ? (
             <span className="font-bold text-emerald-600">مجاني</span>
@@ -532,7 +536,7 @@ export function OrderForm({
             </span>
           )}
         </div>
-        <div className="mt-1 flex justify-between border-t border-zinc-200 pt-2 text-base font-bold text-zinc-900">
+        <div className="mt-1 flex justify-between border-t border-zinc-200 pt-2 text-base font-bold text-zinc-900 dark:border-zinc-700 dark:text-zinc-100">
           <span>المجموع</span>
           <span className="text-(--primary)">
             {fee !== null ? formatDA(total) : formatDA(subtotal)}
@@ -541,7 +545,7 @@ export function OrderForm({
       </div>
 
       {state.error && (
-        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600 dark:bg-red-500/15 dark:text-red-400">
           {state.error}
         </p>
       )}

@@ -14,7 +14,7 @@ export function Gallery({ images, alt }: { images: string[]; alt: string }) {
 
   if (count === 0) {
     return (
-      <div className="flex aspect-square w-full items-center justify-center rounded-3xl bg-zinc-100 text-zinc-400">
+      <div className="flex aspect-square w-full items-center justify-center rounded-3xl bg-zinc-100 text-zinc-400 dark:bg-zinc-900">
         <ImageOff className="size-12" strokeWidth={1.5} />
       </div>
     );
@@ -37,7 +37,7 @@ export function Gallery({ images, alt }: { images: string[]; alt: string }) {
     <div className="flex flex-col gap-3">
       {/* Image principale */}
       <div
-        className="group relative overflow-hidden rounded-3xl bg-zinc-100 shadow-xl shadow-zinc-900/10 ring-1 ring-zinc-200/60"
+        className="group relative overflow-hidden rounded-3xl bg-zinc-100 shadow-xl shadow-zinc-900/10 ring-1 ring-zinc-200/60 dark:bg-zinc-900 dark:ring-white/10"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >

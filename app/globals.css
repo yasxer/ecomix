@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Le thème sombre de la landing est un choix de l'admin, pas du système :
+   `dark:` ne réagit qu'à `data-theme="dark"` posé sur la page (ou l'aperçu). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

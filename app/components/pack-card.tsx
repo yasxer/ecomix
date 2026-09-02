@@ -28,10 +28,10 @@ export function PackCard({
       onClick={onSelect}
       aria-pressed={selected}
       dir="rtl"
-      className={`relative mt-1 flex min-h-20 w-full items-center rounded-2xl border-2 bg-white px-5 py-4 text-start transition hover:border-(--primary)/60 ${
+      className={`relative mt-1 flex min-h-20 w-full items-center rounded-2xl border-2 bg-white px-5 py-4 dark:bg-zinc-900 text-start transition hover:border-(--primary)/60 ${
         selected
           ? "border-(--primary) bg-(--primary)/5"
-          : "border-zinc-200"
+          : "border-zinc-200 dark:border-zinc-700"
       } ${pack.highlight === "border" ? "ring-1 ring-(--primary)/35" : ""}`}
     >
       {ribbon && (
@@ -48,12 +48,12 @@ export function PackCard({
           className={`flex size-6 shrink-0 items-center justify-center rounded-full border-2 ${
             selected
               ? "border-(--primary) bg-(--primary) text-white"
-              : "border-zinc-300 bg-white"
+              : "border-zinc-300 bg-white dark:border-zinc-600 dark:bg-zinc-800"
           }`}
         >
           {selected && <Check className="size-4" strokeWidth={3} />}
         </span>
-        <span dir="auto" className="truncate text-base font-bold text-zinc-900">
+        <span dir="auto" className="truncate text-base font-bold text-zinc-900 dark:text-zinc-100">
           {pack.label}
         </span>
       </span>

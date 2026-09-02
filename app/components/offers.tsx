@@ -47,7 +47,7 @@ export function Offers({
         <section id="offres" dir="rtl" lang="ar" className="scroll-mt-24 pt-10">
           <div className="mb-4 flex flex-col items-center gap-1 text-center">
             <h2 className="text-2xl font-extrabold tracking-tight">اختر عرضك</h2>
-            <p className="text-sm text-zinc-500">كل ما زادت الكمية، رخّص السعر</p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">كل ما زادت الكمية، رخّص السعر</p>
           </div>
           <div className="grid grid-cols-1 gap-3">
             {packs.map((pack) => (

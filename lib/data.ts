@@ -3,7 +3,10 @@ import { supabase } from "./supabase";
 import {
   FREE_DELIVERY_MODES,
   BASE_PACK_ID,
+  LANDING_MODES,
+  LANDING_THEMES,
   PACK_HIGHLIGHTS,
+  type LandingBlock,
   type Order,
   type OrderItem,
   type OrderStatus,
@@ -20,7 +23,55 @@ export const DEFAULT_SETTINGS: Omit<Settings, "id" | "updated_at"> = {
   pixel_id: null,
   fb_domain_verification: null,
   free_delivery_mode: "none",
+  landing_mode: "simple",
+  landing_blocks: [],
+  landing_theme: "light",
+  landing_sticky_cta: true,
+  landing_sticky_header: true,
 };
+
+/**
+ * Remet un `landing_blocks` venu de la base dans une forme sûre pour le rendu.
+ * Même logique que `normalizePacks` : colonne absente tant que la migration
+ * 014 n'a pas été jouée, et une entrée incomplète est écartée plutôt que de
+ * faire tomber toute la landing.
+ */
+export function normalizeLandingBlocks(raw: unknown): LandingBlock[] {
+  if (!Array.isArray(raw)) return [];
+  const seen = new Set<string>();
+  return raw.flatMap((b): LandingBlock[] => {
+    const id = typeof b?.id === "string" ? b.id : "";
+    if (!id || seen.has(id)) return [];
+    switch (b?.type) {
+      case "hero":
+      case "gallery":
+      case "description":
+      case "form":
+        seen.add(id);
+        return [{ id, type: b.type }];
+      case "image": {
+        const width = Number(b.width);
+        const height = Number(b.height);
+        if (typeof b.url !== "string" || !b.url) return [];
+        if (!Number.isFinite(width) || width < 1) return [];
+        if (!Number.isFinite(height) || height < 1) return [];
+        seen.add(id);
+        return [
+          { id, type: "image", url: b.url, width: Math.round(width), height: Math.round(height) },
+        ];
+      }
+      case "text": {
+        const title = typeof b.title === "string" ? b.title : "";
+        const body = typeof b.body === "string" ? b.body : "";
+        if (!title && !body) return [];
+        seen.add(id);
+        return [{ id, type: "text", title, body }];
+      }
+      default:
+        return [];
+    }
+  });
+}
 
 /**
  * Remet un `packs` venu de la base dans une forme sur laquelle le rendu peut
@@ -125,6 +176,13 @@ export async function getSettings(): Promise<Settings> {
     free_delivery_mode: FREE_DELIVERY_MODES.includes(raw.free_delivery_mode)
       ? raw.free_delivery_mode
       : "none",
+    landing_mode: LANDING_MODES.includes(raw.landing_mode) ? raw.landing_mode : "simple",
+    landing_blocks: normalizeLandingBlocks(raw.landing_blocks),
+    landing_theme: LANDING_THEMES.includes(raw.landing_theme) ? raw.landing_theme : "light",
+    // Colonnes absentes tant que la migration 014 n'est pas jouée : on garde
+    // le comportement d'avant (en-tête fixé, bouton flottant).
+    landing_sticky_cta: raw.landing_sticky_cta !== false,
+    landing_sticky_header: raw.landing_sticky_header !== false,
   };
   settingsCache = { expires: Date.now() + 60_000, data: settings };
   return settings;
