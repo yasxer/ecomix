@@ -1,5 +1,10 @@
-import { Filter, Home, Inbox, Search, Store } from "lucide-react";
-import { getOrders, syncYalidineStatuses, type OrderFilters } from "@/lib/data";
+import { Filter, Home, Inbox, Package, Search, Store } from "lucide-react";
+import {
+  getOrders,
+  getProducts,
+  syncYalidineStatuses,
+  type OrderFilters,
+} from "@/lib/data";
 import { ORDER_STATUSES, type Order, type OrderStatus } from "@/lib/types";
 import { formatVariants } from "@/lib/variants";
 import { WILAYAS } from "@/lib/wilayas";
@@ -45,8 +50,10 @@ export default async function OrdersPage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const params = await searchParams;
+  const [params, products] = await Promise.all([searchParams, getProducts()]);
   const filters: OrderFilters = {};
+  const productParam = typeof params.product === "string" ? params.product : "";
+  if (products.some((p) => p.id === productParam)) filters.productId = productParam;
   const statusParam = typeof params.status === "string" ? params.status : "";
   if (ORDER_STATUSES.some((s) => s.value === statusParam)) {
     filters.status = statusParam as OrderStatus;
@@ -91,6 +98,20 @@ export default async function OrdersPage({
             className={`${selectClass} w-full pl-9`}
           />
         </div>
+        {products.length > 1 && (
+          <select
+            name="product"
+            defaultValue={filters.productId ?? ""}
+            className={`${selectClass} col-span-2 w-full lg:col-span-1 lg:w-auto`}
+          >
+            <option value="">Toutes les boutiques</option>
+            {products.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        )}
         <select
           name="status"
           defaultValue={statusParam}
@@ -155,6 +176,9 @@ export default async function OrdersPage({
               <thead>
                 <tr className="border-b border-zinc-100 text-xs uppercase tracking-wide text-zinc-400">
                   <th className="px-4 py-3 font-semibold">Date</th>
+                  {products.length > 1 && (
+                    <th className="px-4 py-3 font-semibold">Boutique</th>
+                  )}
                   <th className="px-4 py-3 font-semibold">Client</th>
                   <th className="px-4 py-3 font-semibold">Destination</th>
                   <th className="px-4 py-3 font-semibold">Livraison</th>
@@ -170,6 +194,11 @@ export default async function OrdersPage({
                     <td className="whitespace-nowrap px-4 py-3 text-zinc-500">
                       {formatDate(o.created_at)}
                     </td>
+                    {products.length > 1 && (
+                      <td className="px-4 py-3 text-xs font-medium text-zinc-600">
+                        {o.product_name ?? "—"}
+                      </td>
+                    )}
                     <td className="px-4 py-3">
                       <p className="font-semibold text-zinc-900">{o.customer_name}</p>
                       <p className="text-xs text-zinc-500">{o.phone}</p>
@@ -238,6 +267,12 @@ export default async function OrdersPage({
                   </div>
                   <span className="text-xs text-zinc-400">{formatDate(o.created_at)}</span>
                 </div>
+                {products.length > 1 && o.product_name && (
+                  <p className="flex items-center gap-1.5 text-xs font-medium text-zinc-600">
+                    <Package className="size-3.5" />
+                    {o.product_name}
+                  </p>
+                )}
                 <p className="text-sm text-zinc-600">
                   {o.wilaya} — {o.commune}
                   {o.address ? ` — ${o.address}` : ""}

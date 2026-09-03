@@ -201,7 +201,7 @@ export function ProductForm({ product }: { product: Product }) {
     if (item.isNew && item.url) {
       const url = item.url;
       startTransition(async () => {
-        await discardProductImage(url);
+        await discardProductImage(product.id, url);
       });
     }
   }
@@ -243,6 +243,8 @@ export function ProductForm({ product }: { product: Product }) {
       action={action}
       className="flex flex-col gap-5 rounded-3xl bg-white p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-1 ring-zinc-900/5 sm:p-8"
     >
+      <input type="hidden" name="product_id" value={product.id} />
+
       <label className={labelClass}>
         Nom du produit
         <input name="name" required defaultValue={product.name} className={inputClass} />
@@ -581,7 +583,7 @@ export function ProductForm({ product }: { product: Product }) {
           Enregistrer
         </button>
         <Link
-          href="/admin/produit"
+          href={`/admin/produits/${product.id}`}
           className="rounded-xl px-5 py-3 font-semibold text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700"
         >
           Annuler

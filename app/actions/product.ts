@@ -10,7 +10,9 @@ import {
   MAX_IMAGE_SIZE,
   type UploadTarget,
 } from "@/lib/storage";
-import { getProduct } from "@/lib/data";
+import { getProductById, getProducts, getSettings } from "@/lib/data";
+import { normalizeSlug } from "@/lib/domain";
+import { revalidateStorefronts } from "@/lib/revalidate";
 import { BASE_PACK_ID, PACK_HIGHLIGHTS, type ProductPack } from "@/lib/types";
 import { requireAdmin } from "./auth";
 
@@ -104,12 +106,13 @@ export async function createProductUploadUrls(
  * ne partent qu'après un enregistrement réussi (voir `updateProduct`).
  */
 export async function discardProductImage(
+  productId: string,
   url: string
 ): Promise<void> {
   await requireAdmin();
   if (typeof url !== "string" || !isBucketUrl(url, "product")) return;
 
-  const product = await getProduct();
+  const product = await getProductById(productId);
   if (!product) return;
   if (product.images.includes(url)) return;
   await deleteImages([url]);
@@ -121,8 +124,9 @@ export async function updateProduct(
 ): Promise<ProductFormState> {
   await requireAdmin();
 
-  const product = await getProduct();
-  if (!product) return { error: "Produit introuvable (exécutez le schema.sql)." };
+  const productId = String(formData.get("product_id") || "");
+  const product = await getProductById(productId);
+  if (!product) return { error: "Produit introuvable." };
 
   const name = String(formData.get("name") || "").trim();
   const description = String(formData.get("description") || "").trim();
@@ -226,8 +230,94 @@ export async function updateProduct(
   const removed = product.images.filter((url) => !kept.has(url));
   await deleteImages(removed);
 
-  revalidatePath("/");
-  revalidatePath("/admin/produit");
+  revalidateStorefronts();
+  revalidatePath(`/admin/produits/${product.id}`);
   // Retour à la carte d'aperçu après enregistrement
-  redirect("/admin/produit");
+  redirect(`/admin/produits/${product.id}`);
+}
+
+/** Slug libre dérivé du nom : `mon-produit`, `mon-produit-2`, etc. */
+async function uniqueSlug(name: string): Promise<string> {
+  const taken = new Set((await getProducts()).map((p) => p.slug));
+  const base = normalizeSlug(name) || "produit";
+  if (!taken.has(base)) return base;
+  for (let i = 2; i < 200; i++) {
+    const candidate = `${base}-${i}`.slice(0, 60).replace(/-+$/, "");
+    if (!taken.has(candidate)) return candidate;
+  }
+  return `${base}-${Date.now().toString(36)}`.slice(0, 60);
+}
+
+/**
+ * Nouvelle boutique. Elle démarre sans domaine et inactive : le temps de la
+ * remplir, personne ne doit tomber dessus. Le domaine et l'activation se
+ * règlent ensuite dans l'onglet Vitrine.
+ */
+export async function createProduct(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const name = String(formData.get("name") || "").trim().slice(0, 120) || "Mon Produit";
+  const { data, error } = await supabase()
+    .from("product")
+    .insert({
+      name,
+      slug: await uniqueSlug(name),
+      store_name: name,
+      active: false,
+    })
+    .select("id")
+    .single();
+  if (error || !data) throw new Error(`Création impossible: ${error?.message}`);
+
+  revalidatePath("/admin/produits");
+  redirect(`/admin/produits/${data.id}?edit=1`);
+}
+
+/**
+ * Supprime définitivement un produit et ses images. Les commandes déjà
+ * passées survivent (`product_id` retombe à null en base) : elles gardent le
+ * nom du produit figé à la commande.
+ */
+export async function deleteProduct(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const product = await getProductById(String(formData.get("product_id") || ""));
+  if (!product) redirect("/admin/produits");
+
+  const { error } = await supabase().from("product").delete().eq("id", product.id);
+  if (error) throw new Error(`Suppression impossible: ${error.message}`);
+
+  // Images libérées seulement après la suppression en base : un fichier
+  // orphelin n'est pas grave, une image manquante sur une page vivante si.
+  await deleteImages([
+    ...product.images,
+    ...product.landing_blocks.flatMap((b) => (b.type === "image" ? [b.url] : [])),
+    ...(product.logo_url ? [product.logo_url] : []),
+  ]);
+
+  revalidateStorefronts();
+  revalidatePath("/admin/produits");
+  redirect("/admin/produits");
+}
+
+/**
+ * Produit servi sur les hôtes qui ne correspondent à aucun domaine — le
+ * domaine Vercel du projet, typiquement.
+ */
+export async function setDefaultProduct(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const id = String(formData.get("product_id") || "");
+  const product = await getProductById(id);
+  const settings = await getSettings();
+  if (!product || !settings.id) redirect("/admin/produits");
+
+  await supabase()
+    .from("settings")
+    .update({ default_product_id: product.id, updated_at: new Date().toISOString() })
+    .eq("id", settings.id);
+
+  revalidateStorefronts();
+  revalidatePath("/admin/produits");
+  redirect("/admin/produits");
 }

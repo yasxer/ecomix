@@ -55,8 +55,42 @@ export type FreeDeliveryMode = "none" | "all" | "stopdesk";
 
 export const FREE_DELIVERY_MODES: FreeDeliveryMode[] = ["none", "all", "stopdesk"];
 
-export type Product = {
+/**
+ * La vitrine d'un produit : tout ce que voit le client sur son domaine.
+ * Ces champs vivaient dans `settings` du temps du produit unique — chaque
+ * boutique a désormais sa marque, son pixel et sa mise en page.
+ */
+export type Storefront = {
+  store_name: string;
+  logo_url: string | null;
+  primary_color: string;
+  /** Meta Pixel de CE domaine : un pixel partagé mélangerait les conversions. */
+  pixel_id: string | null;
+  fb_domain_verification: string | null;
+  /** Livraison offerte au client : la boutique absorbe les frais Yalidine. */
+  free_delivery_mode: FreeDeliveryMode;
+  landing_mode: LandingMode;
+  /** Blocs du mode custom, dans l'ordre d'affichage. Ignorés en mode simple. */
+  landing_blocks: LandingBlock[];
+  /** Options d'affichage du mode custom, sans effet en mode simple. */
+  landing_theme: LandingTheme;
+  /** Bouton « Commander » flottant, visible sur toute la page. */
+  landing_sticky_cta: boolean;
+  /** En-tête collé en haut pendant le défilement. */
+  landing_sticky_header: boolean;
+};
+
+/** Un produit = une boutique : son domaine, sa vitrine et sa landing page. */
+export type Product = Storefront & {
   id: string;
+  /** Clé lisible, unique : sert d'aperçu sur `/p/<slug>`. */
+  slug: string;
+  /** Domaine dédié, normalisé (minuscules, sans « www. »). Null = slug seul. */
+  domain: string | null;
+  /** Un produit inactif n'est plus servi ni commandable. */
+  active: boolean;
+  /** Null = le propriétaire de la plateforme (préparation du multi-comptes). */
+  owner_id: string | null;
   name: string;
   description: string;
   price: number;
@@ -69,12 +103,17 @@ export type Product = {
   sizes: string[];
   /** Offres groupées. Vide = vente à la pièce avec sélecteur de quantité. */
   packs: ProductPack[];
+  created_at: string;
   updated_at: string;
 };
 
 export type Order = {
   id: string;
   created_at: string;
+  /** Boutique d'origine. Null si le produit a été supprimé depuis. */
+  product_id: string | null;
+  /** Nom du produit figé à la commande : l'historique ne se réécrit pas. */
+  product_name: string | null;
   customer_name: string;
   phone: string;
   wilaya: string;
@@ -140,24 +179,19 @@ export const LANDING_BLOCK_TYPES: LandingBlockType[] = [
   "text",
 ];
 
+/**
+ * Réglages de la plateforme — ce qui n'appartient à aucune boutique en
+ * particulier. Tout le reste (marque, couleur, pixel, landing) est porté par
+ * le produit, voir `Storefront`.
+ */
 export type Settings = {
   id: string;
+  /** Identité affichée dans l'admin, pas sur les landings. */
   store_name: string;
   logo_url: string | null;
-  primary_color: string;
+  /** Adresse de départ des colis Yalidine. */
   from_wilaya: string;
-  pixel_id: string | null;
-  fb_domain_verification: string | null;
-  /** Livraison offerte au client : la boutique absorbe les frais Yalidine. */
-  free_delivery_mode: FreeDeliveryMode;
-  landing_mode: LandingMode;
-  /** Blocs du mode custom, dans l'ordre d'affichage. Ignorés en mode simple. */
-  landing_blocks: LandingBlock[];
-  /** Options d'affichage du mode custom, sans effet en mode simple. */
-  landing_theme: LandingTheme;
-  /** Bouton « Commander » flottant, visible sur toute la page. */
-  landing_sticky_cta: boolean;
-  /** En-tête collé en haut pendant le défilement. */
-  landing_sticky_header: boolean;
+  /** Produit servi sur un hôte qui ne correspond à aucun domaine. */
+  default_product_id: string | null;
   updated_at: string;
 };

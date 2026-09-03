@@ -9,7 +9,8 @@ import {
   MAX_IMAGE_SIZE,
   type UploadTarget,
 } from "@/lib/storage";
-import { getSettings, normalizeLandingBlocks } from "@/lib/data";
+import { getProductById, normalizeLandingBlocks } from "@/lib/data";
+import { revalidateStorefronts } from "@/lib/revalidate";
 import {
   LANDING_MODES,
   LANDING_THEMES,
@@ -67,12 +68,16 @@ export async function createLandingUploadUrl(file: {
  * Refuse toute URL déjà rattachée à un bloc enregistré : celles-là ne partent
  * qu'après un enregistrement réussi (voir `updateLanding`).
  */
-export async function discardLandingImage(url: string): Promise<void> {
+export async function discardLandingImage(
+  productId: string,
+  url: string
+): Promise<void> {
   await requireAdmin();
   if (typeof url !== "string" || !isBucketUrl(url, FOLDER)) return;
 
-  const settings = await getSettings();
-  if (imageUrls(settings.landing_blocks).includes(url)) return;
+  const product = await getProductById(productId);
+  if (!product) return;
+  if (imageUrls(product.landing_blocks).includes(url)) return;
   await deleteImages([url]);
 }
 
@@ -82,8 +87,8 @@ export async function updateLanding(
 ): Promise<LandingFormState> {
   await requireAdmin();
 
-  const settings = await getSettings();
-  if (!settings.id) return { error: "Settings introuvables (exécutez le schema.sql)." };
+  const product = await getProductById(String(formData.get("product_id") || ""));
+  if (!product) return { error: "Produit introuvable." };
 
   const landing_mode = String(formData.get("landing_mode") || "simple") as LandingMode;
   if (!LANDING_MODES.includes(landing_mode)) return { error: "Mode invalide." };
@@ -133,7 +138,7 @@ export async function updateLanding(
     return { error: "La page personnalisée doit contenir le bloc Formulaire." };
 
   const { error } = await supabase()
-    .from("settings")
+    .from("product")
     .update({
       landing_mode,
       landing_blocks: blocks,
@@ -142,16 +147,16 @@ export async function updateLanding(
       landing_sticky_header,
       updated_at: new Date().toISOString(),
     })
-    .eq("id", settings.id);
+    .eq("id", product.id);
   if (error) return { error: error.message };
 
   // Les images de sections retirées sont supprimées du storage, seulement
   // après la réussite de la mise à jour en base.
   const kept = new Set(imageUrls(blocks));
-  const removed = imageUrls(settings.landing_blocks).filter((url) => !kept.has(url));
+  const removed = imageUrls(product.landing_blocks).filter((url) => !kept.has(url));
   await deleteImages(removed);
 
-  revalidatePath("/");
-  revalidatePath("/admin/landing");
+  revalidateStorefronts();
+  revalidatePath(`/admin/produits/${product.id}/landing`);
   return { success: true };
 }

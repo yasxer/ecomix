@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { ArrowDown, BadgeCheck, Banknote, Check, Truck } from "lucide-react";
-import type { LandingBlock, Product, Settings } from "@/lib/types";
+import type { LandingBlock, Product } from "@/lib/types";
 import { Gallery } from "./gallery";
 import { Offers } from "./offers";
 
 /**
  * Les sections de la landing, une par bloc. Le mode simple les enchaîne dans
- * un ordre fixe, le mode custom suit `settings.landing_blocks`. Tout est
+ * un ordre fixe, le mode custom suit `product.landing_blocks`. Tout est
  * Server Component : seules la galerie et le formulaire embarquent du client.
  */
 
@@ -15,13 +15,7 @@ export function formatDA(n: number) {
 }
 
 /** Titre, prix, remise, mini badges et bouton d'ancre vers le formulaire. */
-export function HeroBlock({
-  product,
-  settings,
-}: {
-  product: Product;
-  settings: Settings;
-}) {
+export function HeroBlock({ product }: { product: Product }) {
   const discount =
     product.old_price && product.old_price > product.price
       ? Math.round((1 - product.price / product.old_price) * 100)
@@ -52,9 +46,9 @@ export function HeroBlock({
       <div className="mt-1 flex items-center gap-4 text-xs font-semibold text-zinc-500 dark:text-zinc-400">
         <span className="flex items-center gap-1.5">
           <Truck className="size-4 text-(--primary)" />
-          {settings.free_delivery_mode === "all"
+          {product.free_delivery_mode === "all"
             ? "Livraison gratuite"
-            : settings.free_delivery_mode === "stopdesk"
+            : product.free_delivery_mode === "stopdesk"
               ? "Gratuit en Stopdesk"
               : "69 wilayas"}
         </span>
@@ -143,20 +137,15 @@ export function DescriptionBlock({ product }: { product: Product }) {
  * Offres groupées (si configurées) puis formulaire : les deux partagent le
  * pack sélectionné, d'où le composant client commun.
  */
-export function FormBlock({
-  product,
-  settings,
-}: {
-  product: Product;
-  settings: Settings;
-}) {
+export function FormBlock({ product }: { product: Product }) {
   return (
     <Offers
+      productId={product.id}
       packs={product.packs}
       price={product.price}
       colors={product.colors}
       sizes={product.sizes}
-      freeDeliveryMode={settings.free_delivery_mode}
+      freeDeliveryMode={product.free_delivery_mode}
     >
       <div className="mb-6 flex flex-col items-center gap-1 text-center">
         <h2 className="text-2xl font-extrabold tracking-tight">
@@ -234,24 +223,22 @@ export function TextBlock({
 export function CustomBlocks({
   blocks,
   product,
-  settings,
 }: {
   blocks: LandingBlock[];
   product: Product;
-  settings: Settings;
 }) {
   const firstImage = blocks.findIndex((b) => b.type === "image");
   return blocks.map((block, index) => {
     const previous = blocks[index - 1];
     switch (block.type) {
       case "hero":
-        return <HeroBlock key={block.id} product={product} settings={settings} />;
+        return <HeroBlock key={block.id} product={product} />;
       case "gallery":
         return <GalleryBlock key={block.id} product={product} />;
       case "description":
         return <DescriptionBlock key={block.id} product={product} />;
       case "form":
-        return <FormBlock key={block.id} product={product} settings={settings} />;
+        return <FormBlock key={block.id} product={product} />;
       case "text":
         return <TextBlock key={block.id} block={block} />;
       case "image": {

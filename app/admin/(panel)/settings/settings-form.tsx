@@ -1,133 +1,25 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
-import {
-  AlertTriangle,
-  CheckCircle2,
-  ImagePlus,
-  Loader2,
-  Save,
-  Trash2,
-  X,
-} from "lucide-react";
+import { useActionState, useCallback, useState } from "react";
+import { CheckCircle2, Loader2, Save } from "lucide-react";
 import { updateSettings, type SettingsFormState } from "@/app/actions/settings";
-import { prepareImage } from "@/lib/prepare-image";
-import type { FreeDeliveryMode, Settings } from "@/lib/types";
+import type { Settings } from "@/lib/types";
 import { WILAYAS } from "@/lib/wilayas";
+import { LogoPicker } from "../logo-picker";
 
 const inputClass =
   "w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20";
 
 const labelClass = "flex flex-col gap-1.5 text-sm font-medium text-zinc-700";
 
-const PRESET_COLORS = [
-  "#4f46e5",
-  "#0ea5e9",
-  "#059669",
-  "#dc2626",
-  "#ea580c",
-  "#d946ef",
-  "#0f172a",
-];
-
-const HEX_RE = /^#[0-9a-fA-F]{6}$/;
-
-const FREE_DELIVERY_OPTIONS: {
-  value: FreeDeliveryMode;
-  label: string;
-  hint: string;
-}[] = [
-  {
-    value: "none",
-    label: "Aucune",
-    hint: "Le client paie les frais de livraison Yalidine.",
-  },
-  {
-    value: "stopdesk",
-    label: "Stopdesk uniquement",
-    hint: "Le bureau est offert, le domicile reste payant — le client choisit.",
-  },
-  {
-    value: "all",
-    label: "Tout offert",
-    hint: "Plus de choix pour le client : tout part en livraison à domicile.",
-  },
-];
-
 export function SettingsForm({ settings }: { settings: Settings }) {
   const [state, action, pending] = useActionState<SettingsFormState, FormData>(
     updateSettings,
     {}
   );
-  const [color, setColor] = useState(settings.primary_color);
-  // Texte du champ hex : peut être temporairement invalide pendant la saisie
-  const [hexInput, setHexInput] = useState(settings.primary_color);
-  const [removeLogo, setRemoveLogo] = useState(false);
-  // Aperçu local du logo choisi : visible avant tout envoi au serveur
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const logoInputRef = useRef<HTMLInputElement>(null);
   const [logoBusy, setLogoBusy] = useState(false);
-  const [logoError, setLogoError] = useState<string | null>(null);
-  const [freeDeliveryMode, setFreeDeliveryMode] = useState<FreeDeliveryMode>(
-    settings.free_delivery_mode
-  );
-  const [pixelId, setPixelId] = useState(settings.pixel_id ?? "");
-  const [fbDomainVerification, setFbDomainVerification] = useState(
-    settings.fb_domain_verification ?? ""
-  );
-
-  // L'URL objet est libérée dès qu'elle est remplacée ou que l'aperçu disparaît
-  useEffect(() => {
-    if (!logoPreview) return;
-    return () => URL.revokeObjectURL(logoPreview);
-  }, [logoPreview]);
-
-  /**
-   * Le logo suit le même traitement que les images produit : décodé (HEIC
-   * compris) puis réencodé en WebP, sans quoi une photo iPhone ressortirait
-   * illisible pour tous les navigateurs sauf Safari. Le fichier converti
-   * remplace celui de l'input, c'est lui que le formulaire enverra.
-   */
-  async function handleLogoChange(file: File | undefined) {
-    setLogoError(null);
-    if (!file) {
-      setLogoPreview(null);
-      return;
-    }
-    // Choisir une image annule une demande de retrait en cours
-    setRemoveLogo(false);
-    setLogoBusy(true);
-    try {
-      const converted = await prepareImage(file);
-      const transfer = new DataTransfer();
-      transfer.items.add(converted);
-      if (logoInputRef.current) logoInputRef.current.files = transfer.files;
-      setLogoPreview(URL.createObjectURL(converted));
-    } catch (e) {
-      setLogoError(e instanceof Error ? e.message : "Conversion échouée.");
-      clearLogoChoice();
-    } finally {
-      setLogoBusy(false);
-    }
-  }
-
-  function clearLogoChoice() {
-    setLogoPreview(null);
-    setLogoError(null);
-    if (logoInputRef.current) logoInputRef.current.value = "";
-  }
-
-  function applyColor(value: string) {
-    setColor(value);
-    setHexInput(value);
-  }
-
-  function handleHexChange(raw: string) {
-    let value = raw.trim();
-    if (value && !value.startsWith("#")) value = `#${value}`;
-    setHexInput(value);
-    if (HEX_RE.test(value)) setColor(value.toLowerCase());
-  }
+  // Référence stable : `LogoPicker` remonte son état dans un effet.
+  const handleLogoBusy = useCallback((busy: boolean) => setLogoBusy(busy), []);
 
   return (
     <form
@@ -135,293 +27,20 @@ export function SettingsForm({ settings }: { settings: Settings }) {
       className="flex flex-col gap-5 rounded-3xl bg-white p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-1 ring-zinc-900/5 sm:p-8"
     >
       <label className={labelClass}>
-        Nom de la boutique
+        Nom affiché dans l&apos;administration
         <input
           name="store_name"
           required
           defaultValue={settings.store_name}
           className={inputClass}
         />
-      </label>
-
-      {/* Logo */}
-      <div className="flex flex-col gap-2.5">
-        <span className="text-sm font-medium text-zinc-700">Logo</span>
-        <div className="flex flex-wrap items-start gap-4">
-          {settings.logo_url && !removeLogo && (
-            <figure className="flex flex-col items-center gap-1.5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={settings.logo_url}
-                alt="Logo actuel"
-                className={`size-16 rounded-xl object-contain ring-1 ring-zinc-200 transition ${
-                  logoPreview ? "opacity-40" : ""
-                }`}
-              />
-              <figcaption className="text-[11px] font-medium text-zinc-400">
-                Actuel
-              </figcaption>
-            </figure>
-          )}
-
-          {/* Aperçu du fichier choisi, avant tout envoi au serveur */}
-          {logoPreview && (
-            <figure className="flex flex-col items-center gap-1.5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={logoPreview}
-                alt="Aperçu du nouveau logo"
-                className="size-16 rounded-xl object-contain ring-2 ring-indigo-400"
-              />
-              <figcaption className="text-[11px] font-semibold text-indigo-600">
-                Nouveau
-              </figcaption>
-            </figure>
-          )}
-
-          {removeLogo && <input type="hidden" name="remove_logo" value="1" />}
-
-          <div className="flex flex-col items-start gap-1.5">
-            <label className="flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-zinc-300 px-4 py-3 text-sm font-medium text-zinc-500 transition hover:border-indigo-400 hover:text-indigo-500">
-              {logoBusy ? (
-                <Loader2 className="size-5 animate-spin" />
-              ) : (
-                <ImagePlus className="size-5" />
-              )}
-              {logoBusy
-                ? "Conversion…"
-                : logoPreview
-                  ? "Choisir une autre image"
-                  : settings.logo_url && !removeLogo
-                    ? "Remplacer le logo"
-                    : "Choisir un logo"}
-              <input
-                ref={logoInputRef}
-                type="file"
-                name="logo"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => handleLogoChange(e.target.files?.[0])}
-              />
-            </label>
-
-            {logoError && (
-              <p className="text-xs font-medium text-red-600">{logoError}</p>
-            )}
-
-            {logoPreview ? (
-              <button
-                type="button"
-                onClick={clearLogoChoice}
-                className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-zinc-500 transition hover:bg-zinc-100"
-              >
-                <X className="size-3.5" />
-                Annuler ce choix
-              </button>
-            ) : (
-              settings.logo_url &&
-              !removeLogo && (
-                <button
-                  type="button"
-                  onClick={() => setRemoveLogo(true)}
-                  className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50"
-                >
-                  <Trash2 className="size-3.5" />
-                  Retirer le logo
-                </button>
-              )
-            )}
-          </div>
-        </div>
-
-        {logoPreview && (
-          <p className="text-xs text-zinc-400">
-            Aperçu local — l&apos;image ne sera envoyée qu&apos;à l&apos;enregistrement.
-          </p>
-        )}
-        {removeLogo && (
-          <p className="flex flex-wrap items-center gap-2 text-xs text-red-500">
-            Le logo sera retiré à l&apos;enregistrement.
-            <button
-              type="button"
-              onClick={() => setRemoveLogo(false)}
-              className="font-semibold text-zinc-500 underline underline-offset-2 hover:text-zinc-700"
-            >
-              Annuler
-            </button>
-          </p>
-        )}
-      </div>
-
-      {/* Couleur */}
-      <div className="flex flex-col gap-2.5">
-        <span className="text-sm font-medium text-zinc-700">
-          Couleur principale (boutons, prix, accents de la landing)
-        </span>
-        <div className="flex flex-wrap items-center gap-2.5">
-          {PRESET_COLORS.map((preset) => (
-            <button
-              key={preset}
-              type="button"
-              onClick={() => applyColor(preset)}
-              className={`size-9 rounded-full transition ${
-                color === preset
-                  ? "ring-2 ring-zinc-900 ring-offset-2"
-                  : "hover:scale-110"
-              }`}
-              style={{ backgroundColor: preset }}
-              aria-label={`Couleur ${preset}`}
-            />
-          ))}
-        </div>
-
-        {/* Couleur personnalisée : pipette + code hex saisi à la main */}
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-zinc-50 p-3">
-          <label className="relative flex size-11 cursor-pointer items-center justify-center overflow-hidden rounded-xl ring-1 ring-zinc-200 transition hover:scale-105">
-            <input
-              type="color"
-              value={color}
-              onChange={(e) => applyColor(e.target.value)}
-              className="absolute -inset-2 size-16 cursor-pointer border-0 p-0"
-              aria-label="Ouvrir la palette de couleurs"
-            />
-          </label>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-xs font-semibold text-zinc-600">
-              Couleur personnalisée
-            </span>
-            <input
-              value={hexInput}
-              onChange={(e) => handleHexChange(e.target.value)}
-              placeholder="#4f46e5"
-              maxLength={7}
-              spellCheck={false}
-              className={`w-28 rounded-lg border bg-white px-2.5 py-1.5 font-mono text-sm outline-none transition ${
-                HEX_RE.test(hexInput)
-                  ? "border-zinc-200 text-zinc-800 focus:border-indigo-400"
-                  : "border-red-300 text-red-600"
-              }`}
-              aria-label="Code couleur hexadécimal"
-            />
-          </div>
-          {!HEX_RE.test(hexInput) && (
-            <span className="text-xs font-medium text-red-500">
-              Format : #rrggbb (ex. #e11d48)
-            </span>
-          )}
-          <input type="hidden" name="primary_color" value={color} />
-        </div>
-
-        {/* Aperçu */}
-        <div className="mt-1 flex flex-wrap items-center gap-3">
-          <span
-            className="flex items-center rounded-xl px-5 py-3 text-sm font-bold text-white shadow-md"
-            style={{ backgroundColor: color, boxShadow: `0 4px 14px ${color}55` }}
-          >
-            Aperçu du bouton
-          </span>
-          <span className="text-2xl font-extrabold" style={{ color }}>
-            12 500 DA
-          </span>
-        </div>
-      </div>
-
-      {/* Livraison offerte */}
-      <div className="flex flex-col gap-2.5 rounded-2xl bg-zinc-50 p-4">
-        <span className="text-sm font-medium text-zinc-700">Livraison offerte</span>
-        <div className="flex flex-col gap-1">
-          {FREE_DELIVERY_OPTIONS.map(({ value, label, hint }) => (
-            <label
-              key={value}
-              className={`flex cursor-pointer items-start gap-3 rounded-xl px-3 py-2.5 transition ${
-                freeDeliveryMode === value ? "bg-white ring-1 ring-indigo-200" : ""
-              }`}
-            >
-              <input
-                type="radio"
-                name="free_delivery_mode"
-                value={value}
-                checked={freeDeliveryMode === value}
-                onChange={() => setFreeDeliveryMode(value)}
-                className="mt-0.5 size-4.5 shrink-0 cursor-pointer accent-indigo-600"
-              />
-              <span className="flex flex-col gap-0.5">
-                <span className="text-sm font-semibold text-zinc-800">{label}</span>
-                <span className="text-xs text-zinc-500">{hint}</span>
-              </span>
-            </label>
-          ))}
-        </div>
-        {freeDeliveryMode !== "none" && (
-          <p className="flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-700">
-            <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
-            {freeDeliveryMode === "all"
-              ? "Yalidine prélève quand même ses frais sur votre versement, et c'est le tarif domicile — le plus cher — qui est absorbé à chaque commande."
-              : "Yalidine prélève quand même ses frais de bureau sur votre versement. Le tarif Stopdesk reste le moins cher, et cette offre pousse les clients vers cette option."}
-          </p>
-        )}
-      </div>
-
-      <label className={labelClass}>
-        Meta Pixel ID (Facebook) — optionnel
-        <div className="flex items-center gap-2">
-          <input
-            name="pixel_id"
-            value={pixelId}
-            onChange={(e) => setPixelId(e.target.value.replace(/\D/g, ""))}
-            placeholder="123456789012345"
-            inputMode="numeric"
-            className={inputClass}
-          />
-          {pixelId && (
-            <button
-              type="button"
-              onClick={() => setPixelId("")}
-              className="flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
-            >
-              <Trash2 className="size-4" />
-              Retirer
-            </button>
-          )}
-        </div>
         <span className="text-xs font-normal text-zinc-400">
-          Meta Business Suite → Gestionnaire d&apos;événements → votre Pixel → l&apos;ID
-          numérique. Videz le champ (ou cliquez Retirer) puis Enregistrer pour
-          désactiver complètement le pixel sur la landing page.
+          Vos clients ne le voient pas : le nom de chaque boutique se règle dans
+          l&apos;onglet Vitrine du produit.
         </span>
       </label>
 
-      <label className={labelClass}>
-        Vérification de domaine Facebook — optionnel
-        <div className="flex items-center gap-2">
-          <input
-            name="fb_domain_verification"
-            value={fbDomainVerification}
-            onChange={(e) => setFbDomainVerification(e.target.value.trim())}
-            placeholder="ex: a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"
-            spellCheck={false}
-            className={inputClass}
-          />
-          {fbDomainVerification && (
-            <button
-              type="button"
-              onClick={() => setFbDomainVerification("")}
-              className="flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
-            >
-              <Trash2 className="size-4" />
-              Retirer
-            </button>
-          )}
-        </div>
-        <span className="text-xs font-normal text-zinc-400">
-          Meta Business Suite → Paramètres → Sécurité de la marque → Domaines →
-          Ajouter votre domaine (ex : agelite.vercel.app) → choisissez
-          &laquo;&nbsp;Vérification par balise meta&nbsp;&raquo; → collez ici uniquement le
-          code dans <code>content=&quot;...&quot;</code> (pas toute la balise). Nécessaire
-          pour que Facebook associe correctement le Pixel à ce site lors de la
-          création d&apos;une campagne.
-        </span>
-      </label>
+      <LogoPicker currentUrl={settings.logo_url} onBusyChange={handleLogoBusy} />
 
       <label className={labelClass}>
         Wilaya d&apos;expédition (adresse de départ pour Yalidine)
@@ -436,6 +55,9 @@ export function SettingsForm({ settings }: { settings: Settings }) {
             </option>
           ))}
         </select>
+        <span className="text-xs font-normal text-zinc-400">
+          Commune à tous les produits : les colis partent tous du même endroit.
+        </span>
       </label>
 
       {state.error && (

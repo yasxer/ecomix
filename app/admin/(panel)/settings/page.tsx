@@ -13,8 +13,9 @@ export default async function SettingsPage() {
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">Paramètres</h1>
         <p className="text-sm text-zinc-500">
-          Logo, couleur et informations de la boutique — appliqués directement sur la
-          landing page.
+          Réglages communs à toutes les boutiques. Le domaine, la marque, la
+          couleur et le pixel de chaque produit se règlent dans son onglet
+          Vitrine.
         </p>
       </div>
       {/* La clé remonte le formulaire après un enregistrement réussi :

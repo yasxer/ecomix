@@ -1,6 +1,7 @@
 import "server-only";
 import { cache } from "react";
 import { supabase } from "./supabase";
+import { normalizeDomain } from "./domain";
 import {
   FREE_DELIVERY_MODES,
   BASE_PACK_ID,
@@ -19,16 +20,8 @@ import {
 export const DEFAULT_SETTINGS: Omit<Settings, "id" | "updated_at"> = {
   store_name: "Ma Boutique",
   logo_url: null,
-  primary_color: "#4f46e5",
   from_wilaya: "16 - Alger",
-  pixel_id: null,
-  fb_domain_verification: null,
-  free_delivery_mode: "none",
-  landing_mode: "simple",
-  landing_blocks: [],
-  landing_theme: "light",
-  landing_sticky_cta: true,
-  landing_sticky_header: true,
+  default_product_id: null,
 };
 
 /**
@@ -114,22 +107,35 @@ export function normalizeItems(raw: unknown): OrderItem[] {
 }
 
 /**
- * Le produit, relu à chaque requête. `cache` de React ne mémorise que le temps
- * d'un rendu : `app/page.tsx` l'appelle depuis `generateMetadata` puis depuis
- * la page sans faire deux requêtes, et rien n'est retenu d'une requête à
- * l'autre.
+ * Remet une ligne `product` dans la forme sur laquelle le rendu peut compter.
+ * Chaque énumération repasse par son garde-fou : une colonne absente (une
+ * migration pas encore jouée) ou une valeur inconnue ne doit pas faire tomber
+ * la landing, ni lui faire annoncer une livraison offerte qui serait quand
+ * même facturée dans le total.
  */
-export const getProduct = cache(async (): Promise<Product | null> => {
-  const { data, error } = await supabase()
-    .from("product")
-    .select("*")
-    .limit(1)
-    .maybeSingle();
-  if (error) throw new Error(`Erreur produit: ${error.message}`);
-  if (!data) return null;
+function toProduct(data: Record<string, unknown>): Product {
+  const price = Number(data.price);
   const packs = normalizePacks(data.packs);
   return {
-    ...(data as Product),
+    ...(data as unknown as Product),
+    free_delivery_mode: FREE_DELIVERY_MODES.includes(
+      data.free_delivery_mode as Product["free_delivery_mode"]
+    )
+      ? (data.free_delivery_mode as Product["free_delivery_mode"])
+      : "none",
+    landing_mode: LANDING_MODES.includes(data.landing_mode as Product["landing_mode"])
+      ? (data.landing_mode as Product["landing_mode"])
+      : "simple",
+    landing_theme: LANDING_THEMES.includes(
+      data.landing_theme as Product["landing_theme"]
+    )
+      ? (data.landing_theme as Product["landing_theme"])
+      : "light",
+    landing_blocks: normalizeLandingBlocks(data.landing_blocks),
+    landing_sticky_cta: data.landing_sticky_cta !== false,
+    landing_sticky_header: data.landing_sticky_header !== false,
+    // Le pack « 1 pièce » est reconstruit depuis le prix du produit : il n'est
+    // pas stocké, pour qu'un changement de prix n'oublie jamais l'offre unitaire.
     packs:
       packs.length > 0
         ? [
@@ -137,25 +143,137 @@ export const getProduct = cache(async (): Promise<Product | null> => {
               id: BASE_PACK_ID,
               label: "1 pièce",
               quantity: 1,
-              price: Number(data.price),
-              old_price: Number(data.price),
+              price,
+              old_price: Number(data.old_price) || null,
               badge: null,
               highlight: "none",
             },
             ...packs
               .filter((pack) => pack.id !== BASE_PACK_ID && pack.quantity !== 1)
-              .map((pack) => ({
-                ...pack,
-                old_price: pack.quantity * Number(data.price),
-              })),
+              .map((pack) => ({ ...pack, old_price: pack.quantity * price })),
           ]
         : [],
   };
+}
+
+/**
+ * Une clé d'hôte sûre à interpoler dans un filtre PostgREST. L'en-tête `Host`
+ * vient du client : sans ce filtre, une virgule suffirait à greffer une
+ * condition supplémentaire dans le `or(...)` ci-dessous.
+ */
+function safeKey(key: string): string | null {
+  const clean = normalizeDomain(key);
+  return /^[a-z0-9.-]{1,253}$/.test(clean) ? clean : null;
+}
+
+/**
+ * La boutique servie pour un hôte : le produit dont c'est le domaine, sinon
+ * celui dont c'est le slug (aperçu `/p/<slug>` avant de brancher le DNS).
+ */
+const findStorefront = cache(async (key: string): Promise<Product | null> => {
+  const clean = safeKey(key);
+  if (!clean) return null;
+  const { data, error } = await supabase()
+    .from("product")
+    .select("*")
+    .or(`domain.eq.${clean},slug.eq.${clean}`)
+    .eq("active", true)
+    // Un domaine l'emporte sur un slug homonyme : les lignes sans domaine
+    // passent en dernier.
+    .order("domain", { ascending: false, nullsFirst: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw new Error(`Erreur produit: ${error.message}`);
+  return data ? toProduct(data) : null;
 });
 
 /**
- * Les settings, relus à chaque requête — même mémoïsation par rendu que
- * `getProduct`.
+ * Le produit servi sur un hôte qui ne correspond à aucun domaine — le domaine
+ * Vercel du projet, typiquement. Null = 404 sur ces hôtes.
+ */
+const getDefaultProduct = cache(async (): Promise<Product | null> => {
+  const settings = await getSettings();
+  if (!settings.default_product_id) return null;
+  const { data, error } = await supabase()
+    .from("product")
+    .select("*")
+    .eq("id", settings.default_product_id)
+    .eq("active", true)
+    .maybeSingle();
+  if (error) throw new Error(`Erreur produit: ${error.message}`);
+  return data ? toProduct(data) : null;
+});
+
+/**
+ * La boutique à servir pour la clé d'URL (l'hôte réécrit par `proxy.ts`).
+ * `cache` de React ne mémorise que le temps d'un rendu : la page l'appelle
+ * depuis `generateMetadata` puis depuis le corps sans faire deux requêtes.
+ */
+export const getStorefront = cache(async (key: string): Promise<Product | null> => {
+  return (await findStorefront(key)) ?? (await getDefaultProduct());
+});
+
+/** Un produit par son id : l'admin et la validation de commande passent par là. */
+export const getProductById = cache(async (id: string): Promise<Product | null> => {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+  const { data, error } = await supabase()
+    .from("product")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw new Error(`Erreur produit: ${error.message}`);
+  return data ? toProduct(data) : null;
+});
+
+/** Tous les produits, du plus ancien au plus récent (liste de l'admin). */
+export async function getProducts(): Promise<Product[]> {
+  const { data, error } = await supabase()
+    .from("product")
+    .select("*")
+    .order("created_at", { ascending: true });
+  if (error) throw new Error(`Erreur produits: ${error.message}`);
+  return (data ?? []).map(toProduct);
+}
+
+/**
+ * Les clés sous lesquelles une boutique est servie : son domaine et son slug.
+ * Alimente `generateStaticParams` — sans au moins un paramètre connu, Next
+ * traite `params` comme une API de requête et la landing tombe en rendu
+ * dynamique à chaque visite, sans cache CDN.
+ */
+export async function getStorefrontKeys(): Promise<string[]> {
+  try {
+    const { data, error } = await supabase()
+      .from("product")
+      .select("slug,domain")
+      .eq("active", true);
+    if (error) throw error;
+    return (data ?? []).flatMap((row) => {
+      const { slug, domain } = row as { slug: string; domain: string | null };
+      return domain ? [domain, slug] : [slug];
+    });
+  } catch {
+    // Base injoignable pendant le build : le site reste servi, simplement
+    // rendu à la demande jusqu'au prochain déploiement.
+    return [];
+  }
+}
+
+/** Nombre de commandes par produit, pour la liste de l'admin. */
+export async function getOrderCountsByProduct(): Promise<Map<string, number>> {
+  const { data, error } = await supabase().from("orders").select("product_id");
+  if (error) throw new Error(`Erreur commandes: ${error.message}`);
+  const counts = new Map<string, number>();
+  for (const row of data ?? []) {
+    const id = (row as { product_id: string | null }).product_id;
+    if (id) counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+  return counts;
+}
+
+/**
+ * Les réglages de la plateforme, relus à chaque requête — même mémoïsation
+ * par rendu que les produits.
  *
  * Un cache mémoire de 60 secondes vivait ici. Il ne pouvait pas tenir en
  * production : chaque instance serverless garde le sien et l'enregistrement
@@ -171,30 +289,13 @@ export const getSettings = cache(async (): Promise<Settings> => {
     .limit(1)
     .maybeSingle();
   if (error) throw new Error(`Erreur settings: ${error.message}`);
-  const raw = data
+  return data
     ? (data as Settings)
     : { id: "", updated_at: "", ...DEFAULT_SETTINGS };
-  // Le mode est retombé sur "none" si la valeur est inconnue — notamment tant
-  // que la migration 009 n'a pas été jouée, où la colonne est absente. Sans ce
-  // garde-fou la landing annoncerait une livraison offerte qui serait quand
-  // même facturée dans le total.
-  const settings: Settings = {
-    ...raw,
-    free_delivery_mode: FREE_DELIVERY_MODES.includes(raw.free_delivery_mode)
-      ? raw.free_delivery_mode
-      : "none",
-    landing_mode: LANDING_MODES.includes(raw.landing_mode) ? raw.landing_mode : "simple",
-    landing_blocks: normalizeLandingBlocks(raw.landing_blocks),
-    landing_theme: LANDING_THEMES.includes(raw.landing_theme) ? raw.landing_theme : "light",
-    // Colonnes absentes tant que la migration 014 n'est pas jouée : on garde
-    // le comportement d'avant (en-tête fixé, bouton flottant).
-    landing_sticky_cta: raw.landing_sticky_cta !== false,
-    landing_sticky_header: raw.landing_sticky_header !== false,
-  };
-  return settings;
 });
 
 export type OrderFilters = {
+  productId?: string;
   status?: OrderStatus;
   wilaya?: string;
   search?: string;
@@ -209,6 +310,7 @@ export async function getOrders(filters: OrderFilters = {}): Promise<Order[]> {
     .order("created_at", { ascending: false })
     .limit(500);
 
+  if (filters.productId) query = query.eq("product_id", filters.productId);
   if (filters.status) query = query.eq("status", filters.status);
   if (filters.wilaya) query = query.eq("wilaya", filters.wilaya);
   if (filters.search) {

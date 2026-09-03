@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { supabase } from "@/lib/supabase";
-import { getProduct, getSettings, normalizeItems } from "@/lib/data";
+import { getProductById, getSettings, normalizeItems } from "@/lib/data";
 import { createParcel, deleteParcel, getDeliveryInfo } from "@/lib/yalidine";
 import { notifyNewOrder } from "@/lib/telegram";
 import { WILAYAS } from "@/lib/wilayas";
@@ -81,8 +81,14 @@ export async function createOrder(
     return { error: "رقم الهاتف غير صحيح (مثال: 0550123456)." };
   if (!WILAYAS.includes(wilaya)) return { error: "الرجاء اختيار ولايتكم." };
 
-  const [product, settings] = await Promise.all([getProduct(), getSettings()]);
-  if (!product) return { error: "المنتج غير متوفر حاليا." };
+  // La boutique commandée arrive du formulaire, mais tout le reste est relu
+  // en base : le navigateur ne décide ni du prix, ni de la quantité, ni des
+  // frais de livraison.
+  const [product, settings] = await Promise.all([
+    getProductById(String(formData.get("product_id") || "")),
+    getSettings(),
+  ]);
+  if (!product || !product.active) return { error: "المنتج غير متوفر حاليا." };
 
   // En mode "tout offert" le formulaire n'affiche plus le choix : on impose le
   // domicile côté serveur pour qu'une requête forgée ne puisse pas passer en
@@ -90,7 +96,7 @@ export async function createOrder(
   const requestedType =
     formData.get("delivery_type") === "stopdesk" ? "stopdesk" : "domicile";
   const delivery_type =
-    settings.free_delivery_mode === "all" ? "domicile" : requestedType;
+    product.free_delivery_mode === "all" ? "domicile" : requestedType;
 
   if (delivery_type === "domicile" && address.length < 5)
     return { error: "الرجاء إدخال عنوان التوصيل." };
@@ -143,11 +149,14 @@ export async function createOrder(
   // Livraison offerte : le client ne paie que le produit. Yalidine facture
   // quand même ses frais, déduits du versement à la boutique.
   const isFree =
-    settings.free_delivery_mode === "all" ||
-    (settings.free_delivery_mode === "stopdesk" && delivery_type === "stopdesk");
+    product.free_delivery_mode === "all" ||
+    (product.free_delivery_mode === "stopdesk" && delivery_type === "stopdesk");
   const total = subtotal + (isFree ? 0 : delivery);
 
   const { error } = await supabase().from("orders").insert({
+    product_id: product.id,
+    // Nom figé : renommer ou supprimer le produit ne réécrit pas l'historique
+    product_name: product.name,
     customer_name,
     phone,
     wilaya,
@@ -210,13 +219,17 @@ export async function confirmOrder(orderId: string): Promise<OrderActionState> {
   if (!order) return { error: "Commande introuvable." };
   if (order.status === "confirmee") return { error: "Commande déjà confirmée." };
 
-  const product = await getProduct();
   const settings = await getSettings();
-  if (!product) return { error: "Produit introuvable." };
+  // Le nom figé à la commande fait foi : le produit a pu être renommé, voire
+  // supprimé, depuis que le client a commandé.
+  const productName =
+    order.product_name ??
+    (order.product_id ? (await getProductById(order.product_id))?.name : null);
+  if (!productName) return { error: "Produit introuvable." };
 
   let result;
   try {
-    result = await createParcel(order, product.name, settings);
+    result = await createParcel(order, productName, settings);
   } catch (e) {
     return { error: e instanceof Error ? e.message : "Erreur Yalidine." };
   }

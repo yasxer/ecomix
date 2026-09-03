@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import { ArrowDown, PackageOpen } from "lucide-react";
-import { getProduct, getSettings } from "@/lib/data";
+import { getStorefront, getStorefrontKeys } from "@/lib/data";
 import {
   CustomBlocks,
   DescriptionBlock,
@@ -9,60 +10,77 @@ import {
   GalleryBlock,
   HeroBlock,
   formatDA,
-} from "./components/landing-blocks";
-import { MetaPixel } from "./components/meta-pixel";
+} from "@/app/components/landing-blocks";
+import { MetaPixel } from "@/app/components/meta-pixel";
 
-// Page servie depuis le cache CDN (rapide même en 2G). Elle est régénérée
-// immédiatement quand le produit ou les settings changent (revalidatePath),
-// avec un filet de sécurité de 5 minutes.
+/**
+ * La boutique d'un domaine. `key` est l'hôte de la requête, réécrit par
+ * `proxy.ts` (`boutique.dz/` → `/s/boutique.dz`) ou le slug d'un produit
+ * (`/p/mon-produit`). Chaque domaine a donc sa propre entrée de cache : la
+ * page reste servie depuis le CDN, rapide même en 2G.
+ *
+ * Régénérée immédiatement quand le produit change (`revalidateStorefronts`),
+ * avec un filet de sécurité de 5 minutes.
+ */
 export const revalidate = 300;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const [settings, product] = await Promise.all([getSettings(), getProduct()]);
+/**
+ * Les domaines et slugs connus au moment du build. Les autres clés (un
+ * domaine ajouté depuis, ou l'hôte qui sert le produit par défaut) sont
+ * générées à la première visite puis mises en cache de la même façon.
+ */
+export async function generateStaticParams() {
+  return (await getStorefrontKeys()).map((key) => ({ key }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ key: string }>;
+}): Promise<Metadata> {
+  const product = await getStorefront((await params).key);
+  if (!product) return { title: "Boutique introuvable" };
   return {
-    title: product ? `${product.name} | ${settings.store_name}` : settings.store_name,
-    description: product?.description.slice(0, 160) || settings.store_name,
-    verification: settings.fb_domain_verification
-      ? { other: { "facebook-domain-verification": settings.fb_domain_verification } }
+    title: `${product.name} | ${product.store_name}`,
+    description: product.description.slice(0, 160) || product.store_name,
+    verification: product.fb_domain_verification
+      ? { other: { "facebook-domain-verification": product.fb_domain_verification } }
       : undefined,
   };
 }
 
-export default async function LandingPage() {
-  const [settings, product] = await Promise.all([getSettings(), getProduct()]);
+export default async function LandingPage({
+  params,
+}: {
+  params: Promise<{ key: string }>;
+}) {
+  const product = await getStorefront((await params).key);
+  if (!product) notFound();
 
-  if (!product) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-8 text-center">
-        <PackageOpen className="size-12 text-zinc-300" strokeWidth={1.5} />
-        <p className="text-zinc-500">
-          Aucun produit configuré. Rendez-vous dans le panel admin.
-        </p>
-      </main>
-    );
-  }
-
+  // La vitrine (marque, couleur, pixel, mise en page) appartient au produit :
+  // deux domaines servis par ce même code n'ont donc rien en commun.
+  //
   // Mode custom : l'admin a composé la page bloc par bloc (voir
-  // /admin/landing). Sans bloc enregistré on retombe sur la mise en page
-  // simple plutôt que de servir une page vide.
-  const custom = settings.landing_mode === "custom" && settings.landing_blocks.length > 0;
+  // /admin/produits/<id>/landing). Sans bloc enregistré on retombe sur la mise
+  // en page simple plutôt que de servir une page vide.
+  const custom = product.landing_mode === "custom" && product.landing_blocks.length > 0;
   // Les options d'affichage n'existent qu'en mode custom : le mode simple
   // garde son thème clair, son en-tête fixé et son bouton flottant mobile.
-  const dark = custom && settings.landing_theme === "dark";
-  const stickyHeader = !custom || settings.landing_sticky_header;
+  const dark = custom && product.landing_theme === "dark";
+  const stickyHeader = !custom || product.landing_sticky_header;
   const cta: "mobile" | "always" | "none" = !custom
     ? "mobile"
-    : settings.landing_sticky_cta
+    : product.landing_sticky_cta
       ? "always"
       : "none";
 
   return (
     <div
       data-theme={dark ? "dark" : undefined}
-      style={{ "--primary": settings.primary_color } as React.CSSProperties}
+      style={{ "--primary": product.primary_color } as React.CSSProperties}
       className="relative min-h-screen overflow-x-clip bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100"
     >
-      {settings.pixel_id && <MetaPixel pixelId={settings.pixel_id} />}
+      {product.pixel_id && <MetaPixel pixelId={product.pixel_id} />}
 
       {/* Halos de couleur en arrière-plan.
           Dégradés radiaux et non des cercles en `filter: blur()` : Safari
@@ -86,10 +104,10 @@ export default async function LandingPage() {
         className={`${stickyHeader ? "sticky top-0" : "relative"} z-40 border-b border-zinc-200/50 bg-white/95 dark:border-white/10 dark:bg-zinc-950/95`}
       >
         <div className="mx-auto flex h-16 max-w-[420px] items-center justify-center gap-3 px-4">
-          {settings.logo_url ? (
+          {product.logo_url ? (
             <Image
-              src={settings.logo_url}
-              alt={settings.store_name}
+              src={product.logo_url}
+              alt={product.store_name}
               width={36}
               height={36}
               className="size-9 rounded-xl object-contain"
@@ -100,24 +118,20 @@ export default async function LandingPage() {
             </span>
           )}
           <span className="text-lg font-extrabold tracking-tight">
-            {settings.store_name}
+            {product.store_name}
           </span>
         </div>
       </header>
 
       <main className="relative mx-auto flex max-w-[420px] flex-col px-4 pb-12">
         {custom ? (
-          <CustomBlocks
-            blocks={settings.landing_blocks}
-            product={product}
-            settings={settings}
-          />
+          <CustomBlocks blocks={product.landing_blocks} product={product} />
         ) : (
           <>
-            <HeroBlock product={product} settings={settings} />
+            <HeroBlock product={product} />
             <GalleryBlock product={product} />
             <DescriptionBlock product={product} />
-            <FormBlock product={product} settings={settings} />
+            <FormBlock product={product} />
           </>
         )}
       </main>
@@ -146,9 +160,9 @@ export default async function LandingPage() {
       >
         <div className="flex flex-col items-center gap-1.5">
           <div className="flex items-center gap-2">
-            {settings.logo_url ? (
+            {product.logo_url ? (
               <Image
-                src={settings.logo_url}
+                src={product.logo_url}
                 alt=""
                 width={24}
                 height={24}
@@ -157,10 +171,10 @@ export default async function LandingPage() {
             ) : (
               <PackageOpen className="size-4.5 text-(--primary)" />
             )}
-            <span className="text-sm font-bold">{settings.store_name}</span>
+            <span className="text-sm font-bold">{product.store_name}</span>
           </div>
           <p className="text-xs text-zinc-400 dark:text-zinc-500">
-            © {new Date().getFullYear()} {settings.store_name} — Tous droits réservés
+            © {new Date().getFullYear()} {product.store_name} — Tous droits réservés
           </p>
         </div>
       </footer>

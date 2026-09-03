@@ -13,6 +13,7 @@ import type { FreeDeliveryMode, ProductColor, ProductPack } from "@/lib/types";
  * dans `page.tsx`.
  */
 export function Offers({
+  productId,
   packs,
   price,
   colors,
@@ -20,6 +21,8 @@ export function Offers({
   freeDeliveryMode,
   children,
 }: {
+  /** Boutique commandée : le serveur relit tout le produit d'après cet id. */
+  productId: string;
   packs: ProductPack[];
   price: number;
   colors: ProductColor[];
@@ -65,6 +68,7 @@ export function Offers({
       <div id="commander" className="scroll-mt-24 pt-10">
         {children}
         <OrderForm
+          productId={productId}
           price={price}
           colors={colors}
           sizes={sizes}

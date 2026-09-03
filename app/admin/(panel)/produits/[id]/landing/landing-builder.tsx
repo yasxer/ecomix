@@ -140,7 +140,7 @@ export function LandingBuilder({
   theme: LandingTheme;
   stickyCta: boolean;
   stickyHeader: boolean;
-  product: Product | null;
+  product: Product;
   storeName: string;
   logoUrl: string | null;
   primaryColor: string;
@@ -241,7 +241,7 @@ export function LandingBuilder({
         if (old.isNew && old.url) {
           const url = old.url;
           startTransition(async () => {
-            await discardLandingImage(url);
+            await discardLandingImage(product.id, url);
           });
         }
       }
@@ -342,7 +342,7 @@ export function LandingBuilder({
     if (draft.isNew && draft.url) {
       const url = draft.url;
       startTransition(async () => {
-        await discardLandingImage(url);
+        await discardLandingImage(product.id, url);
       });
     }
   }
@@ -389,6 +389,7 @@ export function LandingBuilder({
         className="hidden"
         onChange={(e) => addFiles(e.target.files)}
       />
+      <input type="hidden" name="product_id" value={product.id} />
       <input type="hidden" name="landing_mode" value={mode} />
       <input type="hidden" name="landing_blocks" value={JSON.stringify(toBlocks(drafts))} />
       <input type="hidden" name="landing_theme" value={theme} />

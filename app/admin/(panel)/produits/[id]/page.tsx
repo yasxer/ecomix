@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { CheckCircle2, ImageOff, Pencil, Truck } from "lucide-react";
-import { getProduct } from "@/lib/data";
+import { getProductById } from "@/lib/data";
 import { ProductForm } from "./product-form";
 
 export const dynamic = "force-dynamic";
@@ -12,34 +13,30 @@ function formatDA(n: number) {
 }
 
 export default async function ProductPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ id: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const [product, params] = await Promise.all([getProduct(), searchParams]);
-  const editing = params.edit === "1";
-
-  if (!product) {
-    return (
-      <p className="mx-auto max-w-3xl rounded-2xl bg-amber-50 p-6 text-amber-700">
-        Aucun produit trouvé. Exécutez le fichier supabase/schema.sql dans le SQL
-        Editor de Supabase pour créer la ligne initiale.
-      </p>
-    );
-  }
+  const [{ id }, product, query] = await Promise.all([
+    params,
+    params.then(({ id }) => getProductById(id)),
+    searchParams,
+  ]);
+  if (!product) notFound();
+  const editing = query.edit === "1";
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <div className="flex items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-900">Produit</h1>
-          <p className="text-sm text-zinc-500">
-            C&apos;est ce produit qui s&apos;affiche sur votre landing page.
-          </p>
-        </div>
+        <p className="text-sm text-zinc-500">
+          Prix, photos, variantes et offres groupées — le contenu de la landing
+          page de cette boutique.
+        </p>
         {!editing && (
           <Link
-            href="/admin/produit?edit=1"
+            href={`/admin/produits/${id}?edit=1`}
             className="flex items-center gap-2 rounded-xl bg-linear-to-b from-indigo-500 to-indigo-600 shadow-md shadow-indigo-600/25 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-500"
           >
             <Pencil className="size-4" />

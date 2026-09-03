@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import {
   ExternalLink,
   LayoutDashboard,
-  LayoutTemplate,
   LogOut,
   Package,
   PackageOpen,
@@ -17,8 +16,7 @@ import { logout } from "@/app/actions/auth";
 const LINKS = [
   { href: "/admin", label: "Statistiques", short: "Stats", icon: LayoutDashboard },
   { href: "/admin/commandes", label: "Commandes", short: "Commandes", icon: ShoppingCart },
-  { href: "/admin/produit", label: "Produit", short: "Produit", icon: Package },
-  { href: "/admin/landing", label: "Landing page", short: "Landing", icon: LayoutTemplate },
+  { href: "/admin/produits", label: "Produits", short: "Produits", icon: Package },
   { href: "/admin/settings", label: "Paramètres", short: "Réglages", icon: Settings },
 ];
 
@@ -87,14 +85,13 @@ export function Sidebar({
           </nav>
 
           <div className="flex flex-col gap-1.5 border-t border-white/5 pt-3">
-            <a
-              href="/"
-              target="_blank"
+            <Link
+              href="/admin/produits"
               className="flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-medium text-zinc-400 transition hover:bg-white/5 hover:text-white"
             >
               <ExternalLink className="size-5 shrink-0" />
-              <span className="hidden lg:inline">Voir la boutique</span>
-            </a>
+              <span className="hidden lg:inline">Voir les boutiques</span>
+            </Link>
             <button
               onClick={() => logout()}
               className="flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-medium text-zinc-400 transition hover:bg-red-500/10 hover:text-red-400"
@@ -126,14 +123,13 @@ export function Sidebar({
           <span className="truncate text-sm font-bold text-zinc-900">{storeName}</span>
         </div>
         <div className="flex shrink-0 items-center gap-1">
-          <a
-            href="/"
-            target="_blank"
-            aria-label="Voir la boutique"
+          <Link
+            href="/admin/produits"
+            aria-label="Voir les boutiques"
             className="flex size-9 items-center justify-center rounded-xl text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900"
           >
             <ExternalLink className="size-4.5" />
-          </a>
+          </Link>
           <button
             onClick={() => logout()}
             aria-label="Déconnexion"

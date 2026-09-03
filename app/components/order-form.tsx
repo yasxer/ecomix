@@ -52,7 +52,7 @@ function formatDA(n: number) {
 // Cache côté navigateur : re-sélectionner une wilaya déjà chargée est instantané
 const deliveryCache = new Map<string, DeliveryData>();
 
-// Meta Pixel (injecté par MetaPixel si configuré dans les settings)
+// Meta Pixel (injecté par MetaPixel si le produit en configure un)
 declare global {
   interface Window {
     fbq?: (...args: unknown[]) => void;
@@ -71,6 +71,7 @@ function trackPixel(event: string, data?: Record<string, unknown>) {
 const EMPTY_ITEM: OrderItem = { color: null, size: null };
 
 export function OrderForm({
+  productId,
   price,
   colors,
   sizes,
@@ -78,6 +79,9 @@ export function OrderForm({
   packs,
   selectedPackId,
 }: {
+  /** Boutique commandée. Le serveur relit prix, packs et variantes d'après
+   *  cet id : le navigateur ne décide ni du montant ni de la quantité. */
+  productId: string;
   price: number;
   colors: ProductColor[];
   sizes: string[];
@@ -287,6 +291,7 @@ export function OrderForm({
 
       {/* Offre retenue. Le serveur relit le prix et la quantité depuis la base
           d'après cet identifiant : rien de tarifaire ne vient du client. */}
+      <input type="hidden" name="product_id" value={productId} />
       <input type="hidden" name="pack_id" value={selectedPack?.id ?? ""} />
 
       {/* Rappel de l'offre choisie. Pas de second sélecteur : la section
