@@ -14,8 +14,7 @@ export type FilterValues = {
   to: string;
 };
 
-const fieldClass =
-  "w-full rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-base text-zinc-700 outline-none transition focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10 sm:py-2 sm:text-sm";
+const fieldClass = "admin-field";
 
 /**
  * Filtres des commandes. Formulaire GET : il fonctionne sans JavaScript, le
@@ -41,7 +40,7 @@ export function OrdersFilters({
   const [open, setOpen] = useState(activeCount > 0);
 
   return (
-    <form method="GET" className="admin-card flex flex-col gap-3 p-3 sm:p-4">
+    <form method="GET" className="flex flex-col gap-3">
       <div className="flex gap-2">
         <div className="relative min-w-0 flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
@@ -57,10 +56,10 @@ export function OrdersFilters({
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          className={`flex min-h-11 shrink-0 items-center gap-1.5 rounded-xl px-3 text-sm font-semibold transition sm:hidden ${
+          className={`admin-btn shrink-0 border sm:hidden ${
             activeCount > 0
-              ? "bg-indigo-50 text-indigo-600"
-              : "bg-zinc-100 text-zinc-600"
+              ? "border-indigo-200 bg-indigo-50 text-indigo-700"
+              : "border-zinc-300 bg-white text-zinc-600"
           }`}
         >
           <Filter className="size-4" />

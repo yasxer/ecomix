@@ -86,7 +86,7 @@ export default async function OrdersPage({
   const multi = products.length > 1;
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-4">
+    <div className="mx-auto flex max-w-6xl flex-col gap-6">
       <PageHeader
         title="Commandes"
         subtitle={
@@ -111,7 +111,7 @@ export default async function OrdersPage({
 
       {orders.length === 0 ? (
         <div className="admin-card flex flex-col items-center gap-3 px-6 py-16 text-center">
-          <Inbox className="size-10 text-zinc-300" strokeWidth={1.5} />
+          <Inbox className="size-8 text-zinc-300" strokeWidth={1.5} />
           <p className="text-sm text-zinc-500">
             Aucune commande ne correspond à ces filtres.
           </p>
@@ -122,7 +122,7 @@ export default async function OrdersPage({
           <div className="admin-card hidden overflow-x-auto lg:block">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-zinc-100 text-xs uppercase tracking-wide text-zinc-400">
+                <tr className="border-b border-zinc-200 bg-zinc-50 text-xs font-medium tracking-wide text-zinc-500">
                   <th className="px-4 py-3 font-semibold">Date</th>
                   {multi && <th className="px-4 py-3 font-semibold">Boutique</th>}
                   <th className="px-4 py-3 font-semibold">Client</th>
@@ -134,9 +134,9 @@ export default async function OrdersPage({
                   <th className="px-4 py-3 font-semibold">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-50">
+              <tbody className="divide-y divide-zinc-200">
                 {orders.map((o) => (
-                  <tr key={o.id} className="transition hover:bg-zinc-50/60">
+                  <tr key={o.id} className="transition hover:bg-zinc-50">
                     <td className="whitespace-nowrap px-4 py-3 text-zinc-500">
                       {formatDate(o.created_at)}
                     </td>
@@ -146,7 +146,7 @@ export default async function OrdersPage({
                       </td>
                     )}
                     <td className="px-4 py-3">
-                      <p className="font-semibold text-zinc-900">{o.customer_name}</p>
+                      <p className="font-medium text-zinc-900">{o.customer_name}</p>
                       <a
                         href={`tel:${o.phone}`}
                         className="text-xs text-zinc-500 transition hover:text-indigo-600"
@@ -175,7 +175,7 @@ export default async function OrdersPage({
                       )}
                     </td>
                     <td className="px-4 py-3 text-zinc-700">{o.quantity}</td>
-                    <td className="whitespace-nowrap px-4 py-3 font-bold text-zinc-900">
+                    <td className="whitespace-nowrap px-4 py-3 font-semibold tabular-nums text-zinc-900">
                       {formatDA(Number(o.total))}
                     </td>
                     <td className="px-4 py-3">
@@ -202,7 +202,7 @@ export default async function OrdersPage({
               <div key={o.id} className="admin-card flex flex-col gap-3 p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="truncate font-bold text-zinc-900">
+                    <p className="truncate font-semibold text-zinc-900">
                       {o.customer_name}
                     </p>
                     <p className="text-[11px] text-zinc-400">
@@ -215,7 +215,7 @@ export default async function OrdersPage({
                       )}
                     </p>
                   </div>
-                  <span className="shrink-0 text-base font-extrabold text-zinc-900">
+                  <span className="shrink-0 text-base font-semibold tabular-nums text-zinc-900">
                     {formatDA(Number(o.total))}
                   </span>
                 </div>
@@ -224,13 +224,13 @@ export default async function OrdersPage({
                     à la livraison, donc une cible tactile pleine largeur. */}
                 <a
                   href={`tel:${o.phone}`}
-                  className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-indigo-50 px-4 font-semibold text-indigo-700 transition active:scale-[0.98] active:bg-indigo-100"
+                  className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 px-4 text-sm font-medium text-indigo-700 transition active:scale-[0.99] active:bg-indigo-100"
                 >
                   <Phone className="size-4" />
                   {o.phone}
                 </a>
 
-                <div className="flex flex-col gap-1 rounded-xl bg-zinc-50 px-3 py-2.5">
+                <div className="flex flex-col gap-1 rounded-lg bg-zinc-50 px-3 py-2.5">
                   <p className="text-sm text-zinc-700">
                     {o.wilaya} — {o.commune}
                     {o.address ? ` — ${o.address}` : ""}
@@ -247,7 +247,7 @@ export default async function OrdersPage({
 
                 <OrderStatusCell order={o} />
 
-                <div className="border-t border-zinc-100 pt-3">
+                <div className="border-t border-zinc-200 pt-3">
                   <OrderActions
                     orderId={o.id}
                     status={o.status}

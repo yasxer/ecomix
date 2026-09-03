@@ -146,7 +146,7 @@ export function PackEditor({
         return (
           <div
             key={pack.id}
-            className="flex flex-col gap-3 rounded-2xl bg-zinc-50 p-4 ring-1 ring-zinc-200"
+            className="flex flex-col gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-4"
           >
             <div className="flex items-start gap-3">
               <div className="flex min-w-0 flex-1 flex-col gap-3">

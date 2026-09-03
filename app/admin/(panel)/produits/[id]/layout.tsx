@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, Globe } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { getProductById } from "@/lib/data";
 import { ProductTabs } from "./product-tabs";
 
@@ -21,42 +21,41 @@ export default async function ProductLayout({
   const publicUrl = product.domain ? `https://${product.domain}` : `/p/${product.slug}`;
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-4">
+    <div className="mx-auto flex max-w-6xl flex-col gap-5">
       <Link
         href="/admin/produits"
-        className="flex w-fit items-center gap-1.5 text-sm font-semibold text-zinc-500 transition hover:text-zinc-900"
+        className="flex w-fit items-center gap-1.5 text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
       >
         <ArrowLeft className="size-4" />
-        Tous les produits
+        Produits
       </Link>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="truncate text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">
+          <h1 className="truncate text-xl font-semibold tracking-tight text-zinc-900">
             {product.name}
           </h1>
-          <p className="mt-0.5 flex items-center gap-1.5 text-sm text-zinc-500">
-            <Globe className="size-3.5 shrink-0" />
+          <p className="mt-1 flex items-center gap-2 text-sm text-zinc-500">
             <span className="truncate">{product.domain ?? `/p/${product.slug}`}</span>
-            {!product.active && (
-              <span className="shrink-0 rounded-md bg-zinc-100 px-2 py-0.5 text-[10px] font-bold text-zinc-500">
-                Hors ligne
-              </span>
-            )}
+            <span
+              className={`admin-chip shrink-0 ${
+                product.active
+                  ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20"
+                  : "bg-zinc-100 text-zinc-500 ring-1 ring-zinc-300"
+              }`}
+            >
+              {product.active ? "En ligne" : "Hors ligne"}
+            </span>
           </p>
         </div>
-        <a
-          href={publicUrl}
-          target="_blank"
-          className="admin-btn-ghost w-full sm:w-fit"
-        >
+        <a href={publicUrl} target="_blank" className="admin-btn-ghost w-full sm:w-fit">
           <ExternalLink className="size-4" />
           Voir la boutique
         </a>
       </div>
 
       <ProductTabs productId={product.id} />
-      {children}
+      <div className="pt-1">{children}</div>
     </div>
   );
 }

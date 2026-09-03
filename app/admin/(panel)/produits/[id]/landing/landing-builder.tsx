@@ -414,7 +414,7 @@ export function LandingBuilder({
         </div>
 
         {mode === "simple" ? (
-          <p className="rounded-2xl bg-zinc-50 px-5 py-4 text-sm text-zinc-500 ring-1 ring-zinc-200/60">
+          <p className="rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-500">
             La landing garde sa mise en page simple. Vos blocs personnalisés sont
             conservés : repassez en mode Personnalisée pour les retrouver.
           </p>
@@ -499,7 +499,7 @@ export function LandingBuilder({
                       type="button"
                       disabled={used}
                       onClick={() => addBlock(type)}
-                      className="group flex items-start gap-3 rounded-2xl border border-zinc-200 bg-white p-3 text-left transition hover:border-indigo-300 hover:bg-indigo-50/40 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:border-zinc-200 disabled:hover:bg-white"
+                      className="group flex items-start gap-3 rounded-lg border border-zinc-200 bg-white p-3 text-left transition hover:border-indigo-300 hover:bg-indigo-50/40 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:border-zinc-200 disabled:hover:bg-white"
                     >
                       <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 transition group-hover:bg-indigo-100 group-hover:text-indigo-600 group-disabled:bg-zinc-100 group-disabled:text-zinc-600">
                         <Icon className="size-4.5" />
@@ -539,7 +539,7 @@ export function LandingBuilder({
               </div>
 
               {drafts.length === 0 ? (
-                <div className="flex flex-col items-center gap-2 rounded-3xl border-2 border-dashed border-zinc-300 px-6 py-12 text-center">
+                <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-zinc-300 px-6 py-12 text-center">
                   <LayoutTemplate className="size-8 text-zinc-300" strokeWidth={1.5} />
                   <p className="text-sm font-medium text-zinc-500">Page vide</p>
                   <p className="text-xs text-zinc-400">
@@ -766,14 +766,14 @@ function ModeCard({
       type="button"
       onClick={onSelect}
       aria-pressed={active}
-      className={`flex items-start gap-3 rounded-3xl p-5 text-left transition ${
+      className={`flex items-start gap-3 rounded-xl p-4 text-left transition ${
         active
           ? "admin-card ring-2 ring-indigo-500"
           : "bg-white/60 ring-1 ring-zinc-200 hover:bg-white hover:ring-zinc-300"
       }`}
     >
       <span
-        className={`flex size-10 shrink-0 items-center justify-center rounded-2xl ${
+        className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${
           active ? "bg-indigo-600 text-white" : "bg-zinc-100 text-zinc-500"
         }`}
       >

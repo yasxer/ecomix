@@ -16,9 +16,9 @@ import type { OrderStatus } from "@/lib/types";
  * de bureau ils reprennent leur largeur naturelle.
  */
 const btn =
-  "flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-xl px-3 text-xs font-semibold transition active:scale-[0.98] disabled:opacity-50 lg:min-h-8 lg:flex-none";
+  "flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-medium transition active:scale-[0.99] disabled:opacity-50 lg:min-h-8 lg:flex-none";
 
-const dangerGhost = `${btn} bg-white text-red-600 ring-1 ring-red-200 hover:bg-red-50`;
+const dangerGhost = `${btn} border border-red-200 bg-white text-red-600 hover:bg-red-50`;
 
 export function OrderActions({
   orderId,
@@ -57,7 +57,7 @@ export function OrderActions({
           <button
             disabled={isPending}
             onClick={() => run(deleteOrder)}
-            className={`${btn} bg-red-600 text-white hover:bg-red-500`}
+            className={`${btn} bg-red-600 text-white hover:bg-red-700`}
           >
             {isPending ? (
               <Loader2 className="size-3.5 animate-spin" />
@@ -72,7 +72,7 @@ export function OrderActions({
               setConfirmingDelete(false);
               setError(null);
             }}
-            className={`${btn} bg-white text-zinc-600 ring-1 ring-zinc-200 hover:bg-zinc-50`}
+            className={`${btn} border border-zinc-300 bg-white text-zinc-600 hover:bg-zinc-50`}
           >
             Non
           </button>
@@ -92,7 +92,7 @@ export function OrderActions({
             <button
               disabled={isPending}
               onClick={() => run(confirmOrder)}
-              className={`${btn} bg-emerald-600 text-white shadow-sm shadow-emerald-600/20 hover:bg-emerald-500`}
+              className={`${btn} bg-emerald-600 text-white hover:bg-emerald-700`}
             >
               {isPending ? (
                 <Loader2 className="size-3.5 animate-spin" />
@@ -119,7 +119,7 @@ export function OrderActions({
                 href={label}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`${btn} bg-zinc-900 text-white hover:bg-zinc-700`}
+                className={`${btn} bg-zinc-900 text-white hover:bg-zinc-800`}
               >
                 <Printer className="size-3.5" />
                 Bordereau
@@ -144,7 +144,7 @@ export function OrderActions({
           <button
             disabled={isPending}
             onClick={() => run(reopenOrder)}
-            className={`${btn} bg-white text-zinc-600 ring-1 ring-zinc-200 hover:bg-zinc-50`}
+            className={`${btn} border border-zinc-300 bg-white text-zinc-600 hover:bg-zinc-50`}
           >
             {isPending ? (
               <Loader2 className="size-3.5 animate-spin" />
@@ -160,7 +160,7 @@ export function OrderActions({
           onClick={() => setConfirmingDelete(true)}
           title="Supprimer définitivement"
           aria-label="Supprimer définitivement la commande"
-          className="flex size-10 shrink-0 items-center justify-center rounded-xl text-zinc-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50 lg:size-8"
+          className="flex size-10 shrink-0 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50 lg:size-8"
         >
           <Trash2 className="size-4 lg:size-3.5" />
         </button>

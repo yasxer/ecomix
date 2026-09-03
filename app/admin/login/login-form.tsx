@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { Loader2, LogIn } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { login, type LoginState } from "@/app/actions/auth";
 
 export function LoginForm() {
@@ -9,26 +9,27 @@ export function LoginForm() {
 
   return (
     <form action={action} className="flex flex-col gap-4">
-      <input
-        type="password"
-        name="password"
-        required
-        autoFocus
-        placeholder="Mot de passe"
-        autoComplete="current-password"
-        className="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3.5 text-base text-white placeholder-zinc-500 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20"
-      />
+      <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700">
+        Mot de passe
+        <input
+          type="password"
+          name="password"
+          required
+          autoFocus
+          autoComplete="current-password"
+          placeholder="••••••••"
+          className="admin-field"
+        />
+      </label>
+
       {state.error && (
-        <p className="rounded-xl bg-red-500/10 px-4 py-3 text-sm font-medium text-red-400">
+        <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
           {state.error}
         </p>
       )}
-      <button
-        type="submit"
-        disabled={pending}
-        className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-linear-to-b from-indigo-500 to-indigo-600 px-6 font-semibold text-white shadow-md shadow-indigo-600/25 transition hover:from-indigo-400 hover:to-indigo-500 active:scale-[0.98] disabled:opacity-60"
-      >
-        {pending ? <Loader2 className="size-5 animate-spin" /> : <LogIn className="size-5" />}
+
+      <button type="submit" disabled={pending} className="admin-btn-primary w-full">
+        {pending && <Loader2 className="size-4 animate-spin" />}
         Se connecter
       </button>
     </form>

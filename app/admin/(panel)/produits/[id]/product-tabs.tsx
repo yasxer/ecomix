@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { LayoutTemplate, Package, Store } from "lucide-react";
 
 /**
- * Onglets d'un produit. L'onglet actif se déduit de l'URL. La barre défile
- * horizontalement sur les petits écrans plutôt que de casser sur deux lignes.
+ * Onglets d'un produit — soulignés plutôt qu'en pilules : ils se lisent comme
+ * une continuité de la page, pas comme un bloc de boutons posé dessus. La
+ * barre défile horizontalement sur les petits écrans.
  */
 export function ProductTabs({ productId }: { productId: string }) {
   const pathname = usePathname();
@@ -18,17 +19,17 @@ export function ProductTabs({ productId }: { productId: string }) {
   ];
 
   return (
-    <nav className="no-scrollbar admin-card flex gap-1 overflow-x-auto p-1.5">
+    <nav className="no-scrollbar -mb-px flex gap-6 overflow-x-auto border-b border-zinc-200">
       {tabs.map(({ href, label, icon: Icon }) => {
         const active = href === base ? pathname === base : pathname.startsWith(href);
         return (
           <Link
             key={href}
             href={href}
-            className={`flex min-h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl px-3 text-sm font-semibold transition ${
+            className={`flex min-h-11 items-center gap-2 whitespace-nowrap border-b-2 text-sm font-medium transition ${
               active
-                ? "bg-linear-to-b from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-600/25"
-                : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+                ? "border-indigo-600 text-indigo-700"
+                : "border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-900"
             }`}
           >
             <Icon className="size-4 shrink-0" />

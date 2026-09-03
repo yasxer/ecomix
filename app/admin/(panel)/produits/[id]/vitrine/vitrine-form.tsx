@@ -89,7 +89,7 @@ export function VitrineForm({ product }: { product: Product }) {
       <input type="hidden" name="product_id" value={product.id} />
 
       {/* Domaine et mise en ligne */}
-      <div className="flex flex-col gap-4 rounded-2xl bg-zinc-50 p-4">
+      <div className="flex flex-col gap-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4">
         <label className={labelClass}>
           <span className="flex items-center gap-2">
             <Globe className="size-4 text-indigo-500" />
@@ -127,7 +127,7 @@ export function VitrineForm({ product }: { product: Product }) {
           </span>
         </label>
 
-        <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-white px-3 py-2.5 ring-1 ring-zinc-200">
+        <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-zinc-200 bg-white px-3 py-2.5">
           <input
             type="checkbox"
             checked={active}
@@ -182,8 +182,8 @@ export function VitrineForm({ product }: { product: Product }) {
         </div>
 
         {/* Couleur personnalisée : pipette + code hex saisi à la main */}
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-zinc-50 p-3">
-          <label className="relative flex size-11 cursor-pointer items-center justify-center overflow-hidden rounded-xl ring-1 ring-zinc-200 transition hover:scale-105">
+        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3">
+          <label className="relative flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-zinc-300 transition">
             <input
               type="color"
               value={color}
@@ -233,14 +233,16 @@ export function VitrineForm({ product }: { product: Product }) {
       </div>
 
       {/* Livraison offerte */}
-      <div className="flex flex-col gap-2.5 rounded-2xl bg-zinc-50 p-4">
+      <div className="flex flex-col gap-2.5 rounded-lg border border-zinc-200 bg-zinc-50 p-4">
         <span className="text-sm font-medium text-zinc-700">Livraison offerte</span>
         <div className="flex flex-col gap-1">
           {FREE_DELIVERY_OPTIONS.map(({ value, label, hint }) => (
             <label
               key={value}
-              className={`flex cursor-pointer items-start gap-3 rounded-xl px-3 py-2.5 transition ${
-                freeDeliveryMode === value ? "bg-white ring-1 ring-indigo-200" : ""
+              className={`flex cursor-pointer items-start gap-3 rounded-lg px-3 py-2.5 transition ${
+                freeDeliveryMode === value
+                  ? "border border-indigo-200 bg-white"
+                  : "border border-transparent"
               }`}
             >
               <input
@@ -259,7 +261,7 @@ export function VitrineForm({ product }: { product: Product }) {
           ))}
         </div>
         {freeDeliveryMode !== "none" && (
-          <p className="flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-700">
+          <p className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-700">
             <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
             {freeDeliveryMode === "all"
               ? "Yalidine prélève quand même ses frais sur votre versement, et c'est le tarif domicile — le plus cher — qui est absorbé à chaque commande."
