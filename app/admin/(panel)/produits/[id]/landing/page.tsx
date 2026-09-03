@@ -4,6 +4,14 @@ import { LandingBuilder } from "./landing-builder";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * La composition automatique tient une requête ouverte le temps que le modèle
+ * rédige la page — bien plus que les quelques secondes d'une action ordinaire.
+ * Sans ce plafond relevé, l'hébergeur coupe la connexion en pleine génération.
+ * (Un plan Vercel Hobby plafonne malgré tout à 60 s.)
+ */
+export const maxDuration = 300;
+
 export const metadata = { title: "Landing page — Admin" };
 
 export default async function LandingPage({
@@ -17,8 +25,8 @@ export default async function LandingPage({
   return (
     <div className="flex flex-col gap-4">
       <p className="text-sm text-ink-dim">
-        Gardez la mise en page simple, ou composez votre propre page bloc par
-        bloc : sections image, formulaire, galerie…
+        Gardez la mise en page simple, composez votre page bloc par bloc, ou
+        laissez l&apos;IA la rédiger à partir du produit et de ses photos.
       </p>
       <LandingBuilder
         mode={product.landing_mode}

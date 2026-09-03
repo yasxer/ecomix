@@ -152,10 +152,13 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Latin en Geist, arabe en Cairo : le navigateur résout la pile glyphe par
+   glyphe, donc une page bilingue n'a rien à déclarer. */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-geist-sans), var(--font-arabic), ui-sans-serif, system-ui,
+    sans-serif;
 }
 
 html {
@@ -301,6 +304,16 @@ html:has(.admin-root) body {
 
 @utility mb-safe {
   margin-bottom: env(safe-area-inset-bottom);
+}
+
+/* Titre de section de la landing.
+   Pas de `tracking-tight` : le texte peut être arabe, et l'arabe est une
+   écriture liée — resserrer l'approche y disjoint les lettres d'un même mot.
+   On resserre donc l'interligne, jamais l'espacement des caractères. */
+@utility landing-title {
+  @apply font-extrabold text-balance;
+  line-height: 1.15;
+  letter-spacing: normal;
 }
 
 @keyframes fade-up {

@@ -5,10 +5,17 @@ import { normalizeDomain } from "./domain";
 import {
   FREE_DELIVERY_MODES,
   BASE_PACK_ID,
+  LANDING_ICONS,
+  LANDING_LIMITS,
   LANDING_MODES,
   LANDING_THEMES,
   PACK_HIGHLIGHTS,
   type LandingBlock,
+  type LandingIcon,
+  type LandingItem,
+  type LandingQuestion,
+  type LandingReview,
+  type LandingSide,
   type Order,
   type OrderItem,
   type OrderStatus,
@@ -24,11 +31,94 @@ export const DEFAULT_SETTINGS: Omit<Settings, "id" | "updated_at"> = {
   default_product_id: null,
 };
 
+/** Chaîne de confiance : jamais `undefined`, jamais plus longue que prévu. */
+function str(value: unknown, max: number): string {
+  return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
+/** Liste de chaînes non vides, plafonnée. */
+function strList(value: unknown, max: number, count: number): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((v) => str(v, max))
+    .filter(Boolean)
+    .slice(0, count);
+}
+
+const ICONS = new Set<string>(LANDING_ICONS);
+
+/** Icône hors de la liste fermée : on retombe sur une puce neutre. */
+function icon(value: unknown): LandingIcon {
+  return typeof value === "string" && ICONS.has(value) ? (value as LandingIcon) : "check";
+}
+
+function items(raw: unknown): LandingItem[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .flatMap((i): LandingItem[] => {
+      const label = str(i?.label, LANDING_LIMITS.label);
+      if (!label) return [];
+      return [{ icon: icon(i?.icon), label, hint: str(i?.hint, LANDING_LIMITS.hint) }];
+    })
+    .slice(0, LANDING_LIMITS.items);
+}
+
+function side(raw: unknown, fallback: string): LandingSide {
+  const value = (raw ?? {}) as { label?: unknown; points?: unknown };
+  return {
+    label: str(value.label, LANDING_LIMITS.label) || fallback,
+    points: strList(value.points, LANDING_LIMITS.label, LANDING_LIMITS.points),
+  };
+}
+
+function questions(raw: unknown): LandingQuestion[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .flatMap((q): LandingQuestion[] => {
+      const question = str(q?.question, LANDING_LIMITS.title);
+      const answer = str(q?.answer, LANDING_LIMITS.body);
+      if (!question || !answer) return [];
+      return [{ question, answer }];
+    })
+    .slice(0, LANDING_LIMITS.questions);
+}
+
+function reviews(raw: unknown): LandingReview[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .flatMap((r): LandingReview[] => {
+      const text = str(r?.text, LANDING_LIMITS.body);
+      if (!text) return [];
+      const rating = Math.round(Number(r?.rating));
+      return [
+        {
+          name: str(r?.name, LANDING_LIMITS.label) || "Client",
+          text,
+          rating: Number.isFinite(rating) ? Math.min(Math.max(rating, 1), 5) : 5,
+        },
+      ];
+    })
+    .slice(0, LANDING_LIMITS.reviews);
+}
+
+/** Dimensions d'une image : `next/image` refuse une valeur nulle ou absurde. */
+function size(rawWidth: unknown, rawHeight: unknown): { width: number; height: number } | null {
+  const width = Number(rawWidth);
+  const height = Number(rawHeight);
+  if (!Number.isFinite(width) || width < 1) return null;
+  if (!Number.isFinite(height) || height < 1) return null;
+  return { width: Math.round(width), height: Math.round(height) };
+}
+
 /**
- * Remet un `landing_blocks` venu de la base dans une forme sûre pour le rendu.
- * Même logique que `normalizePacks` : colonne absente tant que la migration
- * 014 n'a pas été jouée, et une entrée incomplète est écartée plutôt que de
- * faire tomber toute la landing.
+ * Remet un `landing_blocks` venu de la base — ou du navigateur — dans une
+ * forme sûre pour le rendu. Même logique que `normalizePacks` : une entrée
+ * incomplète est écartée plutôt que de faire tomber toute la landing.
+ *
+ * C'est aussi le seul endroit qui coupe les textes trop longs : le chemin de
+ * lecture et le chemin d'enregistrement passent tous les deux par ici, donc
+ * les règles ne peuvent pas diverger entre ce qui est affiché et ce qui est
+ * stocké.
  */
 export function normalizeLandingBlocks(raw: unknown): LandingBlock[] {
   if (!Array.isArray(raw)) return [];
@@ -36,6 +126,9 @@ export function normalizeLandingBlocks(raw: unknown): LandingBlock[] {
   return raw.flatMap((b): LandingBlock[] => {
     const id = typeof b?.id === "string" ? b.id : "";
     if (!id || seen.has(id)) return [];
+    const title = str(b?.title, LANDING_LIMITS.title);
+    const body = str(b?.body, LANDING_LIMITS.body);
+
     switch (b?.type) {
       case "hero":
       case "gallery":
@@ -43,24 +136,83 @@ export function normalizeLandingBlocks(raw: unknown): LandingBlock[] {
       case "form":
         seen.add(id);
         return [{ id, type: b.type }];
+
       case "image": {
-        const width = Number(b.width);
-        const height = Number(b.height);
-        if (typeof b.url !== "string" || !b.url) return [];
-        if (!Number.isFinite(width) || width < 1) return [];
-        if (!Number.isFinite(height) || height < 1) return [];
+        const dims = size(b.width, b.height);
+        if (typeof b.url !== "string" || !b.url || !dims) return [];
         seen.add(id);
-        return [
-          { id, type: "image", url: b.url, width: Math.round(width), height: Math.round(height) },
-        ];
+        return [{ id, type: "image", url: b.url, ...dims }];
       }
+
       case "text": {
-        const title = typeof b.title === "string" ? b.title : "";
-        const body = typeof b.body === "string" ? b.body : "";
         if (!title && !body) return [];
         seen.add(id);
         return [{ id, type: "text", title, body }];
       }
+
+      case "showcase": {
+        const bullets = strList(b.bullets, LANDING_LIMITS.label, LANDING_LIMITS.bullets);
+        const dims = typeof b.url === "string" && b.url ? size(b.width, b.height) : null;
+        // Une section sans visuel ni texte n'affiche rien : autant la retirer.
+        if (!dims && !title && !body && bullets.length === 0) return [];
+        seen.add(id);
+        return [
+          {
+            id,
+            type: "showcase",
+            title,
+            body,
+            bullets,
+            // Sans visuel, la gravure n'a pas de support : la section retombe
+            // sur la carte de texte. ("overlay" est l'ancien rendu HTML par
+            // dessus l'image ; il devient une affiche.)
+            layout: dims && b.layout !== "stack" ? "baked" : "stack",
+            url: dims ? String(b.url) : null,
+            width: dims?.width ?? 0,
+            height: dims?.height ?? 0,
+          },
+        ];
+      }
+
+      case "problem":
+      case "features": {
+        const list = items(b.items);
+        if (!title && !body && list.length === 0) return [];
+        seen.add(id);
+        return b.type === "problem"
+          ? [{ id, type: "problem", title, body, items: list }]
+          : [{ id, type: "features", title, items: list }];
+      }
+
+      case "compare": {
+        const before = side(b.before, "Avant");
+        const after = side(b.after, "Après");
+        if (before.points.length === 0 && after.points.length === 0) return [];
+        seen.add(id);
+        return [{ id, type: "compare", title, before, after }];
+      }
+
+      case "faq": {
+        const list = questions(b.items);
+        if (list.length === 0) return [];
+        seen.add(id);
+        return [{ id, type: "faq", title, items: list }];
+      }
+
+      case "reviews": {
+        const list = reviews(b.items);
+        if (list.length === 0) return [];
+        seen.add(id);
+        return [{ id, type: "reviews", title, items: list }];
+      }
+
+      case "cta": {
+        const label = str(b.label, LANDING_LIMITS.label);
+        if (!title && !label) return [];
+        seen.add(id);
+        return [{ id, type: "cta", title, body, label: label || "Commander maintenant" }];
+      }
+
       default:
         return [];
     }

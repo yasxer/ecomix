@@ -149,9 +149,55 @@ export type LandingTheme = "light" | "dark";
 export const LANDING_THEMES: LandingTheme[] = ["light", "dark"];
 
 /**
- * Bloc de la landing en mode custom. Les blocs "hero", "gallery",
- * "description" et "form" reprennent les données du produit ; "image" et
- * "text" portent leur propre contenu.
+ * Icônes utilisables dans les blocs à puces. Liste fermée volontairement :
+ * l'admin choisit dans une grille plutôt que de taper un nom, et le jour où la
+ * page est composée automatiquement, le modèle n'a qu'un vocabulaire fini à
+ * respecter — un nom inventé serait rejeté à la normalisation au lieu de
+ * rendre une icône vide.
+ */
+export const LANDING_ICONS = [
+  "shield", "lock", "badge-check", "award", "crown", "gem",
+  "droplets", "waves", "thermometer", "wind", "leaf", "recycle",
+  "zap", "battery", "wifi", "volume", "headphones", "camera",
+  "watch", "timer", "clock", "hourglass", "infinity", "refresh",
+  "truck", "package", "box", "layers", "map-pin", "phone",
+  "banknote", "credit-card", "tag", "gift", "handshake", "users",
+  "star", "heart", "sparkles", "flame", "lightbulb", "target",
+  "check", "check-circle", "x-circle", "alert", "thumbs-up", "thumbs-down",
+  "smile", "frown", "eye", "bell", "quote", "trending-up",
+  "scale", "ruler", "weight", "wrench", "scissors", "brush",
+  "palette", "wand", "shirt", "sofa", "baby", "dumbbell",
+  "bike", "car", "home", "utensils", "coffee", "feather", "sun", "moon",
+] as const;
+
+export type LandingIcon = (typeof LANDING_ICONS)[number];
+
+/** Puce d'un bloc `problem` ou `features` : une icône, un libellé, une précision. */
+export type LandingItem = { icon: LandingIcon; label: string; hint: string };
+
+/** Une colonne du bloc `compare` : son intitulé et ses arguments. */
+export type LandingSide = { label: string; points: string[] };
+
+/** Question / réponse du bloc `faq`. */
+export type LandingQuestion = { question: string; answer: string };
+
+/** Avis client du bloc `reviews`. `rating` va de 1 à 5. */
+export type LandingReview = { name: string; text: string; rating: number };
+
+/**
+ * Bloc de la landing en mode custom.
+ *
+ * Trois familles :
+ * - "hero", "gallery", "description", "form" reprennent les données du produit
+ *   (un seul exemplaire chacun) ;
+ * - "image" et "text" portent un contenu libre ;
+ * - "showcase", "problem", "features", "compare", "faq", "reviews" et "cta"
+ *   sont les sections d'argumentaire — celles qui font une page longue.
+ *
+ * Le texte n'est jamais incrusté dans une image : il vit ici, donc il reste
+ * net, modifiable sans régénérer le visuel, lisible par les moteurs de
+ * recherche, et correctement rendu en arabe — ce qu'aucun générateur d'images
+ * ne sait faire.
  */
 export type LandingBlock =
   | { id: string; type: "hero" }
@@ -166,7 +212,35 @@ export type LandingBlock =
       width: number;
       height: number;
     }
-  | { id: string; type: "text"; title: string; body: string };
+  | { id: string; type: "text"; title: string; body: string }
+  | {
+      id: string;
+      type: "showcase";
+      title: string;
+      body: string;
+      bullets: string[];
+      /**
+       * "baked" : le texte est gravé dans l'image. La section ne rend alors
+       *           que le visuel — rien n'est réécrit par-dessus, sinon la
+       *           page dirait deux fois la même chose.
+       * "stack" : repli, quand aucune image n'a pu être composée. Le texte
+       *           s'affiche dans une carte, faute de support où le graver.
+       *
+       * Le titre et le texte restent stockés dans les deux cas : ce sont eux
+       * qu'on grave, et qu'on corrige avant de recomposer.
+       */
+      layout: "baked" | "stack";
+      /** Visuel de la section. Null = la section se rend en carte de texte. */
+      url: string | null;
+      width: number;
+      height: number;
+    }
+  | { id: string; type: "problem"; title: string; body: string; items: LandingItem[] }
+  | { id: string; type: "features"; title: string; items: LandingItem[] }
+  | { id: string; type: "compare"; title: string; before: LandingSide; after: LandingSide }
+  | { id: string; type: "faq"; title: string; items: LandingQuestion[] }
+  | { id: string; type: "reviews"; title: string; items: LandingReview[] }
+  | { id: string; type: "cta"; title: string; body: string; label: string };
 
 export type LandingBlockType = LandingBlock["type"];
 
@@ -177,6 +251,63 @@ export const LANDING_BLOCK_TYPES: LandingBlockType[] = [
   "form",
   "image",
   "text",
+  "showcase",
+  "problem",
+  "features",
+  "compare",
+  "faq",
+  "reviews",
+  "cta",
+];
+
+/**
+ * Plafonds partagés par la normalisation et les éditeurs de l'admin. Ils ne
+ * protègent pas la base — ils protègent la mise en page : un titre de trois
+ * lignes ou une liste de vingt puces ruinent une colonne de 420 pixels.
+ */
+export const LANDING_LIMITS = {
+  title: 120,
+  body: 2000,
+  label: 80,
+  hint: 120,
+  bullets: 6,
+  items: 6,
+  points: 5,
+  questions: 10,
+  reviews: 8,
+} as const;
+
+/** Cadres utiles pour un visuel de section, dans une colonne de téléphone. */
+export const IMAGE_RATIOS = ["4:5", "1:1", "16:9"] as const;
+
+export type ImageRatio = (typeof IMAGE_RATIOS)[number];
+
+/**
+ * Consigne de composition d'un visuel, rendue par le modèle rédacteur et
+ * exécutée par le générateur d'images. `scene` ne décrit que l'environnement
+ * autour du produit : le produit lui-même vient des photos de référence.
+ */
+export type ImageBrief = {
+  scene: string;
+  ratio: ImageRatio;
+  /**
+   * Texte à graver dans le visuel. Présent uniquement pour une section
+   * « baked » : la composition le dessine dans l'image, avec un vrai moteur
+   * typographique — les générateurs d'images ne savent pas écrire l'arabe.
+   */
+  text?: { title: string; body: string; bullets: string[] };
+};
+
+/**
+ * Langue de la copie rédigée par l'IA. La page n'est pas traduite : c'est le
+ * texte des blocs qui est écrit dans cette langue.
+ */
+export type LandingLanguage = "ar" | "darija" | "fr";
+
+export const LANDING_LANGUAGES: { value: LandingLanguage; label: string }[] = [
+  { value: "ar", label: "العربية" },
+  { value: "darija", label: "الدارجة الجزائرية" },
+  { value: "fr", label: "Français" },
 ];
 
 /**

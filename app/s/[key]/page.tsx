@@ -117,7 +117,7 @@ export default async function LandingPage({
               <PackageOpen className="size-5" />
             </span>
           )}
-          <span className="text-lg font-extrabold tracking-tight">
+          <span className="landing-title text-lg">
             {product.store_name}
           </span>
         </div>
