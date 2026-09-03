@@ -16,11 +16,16 @@ export default async function AdminLayout({
   const settings = await getSettings();
 
   return (
-    <div className="flex min-h-screen bg-[#f4f5f9]">
+    <div className="flex min-h-screen bg-[#f6f7fb]">
       <Sidebar storeName={settings.store_name} logoUrl={settings.logo_url} />
-      {/* pt-18/pb-24 mobile : espace pour le header et la nav flottante */}
-      <main className="min-w-0 flex-1 p-4 pb-28 pt-18 sm:p-8 sm:pt-8 lg:pb-8">
-        {children}
+
+      {/*
+        Mobile : `pt-16` laisse la place à l'en-tête fixe, et la marge basse
+        additionne la hauteur de la navigation flottante et l'encoche iPhone —
+        sans quoi le dernier bouton d'une page se retrouve dessous.
+      */}
+      <main className="min-w-0 flex-1 px-4 pb-32 pt-20 sm:px-6 sm:pb-10 sm:pt-8 lg:px-8">
+        <div className="pb-safe">{children}</div>
       </main>
     </div>
   );

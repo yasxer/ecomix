@@ -23,11 +23,7 @@ import { MAX_SOURCE_SIZE, prepareImage } from "@/lib/prepare-image";
 import { mapLimit, putToSignedUrl } from "@/lib/upload-client";
 import type { Product, ProductColor } from "@/lib/types";
 import { PackEditor } from "./pack-editor";
-
-const inputClass =
-  "w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20";
-
-const labelClass = "flex flex-col gap-1.5 text-sm font-medium text-zinc-700";
+import { inputClass, labelClass } from "../../ui";
 
 /** Taille des lots d'URLs signées demandées au serveur (voir `MAX_BATCH`). */
 const BATCH_SIZE = 40;
@@ -241,7 +237,7 @@ export function ProductForm({ product }: { product: Product }) {
   return (
     <form
       action={action}
-      className="flex flex-col gap-5 rounded-3xl bg-white p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-1 ring-zinc-900/5 sm:p-8"
+      className="flex flex-col gap-5 admin-card p-4 sm:p-8"
     >
       <input type="hidden" name="product_id" value={product.id} />
 
@@ -573,18 +569,18 @@ export function ProductForm({ product }: { product: Product }) {
         </p>
       )}
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col-reverse items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
         <button
           type="submit"
           disabled={pending || busy}
-          className="flex items-center gap-2 rounded-xl bg-linear-to-b from-indigo-500 to-indigo-600 shadow-md shadow-indigo-600/25 px-6 py-3 font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-60"
+          className="admin-btn-primary sm:w-fit"
         >
           {pending ? <Loader2 className="size-5 animate-spin" /> : <Save className="size-5" />}
           Enregistrer
         </button>
         <Link
           href={`/admin/produits/${product.id}`}
-          className="rounded-xl px-5 py-3 font-semibold text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700"
+          className="admin-btn text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700 sm:w-fit"
         >
           Annuler
         </Link>

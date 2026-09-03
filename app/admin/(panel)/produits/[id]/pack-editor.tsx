@@ -15,11 +15,7 @@ import {
   type PackHighlight,
   type ProductPack,
 } from "@/lib/types";
-
-const inputClass =
-  "w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20";
-
-const labelClass = "flex flex-col gap-1.5 text-sm font-medium text-zinc-700";
+import { inputClass, labelClass } from "../../ui";
 
 /** Doit rester aligné sur `MAX_PACKS` dans `app/actions/product.ts`. */
 const MAX_PACKS = 10;

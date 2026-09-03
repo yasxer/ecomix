@@ -28,16 +28,16 @@ export default async function ProductPage({
   const editing = query.edit === "1";
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-end justify-between gap-4">
-        <p className="text-sm text-zinc-500">
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm leading-relaxed text-zinc-500">
           Prix, photos, variantes et offres groupées — le contenu de la landing
           page de cette boutique.
         </p>
         {!editing && (
           <Link
             href={`/admin/produits/${id}?edit=1`}
-            className="flex items-center gap-2 rounded-xl bg-linear-to-b from-indigo-500 to-indigo-600 shadow-md shadow-indigo-600/25 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-500"
+            className="admin-btn-primary w-full shrink-0 sm:w-fit"
           >
             <Pencil className="size-4" />
             Modifier
@@ -49,22 +49,22 @@ export default async function ProductPage({
         <ProductForm product={product} />
       ) : (
         /* Carte d'aperçu */
-        <div className="overflow-hidden rounded-3xl bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-1 ring-zinc-900/5">
-          <div className="grid sm:grid-cols-[240px_1fr]">
+        <div className="admin-card overflow-hidden">
+          <div className="grid sm:grid-cols-[220px_1fr]">
             {product.images[0] ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={product.images[0]}
                 alt={product.name}
-                className="h-full max-h-72 w-full object-cover sm:max-h-none"
+                className="h-48 w-full object-cover sm:h-full sm:max-h-none"
               />
             ) : (
-              <div className="flex min-h-48 items-center justify-center bg-zinc-100 text-zinc-300">
+              <div className="flex h-48 items-center justify-center bg-zinc-100 text-zinc-300 sm:h-full">
                 <ImageOff className="size-10" strokeWidth={1.5} />
               </div>
             )}
 
-            <div className="flex flex-col gap-4 p-6">
+            <div className="flex flex-col gap-4 p-4 sm:p-6">
               <div>
                 <h2 className="text-xl font-bold text-zinc-900">{product.name}</h2>
                 <div className="mt-1 flex items-baseline gap-2">
@@ -161,14 +161,14 @@ export default async function ProductPage({
           </div>
 
           {product.images.length > 1 && (
-            <div className="flex gap-2 border-t border-zinc-100 p-4">
+            <div className="no-scrollbar flex gap-2 overflow-x-auto border-t border-zinc-100 p-4">
               {product.images.slice(1).map((src) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   key={src}
                   src={src}
                   alt=""
-                  className="size-16 rounded-lg object-cover ring-1 ring-zinc-200"
+                  className="size-16 shrink-0 rounded-lg object-cover ring-1 ring-zinc-200"
                 />
               ))}
             </div>

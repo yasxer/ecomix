@@ -10,6 +10,16 @@ import {
 } from "@/app/actions/orders";
 import type { OrderStatus } from "@/lib/types";
 
+/**
+ * Boutons d'une commande. Sur mobile (jusqu'à `lg`, là où la liste passe en
+ * cartes) ils s'étirent pour offrir une vraie cible tactile ; dans le tableau
+ * de bureau ils reprennent leur largeur naturelle.
+ */
+const btn =
+  "flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-xl px-3 text-xs font-semibold transition active:scale-[0.98] disabled:opacity-50 lg:min-h-8 lg:flex-none";
+
+const dangerGhost = `${btn} bg-white text-red-600 ring-1 ring-red-200 hover:bg-red-50`;
+
 export function OrderActions({
   orderId,
   status,
@@ -34,7 +44,7 @@ export function OrderActions({
   // Suppression définitive : confirmation en deux temps, pas de clic accidentel
   if (confirmingDelete) {
     return (
-      <div className="flex flex-col items-start gap-1.5">
+      <div className="flex flex-col items-stretch gap-2 lg:items-start">
         <p className="text-[11px] font-semibold leading-tight text-red-600">
           Supprimer définitivement&nbsp;?
           {status === "confirmee" && (
@@ -47,7 +57,7 @@ export function OrderActions({
           <button
             disabled={isPending}
             onClick={() => run(deleteOrder)}
-            className="flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-red-500 disabled:opacity-50"
+            className={`${btn} bg-red-600 text-white hover:bg-red-500`}
           >
             {isPending ? (
               <Loader2 className="size-3.5 animate-spin" />
@@ -62,27 +72,27 @@ export function OrderActions({
               setConfirmingDelete(false);
               setError(null);
             }}
-            className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-zinc-600 ring-1 ring-zinc-200 transition hover:bg-zinc-50 disabled:opacity-50"
+            className={`${btn} bg-white text-zinc-600 ring-1 ring-zinc-200 hover:bg-zinc-50`}
           >
             Non
           </button>
         </div>
         {error && (
-          <p className="max-w-64 text-[11px] leading-tight text-red-600">{error}</p>
+          <p className="text-[11px] leading-tight text-red-600 lg:max-w-64">{error}</p>
         )}
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-start gap-1.5">
+    <div className="flex flex-col items-stretch gap-2 lg:items-start">
       <div className="flex items-center gap-2">
         {status === "en_attente" && (
           <>
             <button
               disabled={isPending}
               onClick={() => run(confirmOrder)}
-              className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-emerald-500 disabled:opacity-50"
+              className={`${btn} bg-emerald-600 text-white shadow-sm shadow-emerald-600/20 hover:bg-emerald-500`}
             >
               {isPending ? (
                 <Loader2 className="size-3.5 animate-spin" />
@@ -94,7 +104,7 @@ export function OrderActions({
             <button
               disabled={isPending}
               onClick={() => run(cancelOrder)}
-              className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-red-600 ring-1 ring-red-200 transition hover:bg-red-50 disabled:opacity-50"
+              className={dangerGhost}
             >
               <X className="size-3.5" />
               Annuler
@@ -109,7 +119,7 @@ export function OrderActions({
                 href={label}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-zinc-700"
+                className={`${btn} bg-zinc-900 text-white hover:bg-zinc-700`}
               >
                 <Printer className="size-3.5" />
                 Bordereau
@@ -118,7 +128,7 @@ export function OrderActions({
             <button
               disabled={isPending}
               onClick={() => run(cancelOrder)}
-              className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-red-600 ring-1 ring-red-200 transition hover:bg-red-50 disabled:opacity-50"
+              className={dangerGhost}
             >
               {isPending ? (
                 <Loader2 className="size-3.5 animate-spin" />
@@ -134,7 +144,7 @@ export function OrderActions({
           <button
             disabled={isPending}
             onClick={() => run(reopenOrder)}
-            className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-zinc-600 ring-1 ring-zinc-200 transition hover:bg-zinc-50 disabled:opacity-50"
+            className={`${btn} bg-white text-zinc-600 ring-1 ring-zinc-200 hover:bg-zinc-50`}
           >
             {isPending ? (
               <Loader2 className="size-3.5 animate-spin" />
@@ -150,13 +160,13 @@ export function OrderActions({
           onClick={() => setConfirmingDelete(true)}
           title="Supprimer définitivement"
           aria-label="Supprimer définitivement la commande"
-          className="flex items-center justify-center rounded-lg p-1.5 text-zinc-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+          className="flex size-10 shrink-0 items-center justify-center rounded-xl text-zinc-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50 lg:size-8"
         >
-          <Trash2 className="size-3.5" />
+          <Trash2 className="size-4 lg:size-3.5" />
         </button>
       </div>
       {error && (
-        <p className="max-w-64 text-[11px] leading-tight text-red-600">{error}</p>
+        <p className="text-[11px] leading-tight text-red-600 lg:max-w-64">{error}</p>
       )}
     </div>
   );

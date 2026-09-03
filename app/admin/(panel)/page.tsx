@@ -10,6 +10,7 @@ import {
 import { getAllOrdersForStats, getOrders } from "@/lib/data";
 import { ORDER_STATUSES } from "@/lib/types";
 import { StatusBadge } from "./commandes/status-badge";
+import { PageHeader } from "./page-header";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,13 @@ export const metadata = { title: "Statistiques — Admin" };
 
 function formatDA(n: number) {
   return `${n.toLocaleString("fr-DZ")} DA`;
+}
+
+/** Montants compacts pour les tuiles : « 1 240 000 DA » ne tient pas sur mobile. */
+function formatCompactDA(n: number) {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toLocaleString("fr-DZ", { maximumFractionDigits: 1 })} M DA`;
+  if (n >= 10_000) return `${Math.round(n / 1000).toLocaleString("fr-DZ")} k DA`;
+  return formatDA(n);
 }
 
 function dayKey(date: Date) {
@@ -58,76 +66,85 @@ export default async function DashboardPage() {
 
   const cards = [
     {
-      label: "Commandes aujourd'hui",
+      label: "Aujourd'hui",
       value: String(ordersToday),
       icon: ShoppingCart,
-      accent: "bg-indigo-100 text-indigo-600",
+      accent: "bg-indigo-50 text-indigo-600",
     },
     {
       label: "En attente",
       value: String(pending),
       icon: Clock,
-      accent: "bg-amber-100 text-amber-600",
+      accent: "bg-amber-50 text-amber-600",
     },
     {
-      label: "Revenus (livrées)",
-      value: formatDA(revenue),
+      label: "Revenus livrés",
+      value: formatCompactDA(revenue),
       icon: CircleDollarSign,
-      accent: "bg-emerald-100 text-emerald-600",
+      accent: "bg-emerald-50 text-emerald-600",
     },
     {
-      label: "Taux de confirmation",
+      label: "Confirmation",
       value: `${confirmationRate}%`,
       icon: Percent,
-      accent: "bg-sky-100 text-sky-600",
+      accent: "bg-sky-50 text-sky-600",
     },
   ];
 
   return (
-    <div className="mx-auto flex max-w-5xl flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-bold text-zinc-900">Statistiques</h1>
-        <p className="text-sm text-zinc-500">
-          Vue d&apos;ensemble de votre boutique — {orders.length} commandes au total
-        </p>
-      </div>
+    <div className="mx-auto flex max-w-5xl flex-col gap-5">
+      <PageHeader
+        title="Statistiques"
+        subtitle={`${orders.length} commande${orders.length > 1 ? "s" : ""} au total`}
+      />
 
-      {/* Cartes KPI */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {/* Tuiles — 2 colonnes sur mobile, la ligne complète à partir de `lg` */}
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
         {cards.map(({ label, value, icon: Icon, accent }) => (
           <div
             key={label}
-            className="flex flex-col gap-3 rounded-3xl bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-1 ring-zinc-900/5 transition hover:-translate-y-0.5 hover:shadow-[0_2px_4px_rgba(16,24,40,0.06),0_20px_40px_-16px_rgba(16,24,40,0.18)]"
+            className="admin-card flex flex-col gap-2.5 p-4 transition sm:gap-3 sm:p-5 sm:hover:-translate-y-0.5"
           >
-            <span className={`flex size-10 items-center justify-center rounded-xl ${accent}`}>
-              <Icon className="size-5" />
+            <span
+              className={`flex size-9 items-center justify-center rounded-xl sm:size-10 ${accent}`}
+            >
+              <Icon className="size-4.5 sm:size-5" />
             </span>
-            <div>
-              <p className="text-xl font-bold text-zinc-900">{value}</p>
-              <p className="text-xs font-medium text-zinc-500">{label}</p>
+            <div className="min-w-0">
+              <p className="truncate text-lg font-bold text-zinc-900 sm:text-xl">
+                {value}
+              </p>
+              <p className="truncate text-xs font-medium text-zinc-500">{label}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Graphique 14 jours */}
-      <div className="rounded-3xl bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-1 ring-zinc-900/5 sm:p-6">
-        <div className="mb-5 flex items-center gap-2">
-          <TrendingUp className="size-5 text-indigo-600" />
-          <h2 className="font-bold text-zinc-900">Commandes — 14 derniers jours</h2>
+      <div className="admin-card p-4 sm:p-6">
+        <div className="mb-4 flex items-center gap-2">
+          <TrendingUp className="size-4.5 text-indigo-600" />
+          <h2 className="text-sm font-bold text-zinc-900 sm:text-base">
+            Commandes — 14 derniers jours
+          </h2>
         </div>
-        <div className="flex h-40 items-end gap-1.5 sm:gap-2">
+        <div className="flex h-32 items-end gap-1 sm:h-40 sm:gap-2">
           {days.map((d) => (
             <div key={d.key} className="group flex flex-1 flex-col items-center gap-1.5">
-              <span className="text-[10px] font-semibold text-zinc-500 opacity-0 transition group-hover:opacity-100">
+              {/* Le compte reste visible sur mobile (pas de survol au doigt) */}
+              <span
+                className={`text-[10px] font-bold text-zinc-500 transition sm:opacity-0 sm:group-hover:opacity-100 ${
+                  d.count > 0 ? "" : "opacity-0"
+                }`}
+              >
                 {d.count}
               </span>
               <div
-                className={`w-full rounded-full transition ${
+                className={`w-full rounded-t-md transition sm:rounded-full ${
                   d.count > 0
-                    ? "bg-linear-to-t from-indigo-600 to-indigo-400 group-hover:from-indigo-700 group-hover:to-indigo-500"
+                    ? "bg-linear-to-t from-indigo-600 to-indigo-400"
                     : "bg-zinc-100"
-                }`}
+                } ${d.key === today ? "ring-2 ring-indigo-300 ring-offset-1" : ""}`}
                 style={{ height: `${Math.max((d.count / maxCount) * 100, 4)}%` }}
               />
               <span className="hidden text-[9px] text-zinc-400 sm:block">{d.label}</span>
@@ -137,18 +154,22 @@ export default async function DashboardPage() {
       </div>
 
       {/* Répartition par statut */}
-      <div className="rounded-3xl bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-1 ring-zinc-900/5 sm:p-6">
-        <h2 className="mb-4 font-bold text-zinc-900">Répartition par statut</h2>
-        <div className="flex flex-wrap gap-3">
+      <div className="admin-card p-4 sm:p-6">
+        <h2 className="mb-3 text-sm font-bold text-zinc-900 sm:text-base">
+          Répartition par statut
+        </h2>
+        <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:gap-3">
           {ORDER_STATUSES.map((s) => {
             const count = orders.filter((o) => o.status === s.value).length;
             return (
               <div
                 key={s.value}
-                className="flex items-center gap-2.5 rounded-xl bg-zinc-50 px-4 py-2.5"
+                className="flex flex-col items-center gap-1.5 rounded-2xl bg-zinc-50 px-3 py-3 sm:flex-row sm:gap-2.5 sm:px-4 sm:py-2.5"
               >
                 <StatusBadge status={s.value} />
-                <span className="text-sm font-bold text-zinc-900">{count}</span>
+                <span className="text-base font-bold text-zinc-900 sm:text-sm">
+                  {count}
+                </span>
               </div>
             );
           })}
@@ -156,19 +177,21 @@ export default async function DashboardPage() {
       </div>
 
       {/* Dernières commandes */}
-      <div className="rounded-3xl bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-1 ring-zinc-900/5 sm:p-6">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-bold text-zinc-900">Dernières commandes</h2>
+      <div className="admin-card p-4 sm:p-6">
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <h2 className="text-sm font-bold text-zinc-900 sm:text-base">
+            Dernières commandes
+          </h2>
           <Link
             href="/admin/commandes"
-            className="flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+            className="flex items-center gap-1 text-sm font-semibold text-indigo-600 transition hover:text-indigo-500"
           >
             Tout voir
             <ArrowRight className="size-4" />
           </Link>
         </div>
         {recent.length === 0 ? (
-          <p className="py-6 text-center text-sm text-zinc-400">
+          <p className="py-8 text-center text-sm text-zinc-400">
             Aucune commande pour le moment.
           </p>
         ) : (
@@ -179,11 +202,11 @@ export default async function DashboardPage() {
                   <p className="truncate font-semibold text-zinc-900">
                     {o.customer_name}
                   </p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="truncate text-xs text-zinc-500">
                     {o.phone} — {o.wilaya}
                   </p>
                 </div>
-                <div className="flex shrink-0 items-center gap-3">
+                <div className="flex shrink-0 flex-col items-end gap-1">
                   <span className="text-sm font-bold text-zinc-900">
                     {formatDA(Number(o.total))}
                   </span>

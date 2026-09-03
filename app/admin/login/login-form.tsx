@@ -15,7 +15,8 @@ export function LoginForm() {
         required
         autoFocus
         placeholder="Mot de passe"
-        className="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white placeholder-zinc-500 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+        autoComplete="current-password"
+        className="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3.5 text-base text-white placeholder-zinc-500 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20"
       />
       {state.error && (
         <p className="rounded-xl bg-red-500/10 px-4 py-3 text-sm font-medium text-red-400">
@@ -25,7 +26,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="flex items-center justify-center gap-2 rounded-xl bg-linear-to-b from-indigo-500 to-indigo-600 shadow-md shadow-indigo-600/25 px-6 py-3 font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-60"
+        className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-linear-to-b from-indigo-500 to-indigo-600 px-6 font-semibold text-white shadow-md shadow-indigo-600/25 transition hover:from-indigo-400 hover:to-indigo-500 active:scale-[0.98] disabled:opacity-60"
       >
         {pending ? <Loader2 className="size-5 animate-spin" /> : <LogIn className="size-5" />}
         Se connecter

@@ -7,6 +7,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* L'admin et la landing peignent eux-mêmes leurs surfaces, en clair. Sans
+     cette déclaration, les contrôles natifs (dates, listes déroulantes,
+     barres de défilement) partiraient en sombre dès que le système l'est —
+     des champs noirs au milieu d'un formulaire blanc. */
+  color-scheme: light;
 }
 
 @theme inline {
@@ -14,13 +19,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
@@ -31,6 +29,60 @@ body {
 
 html {
   scroll-behavior: smooth;
+}
+
+/* ── Briques de l'admin ─────────────────────────────────────────────────────
+   Les mêmes surfaces, champs et boutons étaient recopiés à l'identique dans
+   chaque page. Regroupés ici, ils changent d'un seul endroit et ne peuvent
+   plus diverger. */
+
+/* Surface blanche posée sur le fond gris de l'admin. */
+@utility admin-card {
+  @apply rounded-3xl bg-white ring-1 ring-zinc-900/5;
+  box-shadow:
+    0 1px 2px rgb(16 24 40 / 0.04),
+    0 12px 32px -16px rgb(16 24 40 / 0.12);
+}
+
+/* Champ de formulaire. `text-base` sur mobile n'est pas cosmétique : en
+   dessous de 16px, Safari iOS zoome la page à chaque mise au point d'un champ
+   et l'utilisateur doit repincer pour lire la suite du formulaire. */
+@utility admin-field {
+  @apply w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-base text-zinc-900 outline-none transition;
+  @apply placeholder:text-zinc-400 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10;
+  @apply sm:py-2.5 sm:text-sm;
+}
+
+/* Bouton principal. `min-h-11` = 44px, la cible tactile minimale. */
+@utility admin-btn {
+  @apply flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold transition active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60;
+}
+
+@utility admin-btn-primary {
+  @apply admin-btn bg-linear-to-b from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-600/25 hover:from-indigo-400 hover:to-indigo-500;
+}
+
+@utility admin-btn-ghost {
+  @apply admin-btn bg-white text-zinc-700 ring-1 ring-zinc-900/5 hover:bg-zinc-50;
+}
+
+/* Barre défilable horizontalement (onglets, filtres) sans barre visible. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Marge basse de l'encoche iPhone : sans elle, la navigation flottante de
+   l'admin passe sous la barre d'accueil et devient à moitié cliquable. */
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility mb-safe {
+  margin-bottom: env(safe-area-inset-bottom);
 }
 
 @keyframes fade-up {

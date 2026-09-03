@@ -40,9 +40,7 @@ import type {
   LandingTheme,
   Product,
 } from "@/lib/types";
-
-const inputClass =
-  "w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-zinc-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20";
+import { inputClass } from "../../../ui";
 
 /** Conversions menées de front. Le canvas travaille sur le thread principal. */
 const CONVERT_CONCURRENCY = 3;
@@ -379,7 +377,7 @@ export function LandingBuilder({
   return (
     <form
       action={action}
-      className="grid gap-6 lg:grid-cols-[1fr_380px] lg:items-start"
+      className="grid gap-4 sm:gap-6 lg:grid-cols-[1fr_380px] lg:items-start"
     >
       <input
         ref={fileInputRef}
@@ -396,7 +394,7 @@ export function LandingBuilder({
       <input type="hidden" name="landing_sticky_cta" value={stickyCta ? "1" : "0"} />
       <input type="hidden" name="landing_sticky_header" value={stickyHeader ? "1" : "0"} />
 
-      <div className="flex min-w-0 flex-col gap-6">
+      <div className="flex min-w-0 flex-col gap-4 sm:gap-6">
         {/* Choix du mode */}
         <div className="grid gap-3 sm:grid-cols-2">
           <ModeCard
@@ -423,7 +421,7 @@ export function LandingBuilder({
         ) : (
           <>
             {/* Options d'affichage */}
-            <section className="flex flex-col gap-4 rounded-3xl bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-1 ring-zinc-900/5">
+            <section className="flex flex-col gap-4 admin-card p-4 sm:p-5">
               <div>
                 <h2 className="font-bold text-zinc-900">Affichage</h2>
                 <p className="text-xs text-zinc-500">
@@ -485,7 +483,7 @@ export function LandingBuilder({
             </section>
 
             {/* Palette */}
-            <section className="flex flex-col gap-3 rounded-3xl bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-1 ring-zinc-900/5">
+            <section className="flex flex-col gap-3 admin-card p-4 sm:p-5">
               <div>
                 <h2 className="font-bold text-zinc-900">Ajouter un bloc</h2>
                 <p className="text-xs text-zinc-500">
@@ -556,7 +554,7 @@ export function LandingBuilder({
                     return (
                       <li
                         key={draft.id}
-                        className="flex flex-col gap-3 rounded-3xl bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-1 ring-zinc-900/5"
+                        className="flex flex-col gap-3 admin-card p-4"
                       >
                         <div className="flex items-center gap-3">
                           <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-xs font-bold text-white">
@@ -664,19 +662,19 @@ export function LandingBuilder({
           </p>
         )}
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col-reverse items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
           <button
             type="submit"
             disabled={pending || busy || blocking !== null}
-            className="flex items-center gap-2 rounded-xl bg-linear-to-b from-indigo-500 to-indigo-600 px-6 py-3 font-semibold text-white shadow-md shadow-indigo-600/25 transition hover:bg-indigo-500 disabled:opacity-60"
+            className="admin-btn-primary sm:w-fit"
           >
             {pending ? <Loader2 className="size-5 animate-spin" /> : <Save className="size-5" />}
             Enregistrer
           </button>
           <a
-            href="/"
+            href={product.domain ? `https://${product.domain}` : `/p/${product.slug}`}
             target="_blank"
-            className="rounded-xl px-5 py-3 font-semibold text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700"
+            className="admin-btn text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700 sm:w-fit"
           >
             Voir la boutique
           </a>
@@ -770,7 +768,7 @@ function ModeCard({
       aria-pressed={active}
       className={`flex items-start gap-3 rounded-3xl p-5 text-left transition ${
         active
-          ? "bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_rgba(16,24,40,0.12)] ring-2 ring-indigo-500"
+          ? "admin-card ring-2 ring-indigo-500"
           : "bg-white/60 ring-1 ring-zinc-200 hover:bg-white hover:ring-zinc-300"
       }`}
     >
