@@ -24,24 +24,24 @@ export default async function ProductLayout({
     <div className="mx-auto flex max-w-6xl flex-col gap-5">
       <Link
         href="/admin/produits"
-        className="flex w-fit items-center gap-1.5 text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
+        className="group flex w-fit items-center gap-1.5 text-sm font-medium text-ink-dim transition hover:text-ink"
       >
-        <ArrowLeft className="size-4" />
+        <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
         Produits
       </Link>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="truncate text-xl font-semibold tracking-tight text-zinc-900">
+          <h1 className="truncate text-2xl font-semibold tracking-tight text-ink">
             {product.name}
           </h1>
-          <p className="mt-1 flex items-center gap-2 text-sm text-zinc-500">
+          <p className="mt-1 flex items-center gap-2 text-sm text-ink-dim">
             <span className="truncate">{product.domain ?? `/p/${product.slug}`}</span>
             <span
               className={`admin-chip shrink-0 ${
                 product.active
-                  ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20"
-                  : "bg-zinc-100 text-zinc-500 ring-1 ring-zinc-300"
+                  ? "bg-ok-soft text-ok-ink ring-ok/30"
+                  : "bg-raised text-ink-dim ring-line-strong"
               }`}
             >
               {product.active ? "En ligne" : "Hors ligne"}

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
 import { getSettings } from "@/lib/data";
 import { Sidebar } from "./sidebar";
+import { THEME_BOOTSTRAP } from "./theme-toggle";
 
 export const dynamic = "force-dynamic";
 
@@ -16,17 +17,23 @@ export default async function AdminLayout({
   const settings = await getSettings();
 
   return (
-    <div className="flex min-h-screen bg-white">
-      <Sidebar storeName={settings.store_name} logoUrl={settings.logo_url} />
+    <>
+      {/* Avant tout le reste du document : le thème doit être posé sur `<html>`
+          au moment où le navigateur peint la première frame. */}
+      <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
 
-      {/*
-        Mobile : `pt-16` laisse la place à l'en-tête fixe, et la marge basse
-        additionne la hauteur de la navigation et l'encoche iPhone — sans quoi
-        le dernier bouton d'une page se retrouve dessous.
-      */}
-      <main className="min-w-0 flex-1 px-4 pb-28 pt-20 sm:px-8 sm:pb-12 sm:pt-10">
-        <div className="pb-safe">{children}</div>
-      </main>
-    </div>
+      <div className="admin-root flex min-h-screen">
+        <Sidebar storeName={settings.store_name} logoUrl={settings.logo_url} />
+
+        {/*
+          Mobile : `pt-20` laisse la place à l'en-tête fixe, et la marge basse
+          additionne la hauteur de la navigation et l'encoche iPhone — sans quoi
+          le dernier bouton d'une page se retrouve dessous.
+        */}
+        <main className="min-w-0 flex-1 px-4 pb-28 pt-20 sm:px-8 sm:pb-14 sm:pt-9">
+          <div className="pb-safe">{children}</div>
+        </main>
+      </div>
+    </>
   );
 }

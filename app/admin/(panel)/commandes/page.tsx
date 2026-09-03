@@ -39,7 +39,7 @@ function OrderStatusCell({ order }: { order: Order }) {
         <YalidineStatusBadge status={order.yalidine_status} />
       )}
       {order.status === "confirmee" && order.yalidine_tracking && (
-        <span className="font-mono text-[10px] text-zinc-400">
+        <span className="font-mono text-[10px] text-ink-faint">
           {order.yalidine_tracking}
         </span>
       )}
@@ -51,7 +51,7 @@ function OrderStatusCell({ order }: { order: Order }) {
 function DeliveryLine({ order }: { order: Order }) {
   const Icon = order.delivery_type === "domicile" ? Home : Store;
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-600">
+    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-soft">
       <Icon className="size-3.5 shrink-0" />
       {order.delivery_type === "domicile" ? "Domicile" : "Stopdesk"}
       {order.stopdesk_name && ` — ${order.stopdesk_name}`}
@@ -110,19 +110,22 @@ export default async function OrdersPage({
       />
 
       {orders.length === 0 ? (
-        <div className="admin-card flex flex-col items-center gap-3 px-6 py-16 text-center">
-          <Inbox className="size-8 text-zinc-300" strokeWidth={1.5} />
-          <p className="text-sm text-zinc-500">
+        <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-line-strong px-6 py-16 text-center">
+          <span className="admin-icon-tile size-11 rounded-xl">
+            <Inbox className="size-5" strokeWidth={1.5} />
+          </span>
+          <p className="text-sm text-ink-dim">
             Aucune commande ne correspond à ces filtres.
           </p>
         </div>
       ) : (
         <>
           {/* ── Tableau desktop ── */}
-          <div className="admin-card hidden overflow-x-auto lg:block">
+          <div className="admin-card hidden overflow-hidden lg:block">
+            <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-zinc-200 bg-zinc-50 text-xs font-medium tracking-wide text-zinc-500">
+                <tr className="border-b border-line bg-raised text-[11px] uppercase tracking-wider text-ink-faint">
                   <th className="px-4 py-3 font-semibold">Date</th>
                   {multi && <th className="px-4 py-3 font-semibold">Boutique</th>}
                   <th className="px-4 py-3 font-semibold">Client</th>
@@ -134,29 +137,29 @@ export default async function OrdersPage({
                   <th className="px-4 py-3 font-semibold">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200">
+              <tbody className="divide-y divide-line">
                 {orders.map((o) => (
-                  <tr key={o.id} className="transition hover:bg-zinc-50">
-                    <td className="whitespace-nowrap px-4 py-3 text-zinc-500">
+                  <tr key={o.id} className="transition hover:bg-raised/70">
+                    <td className="whitespace-nowrap px-4 py-3 text-ink-dim">
                       {formatDate(o.created_at)}
                     </td>
                     {multi && (
-                      <td className="px-4 py-3 text-xs font-medium text-zinc-600">
+                      <td className="px-4 py-3 text-xs font-medium text-ink-soft">
                         {o.product_name ?? "—"}
                       </td>
                     )}
                     <td className="px-4 py-3">
-                      <p className="font-medium text-zinc-900">{o.customer_name}</p>
+                      <p className="font-medium text-ink">{o.customer_name}</p>
                       <a
                         href={`tel:${o.phone}`}
-                        className="text-xs text-zinc-500 transition hover:text-indigo-600"
+                        className="text-xs text-ink-dim transition hover:text-accent"
                       >
                         {o.phone}
                       </a>
                     </td>
                     <td className="px-4 py-3">
-                      <p className="text-zinc-700">{o.wilaya}</p>
-                      <p className="text-xs text-zinc-500">
+                      <p className="text-ink-soft">{o.wilaya}</p>
+                      <p className="text-xs text-ink-dim">
                         {o.commune}
                         {o.address ? ` — ${o.address}` : ""}
                       </p>
@@ -164,18 +167,18 @@ export default async function OrdersPage({
                     <td className="px-4 py-3">
                       <DeliveryLine order={o} />
                       {o.pack_label && (
-                        <p className="mt-0.5 text-xs font-semibold text-zinc-700">
+                        <p className="mt-0.5 text-xs font-semibold text-ink-soft">
                           {o.pack_label}
                         </p>
                       )}
                       {formatVariants(o) && (
-                        <p className="mt-0.5 text-xs font-medium text-indigo-600">
+                        <p className="mt-0.5 text-xs font-medium text-accent">
                           {formatVariants(o)}
                         </p>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-zinc-700">{o.quantity}</td>
-                    <td className="whitespace-nowrap px-4 py-3 font-semibold tabular-nums text-zinc-900">
+                    <td className="px-4 py-3 text-ink-soft">{o.quantity}</td>
+                    <td className="whitespace-nowrap px-4 py-3 font-semibold tabular-nums text-ink">
                       {formatDA(Number(o.total))}
                     </td>
                     <td className="px-4 py-3">
@@ -192,6 +195,7 @@ export default async function OrdersPage({
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
 
           {/* ── Cartes mobile / tablette ──
@@ -202,20 +206,20 @@ export default async function OrdersPage({
               <div key={o.id} className="admin-card flex flex-col gap-3 p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="truncate font-semibold text-zinc-900">
+                    <p className="truncate font-semibold text-ink">
                       {o.customer_name}
                     </p>
-                    <p className="text-[11px] text-zinc-400">
+                    <p className="text-[11px] text-ink-faint">
                       {formatDate(o.created_at)}
                       {multi && o.product_name && (
-                        <span className="ms-1.5 inline-flex items-center gap-1 font-medium text-zinc-500">
+                        <span className="ms-1.5 inline-flex items-center gap-1 font-medium text-ink-dim">
                           <Package className="inline size-3" />
                           {o.product_name}
                         </span>
                       )}
                     </p>
                   </div>
-                  <span className="shrink-0 text-base font-semibold tabular-nums text-zinc-900">
+                  <span className="shrink-0 text-base font-semibold tabular-nums text-ink">
                     {formatDA(Number(o.total))}
                   </span>
                 </div>
@@ -224,30 +228,30 @@ export default async function OrdersPage({
                     à la livraison, donc une cible tactile pleine largeur. */}
                 <a
                   href={`tel:${o.phone}`}
-                  className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 px-4 text-sm font-medium text-indigo-700 transition active:scale-[0.99] active:bg-indigo-100"
+                  className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-accent-line bg-accent-soft px-4 text-sm font-semibold text-accent-ink transition active:scale-[0.99] active:brightness-95"
                 >
                   <Phone className="size-4" />
                   {o.phone}
                 </a>
 
-                <div className="flex flex-col gap-1 rounded-lg bg-zinc-50 px-3 py-2.5">
-                  <p className="text-sm text-zinc-700">
+                <div className="admin-inset flex flex-col gap-1 px-3 py-2.5">
+                  <p className="text-sm text-ink-soft">
                     {o.wilaya} — {o.commune}
                     {o.address ? ` — ${o.address}` : ""}
                   </p>
                   <DeliveryLine order={o} />
-                  <p className="text-xs font-medium text-zinc-600">
+                  <p className="text-xs font-medium text-ink-soft">
                     Qté {o.quantity}
                     {o.pack_label && ` — ${o.pack_label}`}
                     {formatVariants(o) && (
-                      <span className="text-indigo-600"> — {formatVariants(o)}</span>
+                      <span className="text-accent"> — {formatVariants(o)}</span>
                     )}
                   </p>
                 </div>
 
                 <OrderStatusCell order={o} />
 
-                <div className="border-t border-zinc-200 pt-3">
+                <div className="border-t border-line pt-3">
                   <OrderActions
                     orderId={o.id}
                     status={o.status}

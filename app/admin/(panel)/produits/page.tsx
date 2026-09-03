@@ -62,28 +62,28 @@ export default async function ProductsPage() {
                   80px de large au pouce n'a aucun intérêt. */}
               <Link
                 href={`/admin/produits/${product.id}`}
-                className="flex items-center gap-3 px-3 py-3 transition hover:bg-zinc-50 sm:gap-4 sm:px-4"
+                className="group flex items-center gap-3 px-3 py-3 transition hover:bg-raised sm:gap-4 sm:px-4"
               >
                 {product.images[0] ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={product.images[0]}
                     alt=""
-                    className="size-12 shrink-0 rounded-lg border border-zinc-200 object-cover sm:size-14"
+                    className="size-12 shrink-0 rounded-xl border border-line object-cover sm:size-14"
                   />
                 ) : (
-                  <div className="flex size-12 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 text-zinc-300 sm:size-14">
+                  <div className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-line bg-raised text-ink-faint sm:size-14">
                     <ImageOff className="size-5" strokeWidth={1.5} />
                   </div>
                 )}
 
                 <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="truncate text-sm font-semibold text-zinc-900">
+                    <span className="truncate text-sm font-semibold text-ink">
                       {product.name}
                     </span>
                     {isDefault && (
-                      <span className="admin-chip bg-indigo-50 text-indigo-700 ring-1 ring-indigo-600/20">
+                      <span className="admin-chip bg-accent-soft text-accent-ink ring-accent/30">
                         <Star className="size-2.5" />
                         Défaut
                       </span>
@@ -91,20 +91,20 @@ export default async function ProductsPage() {
                     <span
                       className={`admin-chip ${
                         product.active
-                          ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20"
-                          : "bg-zinc-100 text-zinc-500 ring-1 ring-zinc-300"
+                          ? "bg-ok-soft text-ok-ink ring-ok/30"
+                          : "bg-raised text-ink-dim ring-line-strong"
                       }`}
                     >
                       {product.active ? "En ligne" : "Hors ligne"}
                     </span>
                   </div>
 
-                  <p className="truncate text-xs text-zinc-500">
+                  <p className="truncate text-xs text-ink-dim">
                     {product.domain ?? `/p/${product.slug}`}
                   </p>
 
-                  <p className="flex flex-wrap items-center gap-x-2 text-xs text-zinc-500">
-                    <span className="font-semibold tabular-nums text-zinc-900">
+                  <p className="flex flex-wrap items-center gap-x-2 text-xs text-ink-dim">
+                    <span className="font-semibold tabular-nums text-ink">
                       {formatDA(Number(product.price))}
                     </span>
                     <span aria-hidden="true">·</span>
@@ -114,7 +114,7 @@ export default async function ProductsPage() {
                   </p>
                 </div>
 
-                <ChevronRight className="size-4 shrink-0 text-zinc-300" />
+                <ChevronRight className="size-4 shrink-0 text-ink-faint transition-transform group-hover:translate-x-0.5" />
               </Link>
 
               {/* Actions secondaires, hors de la zone cliquable de la ligne */}
@@ -122,7 +122,7 @@ export default async function ProductsPage() {
                 <a
                   href={publicUrl}
                   target="_blank"
-                  className="flex min-h-9 flex-1 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-medium text-zinc-500 transition hover:bg-zinc-100 hover:text-indigo-600"
+                  className="flex min-h-9 flex-1 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-medium text-ink-dim transition hover:bg-raised hover:text-accent"
                 >
                   <ExternalLink className="size-3.5" />
                   Voir la boutique
@@ -133,7 +133,7 @@ export default async function ProductsPage() {
                     <button
                       type="submit"
                       title="Servi sur les domaines non attribués"
-                      className="flex min-h-9 w-full items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-medium text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900"
+                      className="flex min-h-9 w-full items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-medium text-ink-dim transition hover:bg-raised hover:text-ink"
                     >
                       <CircleCheck className="size-3.5" />
                       Par défaut
@@ -148,13 +148,13 @@ export default async function ProductsPage() {
 
       {/* Suppression : à part, et jamais à un clic d'un bouton d'édition */}
       {products.length > 1 && (
-        <details className="group border-t border-zinc-200 pt-4">
-          <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium text-zinc-500 transition hover:text-zinc-900">
+        <details className="group rounded-xl border border-dashed border-line-strong p-4">
+          <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium text-ink-dim transition hover:text-ink">
             <ChevronRight className="size-4 transition-transform group-open:rotate-90" />
             Supprimer un produit
           </summary>
           <form action={deleteProduct} className="mt-4 flex max-w-md flex-col gap-3">
-            <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700">
+            <label className="flex flex-col gap-1.5 text-sm font-medium text-ink-soft">
               Produit à supprimer
               <select name="product_id" required defaultValue="" className="admin-field">
                 <option value="" disabled>
@@ -167,14 +167,14 @@ export default async function ProductsPage() {
                 ))}
               </select>
             </label>
-            <p className="text-xs leading-relaxed text-zinc-500">
+            <p className="text-xs leading-relaxed text-ink-dim">
               Le produit, sa landing et ses images partent définitivement. Les
               commandes déjà passées sont conservées, avec le nom du produit figé
               au moment de la commande.
             </p>
             <button
               type="submit"
-              className="admin-btn w-full bg-red-600 text-white hover:bg-red-700 sm:w-fit"
+              className="admin-btn-danger w-full sm:w-fit"
             >
               Supprimer définitivement
             </button>

@@ -89,10 +89,10 @@ export function VitrineForm({ product }: { product: Product }) {
       <input type="hidden" name="product_id" value={product.id} />
 
       {/* Domaine et mise en ligne */}
-      <div className="flex flex-col gap-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4">
+      <div className="flex flex-col gap-4 rounded-lg border border-line bg-raised p-4">
         <label className={labelClass}>
           <span className="flex items-center gap-2">
-            <Globe className="size-4 text-indigo-500" />
+            <Globe className="size-4 text-accent" />
             Domaine de cette boutique
           </span>
           <input
@@ -103,7 +103,7 @@ export function VitrineForm({ product }: { product: Product }) {
             autoCapitalize="off"
             className={inputClass}
           />
-          <span className="text-xs font-normal text-zinc-400">
+          <span className="text-xs font-normal text-ink-faint">
             Le domaine doit aussi être ajouté au projet sur Vercel (Settings →
             Domains) et pointer vers lui chez votre registrar. « www. » et les
             majuscules sont ignorés. Laissez vide pour n&apos;utiliser que
@@ -121,24 +121,24 @@ export function VitrineForm({ product }: { product: Product }) {
             autoCapitalize="off"
             className={inputClass}
           />
-          <span className="text-xs font-normal text-zinc-400">
+          <span className="text-xs font-normal text-ink-faint">
             Page visible sur <code>/p/{product.slug}</code> — pratique pour
             tester avant de brancher le DNS.
           </span>
         </label>
 
-        <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-zinc-200 bg-white px-3 py-2.5">
+        <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-line bg-surface px-3 py-2.5">
           <input
             type="checkbox"
             checked={active}
             onChange={(e) => setActive(e.target.checked)}
-            className="mt-0.5 size-4.5 shrink-0 cursor-pointer accent-indigo-600"
+            className="mt-0.5 size-4.5 shrink-0 cursor-pointer accent-accent"
           />
           <span className="flex flex-col gap-0.5">
-            <span className="text-sm font-semibold text-zinc-800">
+            <span className="text-sm font-semibold text-ink">
               Boutique en ligne
             </span>
-            <span className="text-xs text-zinc-500">
+            <span className="text-xs text-ink-dim">
               Décochée, la page renvoie une 404 et plus aucune commande n&apos;est
               acceptée — le produit et ses commandes restent intacts.
             </span>
@@ -161,7 +161,7 @@ export function VitrineForm({ product }: { product: Product }) {
 
       {/* Couleur */}
       <div className="flex flex-col gap-2.5">
-        <span className="text-sm font-medium text-zinc-700">
+        <span className="text-sm font-medium text-ink-soft">
           Couleur principale (boutons, prix, accents de la landing)
         </span>
         <div className="flex flex-wrap items-center gap-2.5">
@@ -172,7 +172,7 @@ export function VitrineForm({ product }: { product: Product }) {
               onClick={() => applyColor(preset)}
               className={`size-9 rounded-full transition ${
                 color === preset
-                  ? "ring-2 ring-zinc-900 ring-offset-2"
+                  ? "ring-2 ring-ink ring-offset-2"
                   : "hover:scale-110"
               }`}
               style={{ backgroundColor: preset }}
@@ -182,8 +182,8 @@ export function VitrineForm({ product }: { product: Product }) {
         </div>
 
         {/* Couleur personnalisée : pipette + code hex saisi à la main */}
-        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3">
-          <label className="relative flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-zinc-300 transition">
+        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-line bg-raised p-3">
+          <label className="relative flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-line-strong transition">
             <input
               type="color"
               value={color}
@@ -193,7 +193,7 @@ export function VitrineForm({ product }: { product: Product }) {
             />
           </label>
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs font-semibold text-zinc-600">
+            <span className="text-xs font-semibold text-ink-soft">
               Couleur personnalisée
             </span>
             <input
@@ -202,16 +202,16 @@ export function VitrineForm({ product }: { product: Product }) {
               placeholder="#4f46e5"
               maxLength={7}
               spellCheck={false}
-              className={`w-28 rounded-lg border bg-white px-2.5 py-1.5 font-mono text-sm outline-none transition ${
+              className={`w-28 rounded-lg border bg-surface px-2.5 py-1.5 font-mono text-sm outline-none transition ${
                 HEX_RE.test(hexInput)
-                  ? "border-zinc-200 text-zinc-800 focus:border-indigo-400"
-                  : "border-red-300 text-red-600"
+                  ? "border-line text-ink focus:border-accent"
+                  : "border-danger/45 text-danger"
               }`}
               aria-label="Code couleur hexadécimal"
             />
           </div>
           {!HEX_RE.test(hexInput) && (
-            <span className="text-xs font-medium text-red-500">
+            <span className="text-xs font-medium text-danger">
               Format : #rrggbb (ex. #e11d48)
             </span>
           )}
@@ -233,15 +233,15 @@ export function VitrineForm({ product }: { product: Product }) {
       </div>
 
       {/* Livraison offerte */}
-      <div className="flex flex-col gap-2.5 rounded-lg border border-zinc-200 bg-zinc-50 p-4">
-        <span className="text-sm font-medium text-zinc-700">Livraison offerte</span>
+      <div className="flex flex-col gap-2.5 rounded-lg border border-line bg-raised p-4">
+        <span className="text-sm font-medium text-ink-soft">Livraison offerte</span>
         <div className="flex flex-col gap-1">
           {FREE_DELIVERY_OPTIONS.map(({ value, label, hint }) => (
             <label
               key={value}
               className={`flex cursor-pointer items-start gap-3 rounded-lg px-3 py-2.5 transition ${
                 freeDeliveryMode === value
-                  ? "border border-indigo-200 bg-white"
+                  ? "border border-accent-line bg-surface"
                   : "border border-transparent"
               }`}
             >
@@ -251,17 +251,17 @@ export function VitrineForm({ product }: { product: Product }) {
                 value={value}
                 checked={freeDeliveryMode === value}
                 onChange={() => setFreeDeliveryMode(value)}
-                className="mt-0.5 size-4.5 shrink-0 cursor-pointer accent-indigo-600"
+                className="mt-0.5 size-4.5 shrink-0 cursor-pointer accent-accent"
               />
               <span className="flex flex-col gap-0.5">
-                <span className="text-sm font-semibold text-zinc-800">{label}</span>
-                <span className="text-xs text-zinc-500">{hint}</span>
+                <span className="text-sm font-semibold text-ink">{label}</span>
+                <span className="text-xs text-ink-dim">{hint}</span>
               </span>
             </label>
           ))}
         </div>
         {freeDeliveryMode !== "none" && (
-          <p className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-700">
+          <p className="flex items-start gap-2 rounded-lg border border-warn/35 bg-warn-soft px-3 py-2.5 text-xs leading-relaxed text-warn-ink">
             <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
             {freeDeliveryMode === "all"
               ? "Yalidine prélève quand même ses frais sur votre versement, et c'est le tarif domicile — le plus cher — qui est absorbé à chaque commande."
@@ -285,14 +285,14 @@ export function VitrineForm({ product }: { product: Product }) {
             <button
               type="button"
               onClick={() => setPixelId("")}
-              className="flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+              className="flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-danger transition hover:bg-danger-soft"
             >
               <Trash2 className="size-4" />
               Retirer
             </button>
           )}
         </div>
-        <span className="text-xs font-normal text-zinc-400">
+        <span className="text-xs font-normal text-ink-faint">
           Un pixel par boutique : Meta Business Suite → Gestionnaire
           d&apos;événements → votre Pixel → l&apos;ID numérique. Partager le même
           pixel entre deux domaines mélangerait les conversions de vos
@@ -316,14 +316,14 @@ export function VitrineForm({ product }: { product: Product }) {
             <button
               type="button"
               onClick={() => setFbDomainVerification("")}
-              className="flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+              className="flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-danger transition hover:bg-danger-soft"
             >
               <Trash2 className="size-4" />
               Retirer
             </button>
           )}
         </div>
-        <span className="text-xs font-normal text-zinc-400">
+        <span className="text-xs font-normal text-ink-faint">
           Meta Business Suite → Paramètres → Sécurité de la marque → Domaines →
           Ajouter le domaine de CETTE boutique → choisissez
           &laquo;&nbsp;Vérification par balise meta&nbsp;&raquo; → collez ici uniquement le
@@ -334,12 +334,12 @@ export function VitrineForm({ product }: { product: Product }) {
       </label>
 
       {state.error && (
-        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+        <p className="rounded-xl bg-danger-soft px-4 py-3 text-sm font-medium text-danger">
           {state.error}
         </p>
       )}
       {state.success && (
-        <p className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+        <p className="flex items-center gap-2 rounded-xl bg-ok-soft px-4 py-3 text-sm font-medium text-ok-ink">
           <CheckCircle2 className="size-4" />
           Vitrine enregistrée.
         </p>

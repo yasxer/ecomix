@@ -18,7 +18,7 @@ import type { OrderStatus } from "@/lib/types";
 const btn =
   "flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-medium transition active:scale-[0.99] disabled:opacity-50 lg:min-h-8 lg:flex-none";
 
-const dangerGhost = `${btn} border border-red-200 bg-white text-red-600 hover:bg-red-50`;
+const dangerGhost = `${btn} border border-danger/35 bg-surface text-danger hover:bg-danger-soft`;
 
 export function OrderActions({
   orderId,
@@ -45,10 +45,10 @@ export function OrderActions({
   if (confirmingDelete) {
     return (
       <div className="flex flex-col items-stretch gap-2 lg:items-start">
-        <p className="text-[11px] font-semibold leading-tight text-red-600">
+        <p className="text-[11px] font-semibold leading-tight text-danger">
           Supprimer définitivement&nbsp;?
           {status === "confirmee" && (
-            <span className="block font-normal text-zinc-500">
+            <span className="block font-normal text-ink-dim">
               Le colis Yalidine sera annulé lui aussi.
             </span>
           )}
@@ -57,7 +57,7 @@ export function OrderActions({
           <button
             disabled={isPending}
             onClick={() => run(deleteOrder)}
-            className={`${btn} bg-red-600 text-white hover:bg-red-700`}
+            className={`${btn} bg-danger text-white hover:brightness-95`}
           >
             {isPending ? (
               <Loader2 className="size-3.5 animate-spin" />
@@ -72,13 +72,13 @@ export function OrderActions({
               setConfirmingDelete(false);
               setError(null);
             }}
-            className={`${btn} border border-zinc-300 bg-white text-zinc-600 hover:bg-zinc-50`}
+            className={`${btn} border border-line-strong bg-surface text-ink-soft hover:bg-raised`}
           >
             Non
           </button>
         </div>
         {error && (
-          <p className="text-[11px] leading-tight text-red-600 lg:max-w-64">{error}</p>
+          <p className="text-[11px] leading-tight text-danger lg:max-w-64">{error}</p>
         )}
       </div>
     );
@@ -92,7 +92,7 @@ export function OrderActions({
             <button
               disabled={isPending}
               onClick={() => run(confirmOrder)}
-              className={`${btn} bg-emerald-600 text-white hover:bg-emerald-700`}
+              className={`${btn} bg-accent-btn text-accent-btn-ink hover:brightness-105`}
             >
               {isPending ? (
                 <Loader2 className="size-3.5 animate-spin" />
@@ -119,7 +119,7 @@ export function OrderActions({
                 href={label}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`${btn} bg-zinc-900 text-white hover:bg-zinc-800`}
+                className={`${btn} bg-ink text-surface hover:bg-ink-soft`}
               >
                 <Printer className="size-3.5" />
                 Bordereau
@@ -144,7 +144,7 @@ export function OrderActions({
           <button
             disabled={isPending}
             onClick={() => run(reopenOrder)}
-            className={`${btn} border border-zinc-300 bg-white text-zinc-600 hover:bg-zinc-50`}
+            className={`${btn} border border-line-strong bg-surface text-ink-soft hover:bg-raised`}
           >
             {isPending ? (
               <Loader2 className="size-3.5 animate-spin" />
@@ -160,13 +160,13 @@ export function OrderActions({
           onClick={() => setConfirmingDelete(true)}
           title="Supprimer définitivement"
           aria-label="Supprimer définitivement la commande"
-          className="flex size-10 shrink-0 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50 lg:size-8"
+          className="flex size-10 shrink-0 items-center justify-center rounded-lg text-ink-faint transition hover:bg-danger-soft hover:text-danger disabled:opacity-50 lg:size-8"
         >
           <Trash2 className="size-4 lg:size-3.5" />
         </button>
       </div>
       {error && (
-        <p className="text-[11px] leading-tight text-red-600 lg:max-w-64">{error}</p>
+        <p className="text-[11px] leading-tight text-danger lg:max-w-64">{error}</p>
       )}
     </div>
   );

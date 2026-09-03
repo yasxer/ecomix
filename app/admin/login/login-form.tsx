@@ -9,7 +9,7 @@ export function LoginForm() {
 
   return (
     <form action={action} className="flex flex-col gap-4">
-      <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700">
+      <label className="flex flex-col gap-1.5 text-sm font-medium text-ink-soft">
         Mot de passe
         <input
           type="password"
@@ -23,7 +23,7 @@ export function LoginForm() {
       </label>
 
       {state.error && (
-        <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
+        <p className="rounded-lg border border-danger/35 bg-danger-soft px-3 py-2.5 text-sm text-danger-ink">
           {state.error}
         </p>
       )}

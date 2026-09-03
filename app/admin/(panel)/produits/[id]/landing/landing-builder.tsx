@@ -414,7 +414,7 @@ export function LandingBuilder({
         </div>
 
         {mode === "simple" ? (
-          <p className="rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-500">
+          <p className="rounded-lg border border-line bg-raised px-4 py-3 text-sm text-ink-dim">
             La landing garde sa mise en page simple. Vos blocs personnalisés sont
             conservés : repassez en mode Personnalisée pour les retrouver.
           </p>
@@ -423,17 +423,17 @@ export function LandingBuilder({
             {/* Options d'affichage */}
             <section className="flex flex-col gap-4 admin-card p-4 sm:p-5">
               <div>
-                <h2 className="font-bold text-zinc-900">Affichage</h2>
-                <p className="text-xs text-zinc-500">
+                <h2 className="font-bold text-ink">Affichage</h2>
+                <p className="text-xs text-ink-dim">
                   Thème, en-tête et bouton flottant de la page personnalisée.
                 </p>
               </div>
               <div className="grid gap-3 sm:grid-cols-3">
                 <div className="flex flex-col gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-ink-dim">
                     Thème
                   </span>
-                  <div className="grid grid-cols-2 gap-1 rounded-xl bg-zinc-100 p-1">
+                  <div className="grid grid-cols-2 gap-1 rounded-xl bg-raised p-1">
                     {(
                       [
                         { value: "light", label: "Clair", icon: Sun },
@@ -447,8 +447,8 @@ export function LandingBuilder({
                         aria-pressed={theme === value}
                         className={`flex items-center justify-center gap-1.5 rounded-lg py-2 text-sm font-semibold transition ${
                           theme === value
-                            ? "bg-white text-zinc-900 shadow-sm"
-                            : "text-zinc-500 hover:text-zinc-700"
+                            ? "bg-surface text-ink shadow-sm"
+                            : "text-ink-dim hover:text-ink-soft"
                         }`}
                       >
                         <Icon className="size-4" />
@@ -485,8 +485,8 @@ export function LandingBuilder({
             {/* Palette */}
             <section className="flex flex-col gap-3 admin-card p-4 sm:p-5">
               <div>
-                <h2 className="font-bold text-zinc-900">Ajouter un bloc</h2>
-                <p className="text-xs text-zinc-500">
+                <h2 className="font-bold text-ink">Ajouter un bloc</h2>
+                <p className="text-xs text-ink-dim">
                   Les blocs s&apos;ajoutent en bas de la page ; réordonnez-les ensuite.
                 </p>
               </div>
@@ -499,29 +499,29 @@ export function LandingBuilder({
                       type="button"
                       disabled={used}
                       onClick={() => addBlock(type)}
-                      className="group flex items-start gap-3 rounded-lg border border-zinc-200 bg-white p-3 text-left transition hover:border-indigo-300 hover:bg-indigo-50/40 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:border-zinc-200 disabled:hover:bg-white"
+                      className="group flex items-start gap-3 rounded-lg border border-line bg-surface p-3 text-left transition hover:border-accent-line hover:bg-accent-soft/40 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:border-line disabled:hover:bg-surface"
                     >
-                      <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 transition group-hover:bg-indigo-100 group-hover:text-indigo-600 group-disabled:bg-zinc-100 group-disabled:text-zinc-600">
+                      <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-raised text-ink-soft transition group-hover:bg-accent-soft group-hover:text-accent group-disabled:bg-raised group-disabled:text-ink-soft">
                         <Icon className="size-4.5" />
                       </span>
                       <span className="min-w-0">
-                        <span className="flex items-center gap-1.5 text-sm font-semibold text-zinc-900">
+                        <span className="flex items-center gap-1.5 text-sm font-semibold text-ink">
                           {label}
                           {used ? (
-                            <span className="text-[10px] font-medium uppercase tracking-wide text-zinc-400">
+                            <span className="text-[10px] font-medium uppercase tracking-wide text-ink-faint">
                               ajouté
                             </span>
                           ) : (
-                            <Plus className="size-3.5 text-zinc-400" />
+                            <Plus className="size-3.5 text-ink-faint" />
                           )}
                         </span>
-                        <span className="block text-xs leading-snug text-zinc-500">{hint}</span>
+                        <span className="block text-xs leading-snug text-ink-dim">{hint}</span>
                       </span>
                     </button>
                   );
                 })}
               </div>
-              <p className="text-xs text-zinc-400">
+              <p className="text-xs text-ink-faint">
                 Image section : sélectionnez plusieurs fichiers d&apos;un coup pour créer une
                 section par image, dans l&apos;ordre choisi. Chaque photo est convertie en
                 WebP dans votre navigateur puis envoyée aussitôt.
@@ -531,18 +531,18 @@ export function LandingBuilder({
             {/* Liste des blocs */}
             <section className="flex flex-col gap-3">
               <div className="flex items-baseline justify-between">
-                <h2 className="font-bold text-zinc-900">Votre page</h2>
-                <span className="text-xs text-zinc-400">
+                <h2 className="font-bold text-ink">Votre page</h2>
+                <span className="text-xs text-ink-faint">
                   {drafts.length} bloc{drafts.length > 1 ? "s" : ""}
                   {busy && " — envoi en cours…"}
                 </span>
               </div>
 
               {drafts.length === 0 ? (
-                <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-zinc-300 px-6 py-12 text-center">
-                  <LayoutTemplate className="size-8 text-zinc-300" strokeWidth={1.5} />
-                  <p className="text-sm font-medium text-zinc-500">Page vide</p>
-                  <p className="text-xs text-zinc-400">
+                <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-line-strong px-6 py-12 text-center">
+                  <LayoutTemplate className="size-8 text-ink-faint" strokeWidth={1.5} />
+                  <p className="text-sm font-medium text-ink-dim">Page vide</p>
+                  <p className="text-xs text-ink-faint">
                     Ajoutez vos blocs ci-dessus. Le Formulaire est obligatoire.
                   </p>
                 </div>
@@ -557,17 +557,17 @@ export function LandingBuilder({
                         className="flex flex-col gap-3 admin-card p-4"
                       >
                         <div className="flex items-center gap-3">
-                          <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-xs font-bold text-white">
+                          <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-ink text-xs font-bold text-surface">
                             {index + 1}
                           </span>
-                          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+                          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
                             <Icon className="size-4.5" />
                           </span>
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-zinc-900">
+                            <p className="truncate text-sm font-semibold text-ink">
                               {meta.label}
                             </p>
-                            <p className="truncate text-xs text-zinc-500">{meta.hint}</p>
+                            <p className="truncate text-xs text-ink-dim">{meta.hint}</p>
                           </div>
                           <div className="flex shrink-0 items-center gap-1">
                             <button
@@ -575,7 +575,7 @@ export function LandingBuilder({
                               onClick={() => moveBlock(index, -1)}
                               disabled={index === 0}
                               aria-label="Monter"
-                              className="flex size-8 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900 disabled:opacity-30 disabled:hover:bg-transparent"
+                              className="flex size-8 items-center justify-center rounded-lg text-ink-dim transition hover:bg-raised hover:text-ink disabled:opacity-30 disabled:hover:bg-transparent"
                             >
                               <ArrowUp className="size-4" />
                             </button>
@@ -584,7 +584,7 @@ export function LandingBuilder({
                               onClick={() => moveBlock(index, 1)}
                               disabled={index === drafts.length - 1}
                               aria-label="Descendre"
-                              className="flex size-8 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900 disabled:opacity-30 disabled:hover:bg-transparent"
+                              className="flex size-8 items-center justify-center rounded-lg text-ink-dim transition hover:bg-raised hover:text-ink disabled:opacity-30 disabled:hover:bg-transparent"
                             >
                               <ArrowDown className="size-4" />
                             </button>
@@ -592,7 +592,7 @@ export function LandingBuilder({
                               type="button"
                               onClick={() => removeBlock(draft)}
                               aria-label="Supprimer le bloc"
-                              className="flex size-8 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-red-50 hover:text-red-600"
+                              className="flex size-8 items-center justify-center rounded-lg text-ink-faint transition hover:bg-danger-soft hover:text-danger"
                             >
                               <Trash2 className="size-4" />
                             </button>
@@ -635,7 +635,7 @@ export function LandingBuilder({
               )}
 
               {imageError && (
-                <p className="flex items-center gap-1.5 text-xs font-medium text-red-600">
+                <p className="flex items-center gap-1.5 text-xs font-medium text-danger">
                   <CircleAlert className="size-3.5 shrink-0" />
                   {imageError}
                 </p>
@@ -645,18 +645,18 @@ export function LandingBuilder({
         )}
 
         {blocking && (
-          <p className="flex items-center gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700">
+          <p className="flex items-center gap-2 rounded-xl bg-warn-soft px-4 py-3 text-sm font-medium text-warn-ink">
             <CircleAlert className="size-4 shrink-0" />
             {blocking}
           </p>
         )}
         {state.error && (
-          <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+          <p className="rounded-xl bg-danger-soft px-4 py-3 text-sm font-medium text-danger">
             {state.error}
           </p>
         )}
         {state.success && !pending && (
-          <p className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+          <p className="flex items-center gap-2 rounded-xl bg-ok-soft px-4 py-3 text-sm font-medium text-ok-ink">
             <CheckCircle2 className="size-4 shrink-0" />
             Landing page enregistrée.
           </p>
@@ -674,7 +674,7 @@ export function LandingBuilder({
           <a
             href={product.domain ? `https://${product.domain}` : `/p/${product.slug}`}
             target="_blank"
-            className="admin-btn text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700 sm:w-fit"
+            className="admin-btn text-ink-dim hover:bg-raised hover:text-ink-soft sm:w-fit"
           >
             Voir la boutique
           </a>
@@ -718,28 +718,28 @@ function Toggle({
       aria-checked={checked}
       onClick={() => onChange(!checked)}
       className={`flex items-start gap-3 rounded-xl p-3 text-left transition ${
-        checked ? "bg-indigo-50 ring-1 ring-indigo-200" : "bg-zinc-50 ring-1 ring-zinc-200"
+        checked ? "bg-accent-soft ring-1 ring-accent-line" : "bg-raised ring-1 ring-line"
       }`}
     >
       <span
         className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${
-          checked ? "bg-indigo-600 text-white" : "bg-white text-zinc-400 ring-1 ring-zinc-200"
+          checked ? "bg-accent-btn text-accent-btn-ink" : "bg-surface text-ink-faint ring-1 ring-line"
         }`}
       >
         <Icon className="size-4" />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-sm font-semibold text-zinc-900">{label}</span>
-        <span className="block text-xs leading-snug text-zinc-500">{hint}</span>
+        <span className="block text-sm font-semibold text-ink">{label}</span>
+        <span className="block text-xs leading-snug text-ink-dim">{hint}</span>
       </span>
       <span
         aria-hidden="true"
         className={`mt-1 flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition ${
-          checked ? "bg-indigo-600" : "bg-zinc-300"
+          checked ? "bg-accent" : "bg-line-strong"
         }`}
       >
         <span
-          className={`size-4 rounded-full bg-white shadow transition ${
+          className={`size-4 rounded-full bg-surface shadow transition ${
             checked ? "translate-x-4" : ""
           }`}
         />
@@ -768,20 +768,20 @@ function ModeCard({
       aria-pressed={active}
       className={`flex items-start gap-3 rounded-xl p-4 text-left transition ${
         active
-          ? "admin-card ring-2 ring-indigo-500"
-          : "bg-white/60 ring-1 ring-zinc-200 hover:bg-white hover:ring-zinc-300"
+          ? "admin-card ring-2 ring-accent"
+          : "bg-surface/60 ring-1 ring-line hover:bg-surface hover:ring-line-strong"
       }`}
     >
       <span
         className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${
-          active ? "bg-indigo-600 text-white" : "bg-zinc-100 text-zinc-500"
+          active ? "bg-accent-btn text-accent-btn-ink" : "bg-raised text-ink-dim"
         }`}
       >
         <Icon className="size-5" />
       </span>
       <span className="min-w-0">
-        <span className="block font-bold text-zinc-900">{title}</span>
-        <span className="block text-xs leading-snug text-zinc-500">{hint}</span>
+        <span className="block font-bold text-ink">{title}</span>
+        <span className="block text-xs leading-snug text-ink-dim">{hint}</span>
       </span>
     </button>
   );
@@ -798,23 +798,23 @@ function ImageEditor({
 }) {
   return (
     <div className="flex items-center gap-3">
-      <div className="relative h-24 w-32 shrink-0 overflow-hidden rounded-xl bg-zinc-100 ring-1 ring-zinc-200">
+      <div className="relative h-24 w-32 shrink-0 overflow-hidden rounded-xl bg-raised ring-1 ring-line">
         {draft.preview && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={draft.preview} alt="" className="size-full object-cover" />
         )}
         {draft.status === "preparing" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-zinc-900/10">
-            <Loader2 className="size-5 animate-spin text-zinc-500" />
-            <span className="text-[10px] font-medium text-zinc-500">Conversion…</span>
+            <Loader2 className="size-5 animate-spin text-ink-dim" />
+            <span className="text-[10px] font-medium text-ink-dim">Conversion…</span>
           </div>
         )}
         {draft.status === "uploading" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-zinc-900/55">
             <Loader2 className="size-5 animate-spin text-white" />
-            <div className="h-1 w-16 overflow-hidden rounded-full bg-white/30">
+            <div className="h-1 w-16 overflow-hidden rounded-full bg-surface/30">
               <div
-                className="h-full rounded-full bg-white transition-all"
+                className="h-full rounded-full bg-surface transition-all"
                 style={{ width: `${draft.progress}%` }}
               />
             </div>
@@ -825,7 +825,7 @@ function ImageEditor({
             <button
               type="button"
               onClick={onRetry}
-              className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-red-600/75 text-white"
+              className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-danger/75 text-white"
               title={draft.error}
             >
               <RotateCcw className="size-5" />
@@ -833,7 +833,7 @@ function ImageEditor({
             </button>
           ) : (
             <span
-              className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-red-600/75 px-1 text-center text-white"
+              className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-danger/75 px-1 text-center text-white"
               title={draft.error}
             >
               <CircleAlert className="size-5" />
@@ -843,7 +843,7 @@ function ImageEditor({
       </div>
       <div className="flex min-w-0 flex-col gap-1.5">
         {draft.status === "done" && draft.width > 0 && (
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-ink-dim">
             {draft.width} × {draft.height} px
           </p>
         )}
@@ -851,7 +851,7 @@ function ImageEditor({
           type="button"
           onClick={onReplace}
           disabled={draft.status === "preparing" || draft.status === "uploading"}
-          className="flex w-fit items-center gap-1.5 rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-200 disabled:opacity-50"
+          className="flex w-fit items-center gap-1.5 rounded-lg bg-raised px-3 py-1.5 text-xs font-semibold text-ink-soft transition hover:bg-line disabled:opacity-50"
         >
           <ImageIcon className="size-3.5" />
           Remplacer l&apos;image
@@ -892,7 +892,7 @@ function Preview({
 
   return (
     <aside className="flex flex-col gap-2 lg:sticky lg:top-8">
-      <p className="px-1 text-xs font-semibold uppercase tracking-widest text-zinc-400">
+      <p className="admin-eyebrow px-1">
         Aperçu mobile
       </p>
       {/* `data-theme` sur le cadre : les mêmes classes `dark:` que la vraie

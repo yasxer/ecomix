@@ -131,11 +131,11 @@ export function PackEditor({
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between gap-3">
-        <span className="text-sm font-medium text-zinc-700">
+        <span className="text-sm font-medium text-ink-soft">
           Offres groupées (optionnel — ex: 1 pièce, 2 pièces, 3 pièces)
         </span>
         {packs.length > 0 && (
-          <span className="text-xs text-zinc-400">
+          <span className="text-xs text-ink-faint">
             {packs.length} offre{packs.length > 1 ? "s" : ""}
           </span>
         )}
@@ -146,7 +146,7 @@ export function PackEditor({
         return (
           <div
             key={pack.id}
-            className="flex flex-col gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-4"
+            className="flex flex-col gap-3 rounded-lg border border-line bg-raised p-4"
           >
             <div className="flex items-start gap-3">
               <div className="flex min-w-0 flex-1 flex-col gap-3">
@@ -197,7 +197,7 @@ export function PackEditor({
                   onClick={() => movePack(index, -1)}
                   disabled={index === 0}
                   aria-label="Déplacer avant"
-                  className="flex size-8 items-center justify-center rounded-lg bg-white text-zinc-500 ring-1 ring-zinc-200 transition hover:text-zinc-900 disabled:opacity-30"
+                  className="flex size-8 items-center justify-center rounded-lg bg-surface text-ink-dim ring-1 ring-line transition hover:text-ink disabled:opacity-30"
                 >
                   <ArrowUp className="size-4" />
                 </button>
@@ -206,7 +206,7 @@ export function PackEditor({
                   onClick={() => movePack(index, 1)}
                   disabled={index === packs.length - 1}
                   aria-label="Déplacer après"
-                  className="flex size-8 items-center justify-center rounded-lg bg-white text-zinc-500 ring-1 ring-zinc-200 transition hover:text-zinc-900 disabled:opacity-30"
+                  className="flex size-8 items-center justify-center rounded-lg bg-surface text-ink-dim ring-1 ring-line transition hover:text-ink disabled:opacity-30"
                 >
                   <ArrowDown className="size-4" />
                 </button>
@@ -215,7 +215,7 @@ export function PackEditor({
                     type="button"
                     onClick={() => removePack(pack)}
                     aria-label={`Supprimer ${pack.label || "l'offre"}`}
-                    className="flex size-8 items-center justify-center rounded-lg bg-white text-zinc-400 ring-1 ring-zinc-200 transition hover:bg-red-50 hover:text-red-600"
+                    className="flex size-8 items-center justify-center rounded-lg bg-surface text-ink-faint ring-1 ring-line transition hover:bg-danger-soft hover:text-danger"
                   >
                     <X className="size-4" />
                   </button>
@@ -273,7 +273,7 @@ export function PackEditor({
         <button
           type="button"
           onClick={addPack}
-          className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-zinc-300 py-3 text-sm font-semibold text-zinc-500 transition hover:border-indigo-400 hover:text-indigo-500"
+          className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-line-strong py-3 text-sm font-semibold text-ink-dim transition hover:border-accent hover:text-accent"
         >
           <Plus className="size-4" />
           Ajouter une offre
@@ -283,7 +283,7 @@ export function PackEditor({
       <input type="hidden" name="packs" value={JSON.stringify(payload)} />
 
       {incomplete > 0 && (
-        <p className="flex items-center gap-1.5 text-xs font-medium text-amber-600">
+        <p className="flex items-center gap-1.5 text-xs font-medium text-warn">
           <CircleAlert className="size-3.5 shrink-0" />
           {incomplete} offre{incomplete > 1 ? "s" : ""} incomplète
           {incomplete > 1 ? "s" : ""} : titre, nombre de pièces (1 à 20) et prix sont
@@ -291,7 +291,7 @@ export function PackEditor({
           {incomplete > 1 ? "nt" : ""} pas enregistrée{incomplete > 1 ? "s" : ""}.
         </p>
       )}
-      <p className="flex items-start gap-1.5 text-xs text-zinc-400">
+      <p className="flex items-start gap-1.5 text-xs text-ink-faint">
         <Package className="mt-0.5 size-3.5 shrink-0" />
         <span>
           Dès qu&apos;une offre existe, la landing remplace le sélecteur de quantité par

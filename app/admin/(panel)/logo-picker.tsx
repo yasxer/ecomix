@@ -72,7 +72,7 @@ export function LogoPicker({
 
   return (
     <div className="flex flex-col gap-2.5">
-      <span className="text-sm font-medium text-zinc-700">Logo</span>
+      <span className="text-sm font-medium text-ink-soft">Logo</span>
       <div className="flex flex-wrap items-start gap-4">
         {currentUrl && !removeLogo && (
           <figure className="flex flex-col items-center gap-1.5">
@@ -80,11 +80,11 @@ export function LogoPicker({
             <img
               src={currentUrl}
               alt="Logo actuel"
-              className={`size-16 rounded-xl object-contain ring-1 ring-zinc-200 transition ${
+              className={`size-16 rounded-xl object-contain ring-1 ring-line transition ${
                 preview ? "opacity-40" : ""
               }`}
             />
-            <figcaption className="text-[11px] font-medium text-zinc-400">
+            <figcaption className="text-[11px] font-medium text-ink-faint">
               Actuel
             </figcaption>
           </figure>
@@ -97,9 +97,9 @@ export function LogoPicker({
             <img
               src={preview}
               alt="Aperçu du nouveau logo"
-              className="size-16 rounded-xl object-contain ring-2 ring-indigo-400"
+              className="size-16 rounded-xl object-contain ring-2 ring-accent"
             />
-            <figcaption className="text-[11px] font-semibold text-indigo-600">
+            <figcaption className="text-[11px] font-semibold text-accent">
               Nouveau
             </figcaption>
           </figure>
@@ -108,7 +108,7 @@ export function LogoPicker({
         {removeLogo && <input type="hidden" name="remove_logo" value="1" />}
 
         <div className="flex flex-col items-start gap-1.5">
-          <label className="flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-zinc-300 px-4 py-3 text-sm font-medium text-zinc-500 transition hover:border-indigo-400 hover:text-indigo-500">
+          <label className="flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-line-strong px-4 py-3 text-sm font-medium text-ink-dim transition hover:border-accent hover:text-accent">
             {busy ? (
               <Loader2 className="size-5 animate-spin" />
             ) : (
@@ -131,13 +131,13 @@ export function LogoPicker({
             />
           </label>
 
-          {error && <p className="text-xs font-medium text-red-600">{error}</p>}
+          {error && <p className="text-xs font-medium text-danger">{error}</p>}
 
           {preview ? (
             <button
               type="button"
               onClick={clearChoice}
-              className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-zinc-500 transition hover:bg-zinc-100"
+              className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-ink-dim transition hover:bg-raised"
             >
               <X className="size-3.5" />
               Annuler ce choix
@@ -148,7 +148,7 @@ export function LogoPicker({
               <button
                 type="button"
                 onClick={() => setRemoveLogo(true)}
-                className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50"
+                className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-danger transition hover:bg-danger-soft"
               >
                 <Trash2 className="size-3.5" />
                 Retirer le logo
@@ -159,17 +159,17 @@ export function LogoPicker({
       </div>
 
       {preview && (
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-ink-faint">
           Aperçu local — l&apos;image ne sera envoyée qu&apos;à l&apos;enregistrement.
         </p>
       )}
       {removeLogo && (
-        <p className="flex flex-wrap items-center gap-2 text-xs text-red-500">
+        <p className="flex flex-wrap items-center gap-2 text-xs text-danger">
           Le logo sera retiré à l&apos;enregistrement.
           <button
             type="button"
             onClick={() => setRemoveLogo(false)}
-            className="font-semibold text-zinc-500 underline underline-offset-2 hover:text-zinc-700"
+            className="font-semibold text-ink-dim underline underline-offset-2 hover:text-ink-soft"
           >
             Annuler
           </button>

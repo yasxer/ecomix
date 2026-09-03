@@ -282,7 +282,7 @@ export function ProductForm({ product }: { product: Product }) {
         </label>
       </div>
 
-      <p className="rounded-xl bg-zinc-50 px-4 py-3 text-xs text-zinc-500">
+      <p className="rounded-xl bg-raised px-4 py-3 text-xs text-ink-dim">
         Les frais de livraison sont récupérés automatiquement depuis votre compte
         Yalidine selon la wilaya du client.
       </p>
@@ -300,7 +300,7 @@ export function ProductForm({ product }: { product: Product }) {
 
       {/* Couleurs disponibles */}
       <div className="flex flex-col gap-2.5">
-        <span className="text-sm font-medium text-zinc-700">
+        <span className="text-sm font-medium text-ink-soft">
           Couleurs disponibles (optionnel — le client devra en choisir une)
         </span>
         {colors.length > 0 && (
@@ -308,10 +308,10 @@ export function ProductForm({ product }: { product: Product }) {
             {colors.map((c) => (
               <span
                 key={c.name}
-                className="flex items-center gap-2 rounded-full bg-zinc-50 py-1.5 pl-2 pr-1.5 text-sm font-medium text-zinc-700 ring-1 ring-zinc-200"
+                className="flex items-center gap-2 rounded-full bg-raised py-1.5 pl-2 pr-1.5 text-sm font-medium text-ink-soft ring-1 ring-line"
               >
                 <span
-                  className="size-5 rounded-full ring-1 ring-zinc-900/10"
+                  className="size-5 rounded-full ring-1 ring-ink/10"
                   style={{ backgroundColor: c.hex }}
                 />
                 {c.name}
@@ -319,7 +319,7 @@ export function ProductForm({ product }: { product: Product }) {
                   type="button"
                   onClick={() => setColors(colors.filter((x) => x.name !== c.name))}
                   aria-label={`Supprimer ${c.name}`}
-                  className="flex size-5 items-center justify-center rounded-full text-zinc-400 transition hover:bg-red-100 hover:text-red-600"
+                  className="flex size-5 items-center justify-center rounded-full text-ink-faint transition hover:bg-danger-soft hover:text-danger"
                 >
                   <X className="size-3.5" />
                 </button>
@@ -328,7 +328,7 @@ export function ProductForm({ product }: { product: Product }) {
           </div>
         )}
         <div className="flex items-center gap-2">
-          <label className="relative flex size-10 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl ring-1 ring-zinc-200">
+          <label className="relative flex size-10 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl ring-1 ring-line">
             <input
               type="color"
               value={newColorHex}
@@ -352,7 +352,7 @@ export function ProductForm({ product }: { product: Product }) {
           <button
             type="button"
             onClick={addColor}
-            className="flex shrink-0 items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-700"
+            className="admin-btn-neutral shrink-0"
           >
             <Plus className="size-4" />
             Ajouter
@@ -363,7 +363,7 @@ export function ProductForm({ product }: { product: Product }) {
 
       {/* Tailles disponibles */}
       <div className="flex flex-col gap-2.5">
-        <span className="text-sm font-medium text-zinc-700">
+        <span className="text-sm font-medium text-ink-soft">
           Tailles disponibles (optionnel — ex: S, M, L ou 40, 41, 42)
         </span>
         {sizes.length > 0 && (
@@ -371,14 +371,14 @@ export function ProductForm({ product }: { product: Product }) {
             {sizes.map((s) => (
               <span
                 key={s}
-                className="flex items-center gap-1.5 rounded-full bg-zinc-50 py-1.5 pl-3 pr-1.5 text-sm font-semibold text-zinc-700 ring-1 ring-zinc-200"
+                className="flex items-center gap-1.5 rounded-full bg-raised py-1.5 pl-3 pr-1.5 text-sm font-semibold text-ink-soft ring-1 ring-line"
               >
                 {s}
                 <button
                   type="button"
                   onClick={() => setSizes(sizes.filter((x) => x !== s))}
                   aria-label={`Supprimer ${s}`}
-                  className="flex size-5 items-center justify-center rounded-full text-zinc-400 transition hover:bg-red-100 hover:text-red-600"
+                  className="flex size-5 items-center justify-center rounded-full text-ink-faint transition hover:bg-danger-soft hover:text-danger"
                 >
                   <X className="size-3.5" />
                 </button>
@@ -402,7 +402,7 @@ export function ProductForm({ product }: { product: Product }) {
           <button
             type="button"
             onClick={addSize}
-            className="flex shrink-0 items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-700"
+            className="admin-btn-neutral shrink-0"
           >
             <Plus className="size-4" />
             Ajouter
@@ -421,9 +421,9 @@ export function ProductForm({ product }: { product: Product }) {
       {/* Images */}
       <div className="flex flex-col gap-2.5">
         <div className="flex items-baseline justify-between gap-3">
-          <span className="text-sm font-medium text-zinc-700">Images du produit</span>
+          <span className="text-sm font-medium text-ink-soft">Images du produit</span>
           {items.length > 0 && (
-            <span className="text-xs text-zinc-400">
+            <span className="text-xs text-ink-faint">
               {items.length} image{items.length > 1 ? "s" : ""}
               {busy && " — traitement en cours…"}
             </span>
@@ -438,25 +438,25 @@ export function ProductForm({ product }: { product: Product }) {
                 <img
                   src={item.preview}
                   alt=""
-                  className="size-24 rounded-xl object-cover ring-1 ring-zinc-200"
+                  className="size-24 rounded-xl object-cover ring-1 ring-line"
                 />
               ) : (
-                <div className="size-24 rounded-xl bg-zinc-100 ring-1 ring-zinc-200" />
+                <div className="size-24 rounded-xl bg-raised ring-1 ring-line" />
               )}
 
               {item.status === "preparing" && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-xl bg-zinc-900/10">
-                  <Loader2 className="size-5 animate-spin text-zinc-500" />
-                  <span className="text-[10px] font-medium text-zinc-500">Conversion…</span>
+                  <Loader2 className="size-5 animate-spin text-ink-dim" />
+                  <span className="text-[10px] font-medium text-ink-dim">Conversion…</span>
                 </div>
               )}
 
               {item.status === "uploading" && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl bg-zinc-900/55">
                   <Loader2 className="size-5 animate-spin text-white" />
-                  <div className="h-1 w-14 overflow-hidden rounded-full bg-white/30">
+                  <div className="h-1 w-14 overflow-hidden rounded-full bg-surface/30">
                     <div
-                      className="h-full rounded-full bg-white transition-all"
+                      className="h-full rounded-full bg-surface transition-all"
                       style={{ width: `${item.progress}%` }}
                     />
                   </div>
@@ -468,7 +468,7 @@ export function ProductForm({ product }: { product: Product }) {
                   <button
                     type="button"
                     onClick={() => retryItem(item)}
-                    className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-xl bg-red-600/75 text-white"
+                    className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-xl bg-danger/75 text-white"
                     title={item.error}
                   >
                     <RotateCcw className="size-5" />
@@ -477,7 +477,7 @@ export function ProductForm({ product }: { product: Product }) {
                 ) : (
                   // Échec de conversion : réessayer le même fichier ne servirait à rien.
                   <span
-                    className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-xl bg-red-600/75 px-1 text-center text-white"
+                    className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-xl bg-danger/75 px-1 text-center text-white"
                     title={item.error}
                   >
                     <CircleAlert className="size-5" />
@@ -498,7 +498,7 @@ export function ProductForm({ product }: { product: Product }) {
                     onClick={() => moveItem(index, -1)}
                     disabled={index === 0}
                     aria-label="Déplacer avant"
-                    className="flex size-6 items-center justify-center rounded-full bg-white/90 text-zinc-700 shadow transition hover:bg-white disabled:opacity-30"
+                    className="flex size-6 items-center justify-center rounded-full bg-surface/90 text-ink-soft shadow transition hover:bg-surface disabled:opacity-30"
                   >
                     <ArrowLeft className="size-3.5" />
                   </button>
@@ -507,7 +507,7 @@ export function ProductForm({ product }: { product: Product }) {
                     onClick={() => moveItem(index, 1)}
                     disabled={index === items.length - 1}
                     aria-label="Déplacer après"
-                    className="flex size-6 items-center justify-center rounded-full bg-white/90 text-zinc-700 shadow transition hover:bg-white disabled:opacity-30"
+                    className="flex size-6 items-center justify-center rounded-full bg-surface/90 text-ink-soft shadow transition hover:bg-surface disabled:opacity-30"
                   >
                     <ArrowRight className="size-3.5" />
                   </button>
@@ -517,7 +517,7 @@ export function ProductForm({ product }: { product: Product }) {
               <button
                 type="button"
                 onClick={() => removeItem(item)}
-                className="absolute -right-2 -top-2 flex size-6 items-center justify-center rounded-full bg-red-500 text-white shadow transition hover:bg-red-600"
+                className="absolute -right-2 -top-2 flex size-6 items-center justify-center rounded-full bg-danger text-white shadow transition hover:brightness-95"
                 aria-label="Supprimer l'image"
               >
                 <X className="size-3.5" />
@@ -525,7 +525,7 @@ export function ProductForm({ product }: { product: Product }) {
             </div>
           ))}
 
-          <label className="flex size-24 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-zinc-300 text-zinc-400 transition hover:border-indigo-400 hover:text-indigo-500">
+          <label className="flex size-24 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-line-strong text-ink-faint transition hover:border-accent hover:text-accent">
             <ImagePlus className="size-6" />
             <span className="text-[10px] font-medium">Ajouter</span>
             <input
@@ -542,20 +542,20 @@ export function ProductForm({ product }: { product: Product }) {
         <input type="hidden" name="images" value={JSON.stringify(uploadedUrls)} />
 
         {imageError && (
-          <p className="flex items-center gap-1.5 text-xs font-medium text-red-600">
+          <p className="flex items-center gap-1.5 text-xs font-medium text-danger">
             <CircleAlert className="size-3.5 shrink-0" />
             {imageError}
           </p>
         )}
         {failedCount > 0 && (
-          <p className="flex items-center gap-1.5 text-xs font-medium text-amber-600">
+          <p className="flex items-center gap-1.5 text-xs font-medium text-warn">
             <CircleAlert className="size-3.5 shrink-0" />
             {failedCount} image{failedCount > 1 ? "s" : ""} en échec : cliquez dessus pour
             réessayer, sinon elle{failedCount > 1 ? "s" : ""} ne sera
             {failedCount > 1 ? "nt" : ""} pas enregistrée{failedCount > 1 ? "s" : ""}.
           </p>
         )}
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-ink-faint">
           Autant d&apos;images que vous voulez. Chaque photo — y compris les HEIC de
           l&apos;iPhone — est convertie en WebP et redimensionnée dans votre navigateur,
           puis envoyée aussitôt. Survolez une image pour changer son ordre : la première
@@ -564,7 +564,7 @@ export function ProductForm({ product }: { product: Product }) {
       </div>
 
       {state.error && (
-        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+        <p className="rounded-xl bg-danger-soft px-4 py-3 text-sm font-medium text-danger">
           {state.error}
         </p>
       )}
@@ -580,7 +580,7 @@ export function ProductForm({ product }: { product: Product }) {
         </button>
         <Link
           href={`/admin/produits/${product.id}`}
-          className="admin-btn text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700 sm:w-fit"
+          className="admin-btn text-ink-dim hover:bg-raised hover:text-ink-soft sm:w-fit"
         >
           Annuler
         </Link>

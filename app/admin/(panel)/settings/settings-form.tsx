@@ -30,7 +30,7 @@ export function SettingsForm({ settings }: { settings: Settings }) {
           defaultValue={settings.store_name}
           className={inputClass}
         />
-        <span className="text-xs font-normal text-zinc-400">
+        <span className="text-xs font-normal text-ink-faint">
           Vos clients ne le voient pas : le nom de chaque boutique se règle dans
           l&apos;onglet Vitrine du produit.
         </span>
@@ -51,18 +51,18 @@ export function SettingsForm({ settings }: { settings: Settings }) {
             </option>
           ))}
         </select>
-        <span className="text-xs font-normal text-zinc-400">
+        <span className="text-xs font-normal text-ink-faint">
           Commune à tous les produits : les colis partent tous du même endroit.
         </span>
       </label>
 
       {state.error && (
-        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+        <p className="rounded-xl bg-danger-soft px-4 py-3 text-sm font-medium text-danger">
           {state.error}
         </p>
       )}
       {state.success && (
-        <p className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+        <p className="flex items-center gap-2 rounded-xl bg-ok-soft px-4 py-3 text-sm font-medium text-ok-ink">
           <CheckCircle2 className="size-4" />
           Paramètres enregistrés.
         </p>

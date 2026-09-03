@@ -4,19 +4,150 @@
    `dark:` ne réagit qu'à `data-theme="dark"` posé sur la page (ou l'aperçu). */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/* Thème sombre de l'admin, côté classes. Il sert surtout à faire basculer une
+   icône sans état React : les couleurs, elles, passent par les jetons. */
+@custom-variant admin-dark (&:where([data-admin-theme="dark"] *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  /* L'admin et la landing peignent eux-mêmes leurs surfaces, en clair. Sans
-     cette déclaration, les contrôles natifs (dates, listes déroulantes,
-     barres de défilement) partiraient en sombre dès que le système l'est —
-     des champs noirs au milieu d'un formulaire blanc. */
+  /* La landing peint elle-même ses surfaces, en clair. Sans cette
+     déclaration, les contrôles natifs (dates, listes déroulantes, barres de
+     défilement) partiraient en sombre dès que le système l'est — des champs
+     noirs au milieu d'un formulaire blanc. L'admin la redéclare plus bas
+     quand son propre thème sombre est actif. */
   color-scheme: light;
 }
 
+/* ── Jetons de l'admin ──────────────────────────────────────────────────────
+   Toutes les couleurs de l'administration passent par ces variables : une
+   classe `bg-surface` ou `text-ink` suit le thème sans avoir à doubler chaque
+   règle d'une variante `dark:`. Basculer le thème ne repeint qu'ici.
+
+   L'échelle d'encre va du plus contrasté (`ink`, un titre) au plus effacé
+   (`ink-faint`, une légende) — les nommer par leur rôle évite les
+   `text-zinc-500` choisis au hasard d'un fichier à l'autre. */
+:root {
+  --canvas: #f5f6f7;
+  --surface: #ffffff;
+  --raised: #f4f4f5;
+  --line: #e6e7e9;
+  --line-strong: #d6d8db;
+
+  --ink: #18181b;
+  --ink-soft: #3f3f46;
+  --ink-dim: #6d7078;
+  --ink-faint: #9ca0a8;
+
+  --accent: #059669;
+  --accent-strong: #047857;
+  --accent-soft: #ecfdf5;
+  --accent-line: #a7f3d0;
+  --accent-ink: #047857;
+  --accent-ring: rgb(5 150 105 / 0.14);
+  --accent-btn: #059669;
+  --accent-btn-hover: #047857;
+  --accent-btn-ink: #ffffff;
+
+  --ok: #059669;
+  --ok-soft: #ecfdf5;
+  --ok-ink: #047857;
+  --warn: #d97706;
+  --warn-soft: #fffbeb;
+  --warn-ink: #b45309;
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+  --danger-ink: #b91c1c;
+  --info: #0284c7;
+  --info-soft: #f0f9ff;
+  --info-ink: #0369a1;
+
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.05);
+  --shadow-pop: 0 10px 30px -12px rgb(16 24 40 / 0.22);
+}
+
+/* Thème sombre de l'admin. Attribut distinct de `data-theme` : celui-là
+   appartient à l'aperçu de la landing, qui doit rester clair quand la boutique
+   l'est — même si l'admin autour est sombre. */
+:root[data-admin-theme="dark"] {
+  color-scheme: dark;
+
+  --canvas: #0a0a0c;
+  --surface: #141417;
+  --raised: #1e1e22;
+  --line: #27272c;
+  --line-strong: #3a3a41;
+
+  --ink: #fafafa;
+  --ink-soft: #d4d4d8;
+  --ink-dim: #9ca0a8;
+  --ink-faint: #6f727a;
+
+  --accent: #10b981;
+  --accent-strong: #34d399;
+  --accent-soft: #10231c;
+  --accent-line: #17513c;
+  --accent-ink: #6ee7b7;
+  --accent-ring: rgb(16 185 129 / 0.2);
+  --accent-btn: #10b981;
+  --accent-btn-hover: #34d399;
+  --accent-btn-ink: #04241a;
+
+  --ok: #10b981;
+  --ok-soft: #10231c;
+  --ok-ink: #6ee7b7;
+  --warn: #f59e0b;
+  --warn-soft: #241a08;
+  --warn-ink: #fcd34d;
+  --danger: #ef4444;
+  --danger-soft: #2a1113;
+  --danger-ink: #fca5a5;
+  --info: #38bdf8;
+  --info-soft: #0a1f2c;
+  --info-ink: #7dd3fc;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-pop: 0 12px 34px -12px rgb(0 0 0 / 0.7);
+}
+
+/* `inline` est indispensable : sans lui Tailwind fige la valeur des jetons à
+   la compilation et le basculement de thème ne changerait plus rien. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-dim: var(--ink-dim);
+  --color-ink-faint: var(--ink-faint);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-btn: var(--accent-btn);
+  --color-accent-btn-ink: var(--accent-btn-ink);
+
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-ok-ink: var(--ok-ink);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-ink: var(--warn-ink);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-ink: var(--danger-ink);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-info-ink: var(--info-ink);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -32,28 +163,60 @@ html {
 }
 
 /* ── Briques de l'admin ─────────────────────────────────────────────────────
-   Parti pris : surfaces plates, séparées par un trait d'un pixel plutôt que
-   par une ombre. Les cartes flottantes arrondies mangeaient l'espace et
-   noyaient la hiérarchie — un tableau de commandes se lit mieux dense. */
+   Parti pris : des surfaces posées sur un fond légèrement teinté plutôt que
+   du blanc sur blanc — la hiérarchie vient du contraste des plans, pas d'un
+   empilement d'ombres. Un trait d'un pixel ferme chaque surface, une ombre
+   très basse la décolle juste assez pour qu'on la lise comme un objet. */
 
-/* Surface : un cadre, pas un objet posé. */
+/* Racine de l'administration : c'est elle qui pose le fond et l'encre par
+   défaut, si bien qu'un composant n'a plus à redire sa couleur de texte. */
+@utility admin-root {
+  background: var(--canvas);
+  color: var(--ink);
+
+  /* Barres de défilement discrètes, accordées au thème : celles du système
+     restaient claires au milieu d'une interface sombre. */
+  scrollbar-color: var(--line-strong) transparent;
+  scrollbar-width: thin;
+}
+
+/* Surface : un plan posé sur le fond. */
+/* Le fond de la page appartient à `admin-root`, mais l'élan de défilement
+   d'iOS découvre le `<body>` derrière : sans cette règle, une bande blanche
+   apparaît en haut et en bas de l'admin en thème sombre. */
+html:has(.admin-root),
+html:has(.admin-root) body {
+  background: var(--canvas);
+}
+
 @utility admin-card {
-  @apply rounded-xl border border-zinc-200 bg-white;
+  @apply rounded-xl border border-line bg-surface;
+  box-shadow: var(--shadow-card);
+}
+
+/* Surface sans relief, pour les blocs imbriqués dans une carte. */
+@utility admin-inset {
+  @apply rounded-lg border border-line bg-raised;
 }
 
 /* Séparateur horizontal entre sections d'une même surface. */
 @utility admin-divide {
-  @apply divide-y divide-zinc-200;
+  @apply divide-y divide-line;
 }
 
 /* Champ de formulaire. `text-base` sur mobile n'est pas cosmétique : en
    dessous de 16px, Safari iOS zoome la page à chaque mise au point d'un champ
    et l'utilisateur doit repincer pour lire la suite du formulaire. */
 @utility admin-field {
-  @apply w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-base text-zinc-900 outline-none transition;
-  @apply placeholder:text-zinc-400;
-  @apply focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10;
+  @apply w-full rounded-lg border border-line-strong bg-surface px-3 py-2.5 text-base text-ink outline-none transition;
+  @apply placeholder:text-ink-faint;
+  @apply hover:border-ink-faint;
   @apply sm:py-2 sm:text-sm;
+
+  &:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-ring);
+  }
 }
 
 /* Bouton. `min-h-11` = 44px, la cible tactile minimale ; les écrans larges
@@ -61,32 +224,64 @@ html {
 @utility admin-btn {
   @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition;
   @apply active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50 sm:min-h-9;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
 }
 
 @utility admin-btn-primary {
-  @apply admin-btn bg-indigo-600 text-white hover:bg-indigo-700;
+  @apply admin-btn;
+  background: var(--accent-btn);
+  color: var(--accent-btn-ink);
   box-shadow:
-    0 1px 1px rgb(0 0 0 / 0.08),
-    inset 0 1px 0 rgb(255 255 255 / 0.12);
+    0 1px 2px rgb(16 24 40 / 0.12),
+    inset 0 1px 0 rgb(255 255 255 / 0.16);
+
+  &:hover {
+    background: var(--accent-btn-hover);
+  }
 }
 
 @utility admin-btn-ghost {
-  @apply admin-btn border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50;
+  @apply admin-btn border border-line-strong bg-surface text-ink-soft hover:bg-raised hover:text-ink;
 }
 
 @utility admin-btn-quiet {
-  @apply admin-btn text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900;
+  @apply admin-btn text-ink-dim hover:bg-raised hover:text-ink;
 }
 
-/* Étiquette de statut : à plat, teintée, sans coin totalement rond. */
+@utility admin-btn-neutral {
+  @apply admin-btn bg-ink text-surface hover:bg-ink-soft;
+  box-shadow: var(--shadow-card);
+}
+
+@utility admin-btn-danger {
+  @apply admin-btn text-white;
+  background: var(--danger);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16);
+
+  &:hover {
+    filter: brightness(0.94);
+  }
+}
+
+/* Étiquette de statut : à plat, teintée, cerclée d'un trait de sa propre
+   couleur — lisible sur fond clair comme sur fond sombre. */
 @utility admin-chip {
-  @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium;
+  @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset;
 }
 
-/* Intitulé de section : petit, espacé, gris — la hiérarchie vient de là et
+/* Intitulé de section : petit, espacé, effacé — la hiérarchie vient de là et
    non de la taille du texte. */
 @utility admin-eyebrow {
-  @apply text-xs font-semibold uppercase tracking-wider text-zinc-400;
+  @apply text-xs font-semibold uppercase tracking-wider text-ink-faint;
+}
+
+/* Pastille d'icône d'une carte de chiffre clé. */
+@utility admin-icon-tile {
+  @apply flex size-9 shrink-0 items-center justify-center rounded-lg border border-line bg-raised text-ink-dim;
 }
 
 /* Barre défilable horizontalement (onglets, filtres) sans barre visible. */
@@ -129,6 +324,23 @@ html {
   animation: fade-up 0.4s ease-out 0.08s both;
 }
 
+/* Entrée des cartes de l'admin : plus courte et sans déplacement vertical
+   marqué, pour ne pas faire sauter une liste à chaque navigation. */
+@keyframes admin-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-rise {
+  animation: admin-rise 0.28s ease-out both;
+}
+
 @keyframes pack-spin {
   to {
     transform: rotate(1turn);
@@ -163,7 +375,8 @@ html {
   }
 
   .animate-fade-up,
-  .animate-fade-up-delay {
+  .animate-fade-up-delay,
+  .admin-rise {
     animation: none;
   }
 

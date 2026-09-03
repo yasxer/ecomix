@@ -19,7 +19,7 @@ export function ProductTabs({ productId }: { productId: string }) {
   ];
 
   return (
-    <nav className="no-scrollbar -mb-px flex gap-6 overflow-x-auto border-b border-zinc-200">
+    <nav className="no-scrollbar -mb-px flex gap-6 overflow-x-auto border-b border-line">
       {tabs.map(({ href, label, icon: Icon }) => {
         const active = href === base ? pathname === base : pathname.startsWith(href);
         return (
@@ -28,11 +28,11 @@ export function ProductTabs({ productId }: { productId: string }) {
             href={href}
             className={`flex min-h-11 items-center gap-2 whitespace-nowrap border-b-2 text-sm font-medium transition ${
               active
-                ? "border-indigo-600 text-indigo-700"
-                : "border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-900"
+                ? "border-accent text-accent-ink"
+                : "border-transparent text-ink-dim hover:border-line-strong hover:text-ink"
             }`}
           >
-            <Icon className="size-4 shrink-0" />
+            <Icon className={`size-4 shrink-0 ${active ? "text-accent" : "text-ink-faint"}`} />
             {label}
           </Link>
         );

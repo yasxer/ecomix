@@ -16,7 +16,7 @@ export default async function LandingPage({
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-ink-dim">
         Gardez la mise en page simple, ou composez votre propre page bloc par
         bloc : sections image, formulaire, galerie…
       </p>

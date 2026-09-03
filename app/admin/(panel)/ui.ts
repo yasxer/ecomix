@@ -10,10 +10,10 @@
 export const inputClass = "admin-field";
 
 /** Libellé + champ empilés. */
-export const labelClass = "flex flex-col gap-1.5 text-sm font-medium text-zinc-700";
+export const labelClass = "flex flex-col gap-1.5 text-sm font-medium text-ink-soft";
 
 /** Texte d'aide sous un champ. */
-export const hintClass = "text-xs font-normal leading-relaxed text-zinc-400";
+export const hintClass = "text-xs font-normal leading-relaxed text-ink-faint";
 
 /** Surface blanche de l'admin. */
 export const cardClass = "admin-card";

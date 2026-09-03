@@ -40,10 +40,10 @@ export function OrdersFilters({
   const [open, setOpen] = useState(activeCount > 0);
 
   return (
-    <form method="GET" className="flex flex-col gap-3">
+    <form method="GET" className="admin-card flex flex-col gap-3 p-3 sm:p-4">
       <div className="flex gap-2">
         <div className="relative min-w-0 flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-ink-faint" />
           <input
             name="q"
             defaultValue={values.q}
@@ -58,8 +58,8 @@ export function OrdersFilters({
           aria-expanded={open}
           className={`admin-btn shrink-0 border sm:hidden ${
             activeCount > 0
-              ? "border-indigo-200 bg-indigo-50 text-indigo-700"
-              : "border-zinc-300 bg-white text-zinc-600"
+              ? "border-accent-line bg-accent-soft text-accent-ink"
+              : "border-line-strong bg-surface text-ink-soft"
           }`}
         >
           <Filter className="size-4" />
@@ -129,7 +129,7 @@ export function OrdersFilters({
         </select>
 
         <div className="grid grid-cols-2 gap-3 sm:flex sm:items-end">
-          <label className="flex flex-col gap-1 text-xs font-medium text-zinc-500">
+          <label className="flex flex-col gap-1 text-xs font-medium text-ink-dim">
             Du
             <input
               type="date"
@@ -138,7 +138,7 @@ export function OrdersFilters({
               className={`${fieldClass} sm:w-auto`}
             />
           </label>
-          <label className="flex flex-col gap-1 text-xs font-medium text-zinc-500">
+          <label className="flex flex-col gap-1 text-xs font-medium text-ink-dim">
             Au
             <input
               type="date"

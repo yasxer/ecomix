@@ -16,7 +16,7 @@ export default async function VitrinePage({
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-ink-dim">
         Le domaine, la marque et le pixel de cette boutique. Chaque produit a
         les siens : rien n&apos;est partagé entre deux domaines.
       </p>
